@@ -1,0 +1,20 @@
+{
+  "name": "lexis-ai",
+  "interface": {
+    "displayName": "Lexis-AI"
+  },
+  "plugins": [
+    {
+      "name": "worldbuilding-forge",
+      "source": {
+        "source": "local",
+        "path": "./plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

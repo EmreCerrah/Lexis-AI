@@ -1,0 +1,24 @@
+{
+  "name": "worldbuilding-forge",
+  "version": "0.1.0",
+  "description": "Live-table GM assistant for tabletop RPGs: records reported events as canon, lists their ripples as hypotheses, and updates world files only after end-of-session approval. MVP system: Fate Accelerated.",
+  "author": {
+    "name": "Emre Cerrah"
+  },
+  "license": "MIT",
+  "keywords": ["rpg", "ttrpg", "gm", "worldbuilding", "fate", "fate-accelerated", "markdown"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Worldbuilding Forge",
+    "shortDescription": "Masa başında GM asistanı (Fate Accelerated)",
+    "longDescription": "Oyun sırasında bildirdiğin olayları canon olarak kaydeder, dünyadaki yankılarını hipotez olarak listeler, aspect/engel üretir ve dünya dosyalarını yalnızca seans sonunda senin onayınla günceller. Düz Markdown + [[wiki-link]].",
+    "developerName": "Emre Cerrah",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Yeni bir Fate Accelerated dünyası kur",
+      "Az önce masada olanı kaydet ve yankılarını çıkar",
+      "Seansı kapat ve değişiklikleri onaya sun"
+    ]
+  }
+}
