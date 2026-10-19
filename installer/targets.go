@@ -89,6 +89,8 @@ func planClaude(e *env) (*plan, error) {
 			"version":     e.meta.Version,
 			"description": e.meta.Description,
 			"author":      map[string]string{"name": e.meta.Author.Name},
+			"homepage":    e.meta.Homepage,
+			"repository":  e.meta.Repository,
 			"license":     e.meta.License,
 			"keywords":    e.meta.Keywords,
 		}); err != nil {
@@ -97,7 +99,7 @@ func planClaude(e *env) (*plan, error) {
 		if err := writeJSON(filepath.Join(root, ".claude-plugin", "marketplace.json"), map[string]any{
 			"name":     marketplaceName,
 			"owner":    map[string]string{"name": e.meta.Author.Name},
-			"metadata": map[string]string{"description": "Lexis-AI eklentileri"},
+			"metadata": map[string]string{"description": "Lexis-AI plugins"},
 			"plugins": []map[string]any{{
 				"name":        e.meta.Name,
 				"source":      "./" + e.meta.Name,
@@ -197,6 +199,21 @@ func planCodex(e *env) (*plan, error) {
 			return err
 		}
 		if err := copyTree(e.src, pdir, nil); err != nil {
+			return err
+		}
+		// Codex's own plugins ship this overlay; generate it from the portable plugin.json.
+		if err := writeJSON(filepath.Join(pdir, ".codex-plugin", "plugin.json"), map[string]any{
+			"name":        e.meta.Name,
+			"version":     e.meta.Version,
+			"description": e.meta.Description,
+			"author":      map[string]string{"name": e.meta.Author.Name},
+			"homepage":    e.meta.Homepage,
+			"repository":  e.meta.Repository,
+			"license":     e.meta.License,
+			"keywords":    e.meta.Keywords,
+			"skills":      "./skills/",
+			"interface":   e.meta.Extensions.OpenAI.Interface,
+		}); err != nil {
 			return err
 		}
 		if err := writeMarker(pdir, e, nil); err != nil {

@@ -17,11 +17,18 @@ type pluginMeta struct {
 	Name        string   `json:"name"`
 	Version     string   `json:"version"`
 	Description string   `json:"description"`
+	Homepage    string   `json:"homepage"`
+	Repository  string   `json:"repository"`
 	License     string   `json:"license"`
 	Keywords    []string `json:"keywords"`
 	Author      struct {
 		Name string `json:"name"`
 	} `json:"author"`
+	Extensions struct {
+		OpenAI struct {
+			Interface map[string]any `json:"interface"`
+		} `json:"com.openai"`
+	} `json:"extensions"`
 }
 
 // fetchSource returns the plugin directory (the one holding plugin.json and skills/).

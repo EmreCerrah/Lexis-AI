@@ -25,6 +25,8 @@ Ardından eklentiyi GitHub'dan (`EmreCerrah/Lexis-AI`, `main` dalı) indirir, ku
 | Gemini CLI | `gemini-extension.json` + `gemini extensions install` | `~/.gemini/extensions/lexis-ai` | (Gemini yalnızca kullanıcı geneli) |
 | GitHub Copilot | Skill'ler + ortak dosyalar kopyalanır | `~/.copilot/skills` + `~/.copilot/lexis-ai` | `<proje>/.github/skills` + `<proje>/.github/lexis-ai` |
 
+Repoda tek bir manifest var: `plugin/plugin.json`. Her aracın kendi manifestini kurulum aracı bu dosyadan üretir.
+
 Skill'ler eklenti köküne `../../` ile başvurur. Kurulum aracı bu yolu her araç için uygun biçime çevirir:
 - Claude Code: `${CLAUDE_PLUGIN_ROOT}/`
 - Copilot, kullanıcı geneli: tam yol

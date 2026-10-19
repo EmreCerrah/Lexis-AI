@@ -6,6 +6,8 @@
   "author": {
     "name": "Emre Cerrah"
   },
+  "homepage": "https://github.com/EmreCerrah/Lexis-AI",
+  "repository": "https://github.com/EmreCerrah/Lexis-AI",
   "license": "MIT",
   "keywords": ["rpg", "ttrpg", "gm", "worldbuilding", "fate", "fate-accelerated", "markdown"],
   "extensions": {
@@ -13,15 +15,16 @@
       "onboardingSkill": "./skills/world-init/SKILL.md",
       "interface": {
         "displayName": "Lexis-AI",
-        "shortDescription": "Masa başında GM asistanı (Fate Accelerated)",
-        "longDescription": "Oyun sırasında bildirdiğin olayları canon olarak kaydeder, dünyadaki yankılarını hipotez olarak listeler, aspect/engel üretir ve dünya dosyalarını yalnızca seans sonunda senin onayınla günceller. Düz Markdown + [[wiki-link]].",
+        "shortDescription": "Live-table GM assistant (Fate Accelerated)",
+        "longDescription": "Records the events you report at the table as canon, lists their ripples through the world as hypotheses, creates aspects and obstacles, and updates your world files only with your approval at the end of the session. Plain Markdown + [[wiki-links]].",
         "developerName": "Emre Cerrah",
         "category": "Productivity",
         "capabilities": ["Read", "Write"],
+        "websiteURL": "https://github.com/EmreCerrah/Lexis-AI",
         "defaultPrompt": [
-          "Yeni bir Fate Accelerated dünyası kur",
-          "Az önce masada olanı kaydet ve yankılarını çıkar",
-          "Seansı kapat ve değişiklikleri onaya sun"
+          "Set up a new Fate Accelerated world",
+          "Record what just happened at the table and list its ripples",
+          "Close the session and show the changes for approval"
         ]
       }
     }

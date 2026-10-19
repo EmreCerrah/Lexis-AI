@@ -114,6 +114,14 @@ func TestCodexUserKeepsCodexManifestAndPaths(t *testing.T) {
 	if m["name"] != "lexis-ai" {
 		t.Errorf("marketplace name = %v", m["name"])
 	}
+	var cm struct {
+		Skills    string
+		Interface map[string]any
+	}
+	json.Unmarshal([]byte(read(t, filepath.Join(pdir, ".codex-plugin", "plugin.json"))), &cm)
+	if cm.Skills != "./skills/" || cm.Interface["displayName"] != "Lexis-AI" || cm.Interface["shortDescription"] == nil {
+		t.Errorf("generated codex manifest incomplete: %+v", cm)
+	}
 }
 
 func TestCodexProjectMergesExistingMarketplace(t *testing.T) {

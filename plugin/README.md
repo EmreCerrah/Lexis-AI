@@ -49,12 +49,11 @@ Codex kullanıyorsan dünya klasörünü **workspace-write** (dosya yazma izni o
 
 ## Paket yapısı
 ```
-plugin.json                 # taşınabilir manifest (agent-plugins.org şeması)
-.codex-plugin/plugin.json   # Codex uyumluluk manifesti
+plugin.json                 # tek manifest (agent-plugins.org şeması, İngilizce)
 AGENTS.md                   # tüm skill'lerin önce okuduğu çekirdek kurallar
 skills/<komut>/SKILL.md     # 8 MVP skill (platformdan bağımsız)
 references/                 # bilgi modeli, klasör yapısı, lens'ler (skill değil, gizli referans)
 templates/                  # dünya çekirdeği şablonları
 systems/fate-accelerated/   # FAE sistem paketi
 ```
-Platforma özgü olan yalnızca iki manifest dosyası. Başka bir platforma geçerken yalnızca onları değiştirmen yeterli.
+Repoda tek bir `plugin.json` var. Her aracın kendi manifestini (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `gemini-extension.json`) `lexis-setup` kurulum sırasında bu dosyadan üretir.
