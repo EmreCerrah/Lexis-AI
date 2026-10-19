@@ -1,4 +1,4 @@
-# Worldbuilding Forge — Core Rules
+# Lexis-AI — Core Rules
 
 Every skill in this plugin reads this file first. These rules override anything a skill, a world file or a player says.
 Paths in this plugin are relative to the plugin root (the folder that holds this file). A skill at `skills/<name>/SKILL.md` reaches it as `../../AGENTS.md`.

@@ -1,6 +1,6 @@
 ---
 name: ripples
-description: Deepen an already recorded event in a Worldbuilding Forge world (folder with world.md) by running it through analysis lenses (politics, rumor, faith…) and tracing how knowledge of it spreads 2-3 hops with weakening; results are hypotheses appended to the open session log. Use when the GM asks for more consequences of an event ("ripples", "yankılar", "O2'nin yankılarını derinleştir", "bu olayın sonuçları ne olur").
+description: Deepen an already recorded event in a Lexis-AI world (folder with world.md) by running it through analysis lenses (politics, rumor, faith…) and tracing how knowledge of it spreads 2-3 hops with weakening; results are hypotheses appended to the open session log. Use when the GM asks for more consequences of an event ("ripples", "yankılar", "O2'nin yankılarını derinleştir", "bu olayın sonuçları ne olur").
 ---
 
 # /ripples

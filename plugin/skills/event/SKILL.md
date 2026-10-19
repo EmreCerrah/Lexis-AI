@@ -1,6 +1,6 @@
 ---
 name: event
-description: Record something that just happened at the RPG table as canon in the open session log of a Worldbuilding Forge world (folder with world.md), then list 3-5 short ripples as hypotheses and who might know. Use when the GM reports an event during play ("event", "olay", "şu oldu", "oyuncular X yaptı"). Never edits canon world files.
+description: Record something that just happened at the RPG table as canon in the open session log of a Lexis-AI world (folder with world.md), then list 3-5 short ripples as hypotheses and who might know. Use when the GM reports an event during play ("event", "olay", "şu oldu", "oyuncular X yaptı"). Never edits canon world files.
 ---
 
 # /event

@@ -1,6 +1,6 @@
 # Lexis-AI
 
-Masa başı GM asistanı **Worldbuilding Forge** eklentisi ve onu farklı yapay zekâ araçlarına kuran `lexis-setup` aracı.
+Masa başı GM asistanı **Lexis-AI** eklentisi ve onu farklı yapay zekâ araçlarına kuran `lexis-setup` aracı.
 
 ```
 plugin/      # eklenti (platformdan bağımsız skill'ler, kurallar, şablonlar, FAE paketi)
@@ -22,13 +22,13 @@ Ardından eklentiyi GitHub'dan (`EmreCerrah/Lexis-AI`, `main` dalı) indirir, ku
 |---|---|---|---|
 | Claude Code | Yerel marketplace + `claude plugin install` | `~/.lexis-ai/claude-code` | `<proje>/.lexis-ai/claude-code` |
 | Codex | Yerel marketplace + `codex plugin add` | `~/.lexis-ai/codex` | `<proje>/plugins/` + `<proje>/.agents/plugins/marketplace.json` |
-| Gemini CLI | `gemini-extension.json` + `gemini extensions install` | `~/.gemini/extensions/worldbuilding-forge` | (Gemini yalnızca kullanıcı geneli) |
-| GitHub Copilot | Skill'ler + ortak dosyalar kopyalanır | `~/.copilot/skills` + `~/.copilot/worldbuilding-forge` | `<proje>/.github/skills` + `<proje>/.github/worldbuilding-forge` |
+| Gemini CLI | `gemini-extension.json` + `gemini extensions install` | `~/.gemini/extensions/lexis-ai` | (Gemini yalnızca kullanıcı geneli) |
+| GitHub Copilot | Skill'ler + ortak dosyalar kopyalanır | `~/.copilot/skills` + `~/.copilot/lexis-ai` | `<proje>/.github/skills` + `<proje>/.github/lexis-ai` |
 
 Skill'ler eklenti köküne `../../` ile başvurur. Kurulum aracı bu yolu her araç için uygun biçime çevirir:
 - Claude Code: `${CLAUDE_PLUGIN_ROOT}/`
 - Copilot, kullanıcı geneli: tam yol
-- Copilot, proje: `../../worldbuilding-forge/`
+- Copilot, proje: `../../lexis-ai/`
 - Codex ve Gemini CLI: değiştirilmez
 
 ### Bayraklar
@@ -42,7 +42,9 @@ Skill'ler eklenti köküne `../../` ile başvurur. Kurulum aracı bu yolu her ar
 | `--yes` | Onay sormaz |
 | `--force` | Lexis-AI'ye ait olmayan bir klasörün üzerine yazar |
 
-Aracın yazdığı her klasörde bir `.lexis-ai.json` işareti bulunur. Kurulum tekrar çalıştırıldığında yalnızca bu işareti taşıyan klasörler değiştirilir. Özel repo için `GITHUB_TOKEN` ortam değişkenini ayarla.
+Aracın yazdığı her klasörde bir `.lexis-ai.json` işareti bulunur. Kurulum tekrar çalıştırıldığında yalnızca bu işareti taşıyan klasörler değiştirilir. Eklentinin eski adı `worldbuilding-forge` idi. Bu adla yapılmış bir kurulum, `lexis-setup` yeniden çalıştırıldığında kaldırılır ve yerine `lexis-ai` kurulur.
+
+Özel repo için `GITHUB_TOKEN` ortam değişkenini ayarla.
 
 ## Derleme
 ```bash

@@ -1,6 +1,6 @@
 ---
 name: create-obstacle
-description: Generate one ready-to-run obstacle, puzzle, hazard or challenge for the current RPG scene in a Worldbuilding Forge world - fiction first, then Fate Accelerated mechanics (aspect, suggested difficulty, fitting approaches, costs). Use when the GM asks for an obstacle, trap, puzzle, lock, hazard or challenge ("create-obstacle", "engel üret", "bir bulmaca", "tuzak lazım").
+description: Generate one ready-to-run obstacle, puzzle, hazard or challenge for the current RPG scene in a Lexis-AI world - fiction first, then Fate Accelerated mechanics (aspect, suggested difficulty, fitting approaches, costs). Use when the GM asks for an obstacle, trap, puzzle, lock, hazard or challenge ("create-obstacle", "engel üret", "bir bulmaca", "tuzak lazım").
 ---
 
 # /create-obstacle

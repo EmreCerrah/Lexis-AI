@@ -1,6 +1,6 @@
 ---
 name: close-session
-description: End an RPG session in a Worldbuilding Forge world - gather everything from the open session log (events, ripples, link proposals, generated items, rule conflicts) into one numbered batch for the GM to approve, then apply only the approved changes to the canon world files. Use when the GM says the session is over ("close-session", "seansı kapat", "seans bitti", "canon'u güncelle").
+description: End an RPG session in a Lexis-AI world - gather everything from the open session log (events, ripples, link proposals, generated items, rule conflicts) into one numbered batch for the GM to approve, then apply only the approved changes to the canon world files. Use when the GM says the session is over ("close-session", "seansı kapat", "seans bitti", "canon'u güncelle").
 ---
 
 # /close-session

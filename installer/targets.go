@@ -10,6 +10,9 @@ import (
 
 const marketplaceName = "lexis-ai"
 
+// legacyNames are plugin names earlier installer versions used; re-running removes those installs.
+var legacyNames = []string{"worldbuilding-forge"}
+
 type target struct {
 	title           string
 	supportsProject bool
@@ -128,18 +131,23 @@ func planClaude(e *env) (*plan, error) {
 	p.steps = append(p.steps,
 		step{"Claude Code marketplace: " + marketplaceName, func() error {
 			if out, _ := e.runner.output(bin, "plugin", "marketplace", "list"); strings.Contains(out, marketplaceName) {
-				fmt.Println("  (zaten kayıtlı; dosyalar yerinde güncellendi)")
-				return nil
+				// Claude Code reads its own copy of the marketplace; refresh it from the files just written.
+				return e.runner.run(workDir(e), bin, "plugin", "marketplace", "update", marketplaceName)
 			}
 			return e.runner.run(addDir, bin, addArgs...)
 		}},
 		step{"Claude Code eklentisi: " + selector, func() error {
-			if out, _ := e.runner.output(bin, "plugin", "list"); strings.Contains(out, selector) {
-				// Claude Code keeps a per-version copy in its cache; refresh it from the marketplace.
-				fmt.Println("  (zaten kurulu; güncelleniyor — aynı sürüm numarası önbellekte kalır)")
-				if err := e.runner.run(workDir(e), bin, "plugin", "marketplace", "update", marketplaceName); err != nil {
-					return err
+			out, _ := e.runner.output(bin, "plugin", "list")
+			for _, old := range legacyNames {
+				if strings.Contains(out, old+"@"+marketplaceName) {
+					fmt.Println("  eski ad kaldırılıyor:", old+"@"+marketplaceName)
+					if err := e.runner.run(workDir(e), bin, "plugin", "uninstall", old+"@"+marketplaceName, "--scope", scope); err != nil {
+						return err
+					}
 				}
+			}
+			if strings.Contains(out, selector) {
+				fmt.Println("  (zaten kurulu; güncelleniyor — aynı sürüm numarası önbellekte kalır)")
 				return e.runner.run(workDir(e), bin, "plugin", "update", selector)
 			}
 			return e.runner.run(workDir(e), bin, instArgs...)
@@ -147,7 +155,7 @@ func planClaude(e *env) (*plan, error) {
 	)
 	p.next = []string{
 		"Claude Code'u yeniden başlat (ya da oturumda /reload-plugins).",
-		"Komutlar eklenti adıyla gelir: /worldbuilding-forge:world-init, /worldbuilding-forge:event …",
+		"Komutlar eklenti adıyla gelir: /" + e.meta.Name + ":world-init, /" + e.meta.Name + ":event …",
 	}
 	return p, nil
 }
@@ -172,6 +180,18 @@ func planCodex(e *env) (*plan, error) {
 	bin := e.runner.findBin(codexCandidates(), "plugin", "marketplace", "list")
 
 	p := &plan{}
+	if bin != "" {
+		// Must run before the marketplace file is rewritten: Codex only lists plugins its marketplaces still name.
+		if out, _ := e.runner.output(bin, "plugin", "list"); out != "" {
+			for _, old := range legacyNames {
+				if oldSel := old + "@" + mkt["name"].(string); strings.Contains(out, oldSel+" ") {
+					p.steps = append(p.steps, step{"Eski ad kaldırılıyor: " + oldSel, func() error {
+						return e.runner.run(workDir(e), bin, "plugin", "remove", oldSel)
+					}})
+				}
+			}
+		}
+	}
 	p.steps = append(p.steps, step{"Eklenti dosyaları → " + pdir, func() error {
 		if err := prepareDir(pdir, e.opts.force); err != nil {
 			return err
@@ -181,6 +201,11 @@ func planCodex(e *env) (*plan, error) {
 		}
 		if err := writeMarker(pdir, e, nil); err != nil {
 			return err
+		}
+		for _, old := range legacyNames {
+			if err := removeOwned(filepath.Join(root, "plugins", old)); err != nil {
+				return err
+			}
 		}
 		return writeJSON(mktFile, mkt)
 	}})
@@ -231,7 +256,7 @@ func codexMarketplace(path, plugin string) (map[string]any, error) {
 	var plugins []any
 	if existing, ok := m["plugins"].([]any); ok {
 		for _, x := range existing {
-			if xm, ok := x.(map[string]any); ok && xm["name"] == plugin {
+			if xm, ok := x.(map[string]any); ok && (xm["name"] == plugin || isLegacy(xm["name"])) {
 				continue
 			}
 			plugins = append(plugins, x)
@@ -285,6 +310,19 @@ func planGemini(e *env) (*plan, error) {
 				return fmt.Errorf("eski kurulum kaldırılamadı: %v", err)
 			}
 		}
+		for _, old := range legacyNames {
+			oldDir := filepath.Join(e.home, ".gemini", "extensions", old)
+			if _, err := os.Stat(filepath.Join(oldDir, markerFile)); err == nil {
+				fmt.Println("  eski ad kaldırılıyor:", old)
+				e.runner.run(e.home, bin, "extensions", "uninstall", old) // checked below by folder
+				if _, err := os.Stat(oldDir); err == nil {
+					return fmt.Errorf("eski eklenti %s kaldırılamadı", old)
+				}
+			}
+			if err := removeOwned(filepath.Join(lexisBase(e), "gemini", old)); err != nil {
+				return err
+			}
+		}
 		args := []string{"extensions", "install", stage}
 		if help, _ := e.runner.output(bin, "extensions", "install", "--help"); strings.Contains(help, "--consent") {
 			args = append(args, "--consent")
@@ -329,11 +367,17 @@ func planCopilot(e *env) (*plan, error) {
 		return nil, err
 	}
 	owned := map[string]bool{}
-	if b, err := os.ReadFile(filepath.Join(core, markerFile)); err == nil {
-		var m struct{ Skills []string }
-		if json.Unmarshal(b, &m) == nil {
-			for _, s := range m.Skills {
-				owned[s] = true
+	cores := []string{core}
+	for _, old := range legacyNames {
+		cores = append(cores, filepath.Join(base, old))
+	}
+	for _, c := range cores {
+		if b, err := os.ReadFile(filepath.Join(c, markerFile)); err == nil {
+			var m struct{ Skills []string }
+			if json.Unmarshal(b, &m) == nil {
+				for _, s := range m.Skills {
+					owned[s] = true
+				}
 			}
 		}
 	}
@@ -348,6 +392,11 @@ func planCopilot(e *env) (*plan, error) {
 		step{"Ortak dosyalar (kurallar, şablonlar, FAE) → " + core, func() error {
 			if err := prepareDir(core, e.opts.force); err != nil {
 				return err
+			}
+			for _, old := range cores[1:] {
+				if err := removeOwned(old); err != nil {
+					return err
+				}
 			}
 			if err := copyTree(e.src, core, append(platformManifests, "skills")); err != nil {
 				return err
@@ -383,4 +432,13 @@ func mustRel(base, target string) string {
 		return target
 	}
 	return r
+}
+
+func isLegacy(name any) bool {
+	for _, old := range legacyNames {
+		if name == old {
+			return true
+		}
+	}
+	return false
 }

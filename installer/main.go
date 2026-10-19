@@ -1,4 +1,4 @@
-// Command lexis-setup installs the Worldbuilding Forge plugin for the AI tool the user picks.
+// Command lexis-setup installs the Lexis-AI plugin for the AI tool the user picks.
 package main
 
 import (

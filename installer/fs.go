@@ -126,3 +126,11 @@ func writeMarker(dir string, e *env, extra map[string]any) error {
 	}
 	return writeJSON(filepath.Join(dir, markerFile), m)
 }
+
+// removeOwned deletes dir only if the installer created it (marker present); a missing dir is fine.
+func removeOwned(dir string) error {
+	if _, err := os.Stat(filepath.Join(dir, markerFile)); err != nil {
+		return nil
+	}
+	return os.RemoveAll(dir)
+}

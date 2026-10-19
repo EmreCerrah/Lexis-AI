@@ -1,6 +1,6 @@
 ---
 name: create-aspect
-description: Write one ready-to-use Fate aspect (scene, situation, consequence, boost or location aspect) for the current RPG scene in a Worldbuilding Forge world, with an invoke and a compel example. Use when the GM asks for an aspect ("create-aspect", "bir aspect yaz", "sahneye aspect", "bu duruma aspect öner").
+description: Write one ready-to-use Fate aspect (scene, situation, consequence, boost or location aspect) for the current RPG scene in a Lexis-AI world, with an invoke and a compel example. Use when the GM asks for an aspect ("create-aspect", "bir aspect yaz", "sahneye aspect", "bu duruma aspect öner").
 ---
 
 # /create-aspect

@@ -1,6 +1,6 @@
 ---
 name: create-lore
-description: Generate one persistent world entity (NPC, location, group/faction or story hook) for a Worldbuilding Forge world as a proposal file in proposals/, using the world's templates and links. Not canon until approved at /close-session. Use when the GM asks to create an NPC, place, faction or hook ("create-lore", "bir NPC lazım", "bir mekan üret", "yeni grup", "hook yaz").
+description: Generate one persistent world entity (NPC, location, group/faction or story hook) for a Lexis-AI world as a proposal file in proposals/, using the world's templates and links. Not canon until approved at /close-session. Use when the GM asks to create an NPC, place, faction or hook ("create-lore", "bir NPC lazım", "bir mekan üret", "yeni grup", "hook yaz").
 ---
 
 # /create-lore

@@ -76,7 +76,7 @@ func TestClaudeUser(t *testing.T) {
 	e := newEnv(t, "claude", "user")
 	p := apply(t, e)
 	root := filepath.Join(e.home, ".lexis-ai", "claude-code")
-	pdir := filepath.Join(root, "worldbuilding-forge")
+	pdir := filepath.Join(root, "lexis-ai")
 	mustExist(t, filepath.Join(root, ".claude-plugin", "marketplace.json"), filepath.Join(pdir, ".claude-plugin", "plugin.json"),
 		filepath.Join(pdir, "AGENTS.md"), filepath.Join(pdir, "references", "lenses", "index.md"))
 	mustNotExist(t, filepath.Join(pdir, ".codex-plugin"), filepath.Join(pdir, "plugin.json"))
@@ -84,7 +84,7 @@ func TestClaudeUser(t *testing.T) {
 	if strings.Contains(skill, "../../") || !strings.Contains(skill, "${CLAUDE_PLUGIN_ROOT}/AGENTS.md") {
 		t.Error("claude skill paths not rewritten")
 	}
-	if !strings.Contains(strings.Join(p.next, "\n"), "claude plugin install worldbuilding-forge@lexis-ai --scope user") {
+	if !strings.Contains(strings.Join(p.next, "\n"), "claude plugin install lexis-ai@lexis-ai --scope user") {
 		t.Errorf("manual next steps missing: %v", p.next)
 	}
 }
@@ -92,7 +92,7 @@ func TestClaudeUser(t *testing.T) {
 func TestClaudeProjectUsesRelativeMarketplace(t *testing.T) {
 	e := newEnv(t, "claude", "project")
 	p := apply(t, e)
-	mustExist(t, filepath.Join(e.opts.projectDir, ".lexis-ai", "claude-code", "worldbuilding-forge", "skills", "close-session", "SKILL.md"))
+	mustExist(t, filepath.Join(e.opts.projectDir, ".lexis-ai", "claude-code", "lexis-ai", "skills", "close-session", "SKILL.md"))
 	if !strings.Contains(strings.Join(p.next, "\n"), "marketplace add ./.lexis-ai/claude-code --scope project") {
 		t.Errorf("project marketplace should be relative: %v", p.next)
 	}
@@ -102,7 +102,7 @@ func TestCodexUserKeepsCodexManifestAndPaths(t *testing.T) {
 	e := newEnv(t, "codex", "user")
 	apply(t, e)
 	root := filepath.Join(e.home, ".lexis-ai", "codex")
-	pdir := filepath.Join(root, "plugins", "worldbuilding-forge")
+	pdir := filepath.Join(root, "plugins", "lexis-ai")
 	mustExist(t, filepath.Join(pdir, ".codex-plugin", "plugin.json"), filepath.Join(pdir, "plugin.json"))
 	if !strings.Contains(read(t, filepath.Join(pdir, "skills", "event", "SKILL.md")), "../../AGENTS.md") {
 		t.Error("codex skills must keep ../../ paths")
@@ -128,10 +128,10 @@ func TestCodexProjectMergesExistingMarketplace(t *testing.T) {
 		Plugins []struct{ Name string }
 	}
 	json.Unmarshal([]byte(read(t, mkt)), &m)
-	if m.Name != "team" || len(m.Plugins) != 2 || m.Plugins[0].Name != "other" || m.Plugins[1].Name != "worldbuilding-forge" {
+	if m.Name != "team" || len(m.Plugins) != 2 || m.Plugins[0].Name != "other" || m.Plugins[1].Name != "lexis-ai" {
 		t.Errorf("merge wrong: %+v", m)
 	}
-	if !strings.Contains(strings.Join(p.next, "\n"), "worldbuilding-forge@team") {
+	if !strings.Contains(strings.Join(p.next, "\n"), "lexis-ai@team") {
 		t.Errorf("selector should use existing marketplace name: %v", p.next)
 	}
 }
@@ -139,12 +139,12 @@ func TestCodexProjectMergesExistingMarketplace(t *testing.T) {
 func TestGeminiManifest(t *testing.T) {
 	e := newEnv(t, "gemini", "user")
 	apply(t, e)
-	stage := filepath.Join(e.home, ".lexis-ai", "gemini", "worldbuilding-forge")
+	stage := filepath.Join(e.home, ".lexis-ai", "gemini", "lexis-ai")
 	var m map[string]any
 	if err := json.Unmarshal([]byte(read(t, filepath.Join(stage, "gemini-extension.json"))), &m); err != nil {
 		t.Fatal(err)
 	}
-	if m["name"] != "worldbuilding-forge" || m["version"] == "" {
+	if m["name"] != "lexis-ai" || m["version"] == "" {
 		t.Errorf("bad gemini manifest: %v", m)
 	}
 	mustExist(t, filepath.Join(stage, "skills", "ripples", "SKILL.md"), filepath.Join(stage, "systems", "fate-accelerated", "pack.md"))
@@ -154,7 +154,7 @@ func TestGeminiManifest(t *testing.T) {
 func TestCopilotUserAbsoluteAndProjectRelative(t *testing.T) {
 	e := newEnv(t, "copilot", "user")
 	apply(t, e)
-	core := filepath.Join(e.home, ".copilot", "worldbuilding-forge")
+	core := filepath.Join(e.home, ".copilot", "lexis-ai")
 	mustExist(t, filepath.Join(core, "AGENTS.md"), filepath.Join(core, "templates", "hook.md"))
 	mustNotExist(t, filepath.Join(core, "skills"))
 	skill := read(t, filepath.Join(e.home, ".copilot", "skills", "event", "SKILL.md"))
@@ -167,10 +167,10 @@ func TestCopilotUserAbsoluteAndProjectRelative(t *testing.T) {
 	ep := newEnv(t, "copilot", "project")
 	apply(t, ep)
 	skillDir := filepath.Join(ep.opts.projectDir, ".github", "skills", "event")
-	if !strings.Contains(read(t, filepath.Join(skillDir, "SKILL.md")), "../../worldbuilding-forge/AGENTS.md") {
+	if !strings.Contains(read(t, filepath.Join(skillDir, "SKILL.md")), "../../lexis-ai/AGENTS.md") {
 		t.Error("copilot project skills should use relative core path")
 	}
-	mustExist(t, filepath.Join(skillDir, "..", "..", "worldbuilding-forge", "AGENTS.md"))
+	mustExist(t, filepath.Join(skillDir, "..", "..", "lexis-ai", "AGENTS.md"))
 }
 
 func TestCopilotRefusesForeignSkillUnlessForce(t *testing.T) {
@@ -191,7 +191,7 @@ func TestReinstallReplacesOwnedDirButNotForeign(t *testing.T) {
 	apply(t, e) // owned: marker present → replaced without force
 
 	e2 := newEnv(t, "gemini", "user")
-	stage := filepath.Join(e2.home, ".lexis-ai", "gemini", "worldbuilding-forge")
+	stage := filepath.Join(e2.home, ".lexis-ai", "gemini", "lexis-ai")
 	os.MkdirAll(stage, 0o755)
 	os.WriteFile(filepath.Join(stage, "notes.md"), []byte("mine"), 0o644)
 	p, err := planGemini(e2)
@@ -243,5 +243,34 @@ func TestLocatePluginInTarballLayout(t *testing.T) {
 	got, err := locatePlugin(root)
 	if err != nil || got != plugin {
 		t.Errorf("locatePlugin = %q, %v", got, err)
+	}
+}
+
+func TestCopilotMigratesLegacyName(t *testing.T) {
+	e := newEnv(t, "copilot", "user")
+	legacyCore := filepath.Join(e.home, ".copilot", "worldbuilding-forge")
+	os.MkdirAll(legacyCore, 0o755)
+	os.WriteFile(filepath.Join(legacyCore, markerFile), []byte(`{"skills":["event","ripples"]}`), 0o644)
+	for _, s := range []string{"event", "ripples"} {
+		os.MkdirAll(filepath.Join(e.home, ".copilot", "skills", s), 0o755)
+	}
+	apply(t, e) // legacy skills count as owned: no conflict error
+	mustNotExist(t, legacyCore)
+	mustExist(t, filepath.Join(e.home, ".copilot", "lexis-ai", "AGENTS.md"))
+}
+
+func TestCodexMarketplaceDropsLegacyEntry(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "marketplace.json")
+	os.WriteFile(path, []byte(`{"name":"lexis-ai","plugins":[{"name":"worldbuilding-forge"},{"name":"other"}]}`), 0o644)
+	m, err := codexMarketplace(path, "lexis-ai")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var names []string
+	for _, p := range m["plugins"].([]any) {
+		names = append(names, p.(map[string]any)["name"].(string))
+	}
+	if strings.Join(names, ",") != "other,lexis-ai" {
+		t.Errorf("plugins = %v", names)
 	}
 }

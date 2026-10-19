@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "worldbuilding-forge",
+      "name": "lexis-ai",
       "source": {
         "source": "local",
         "path": "./plugin"

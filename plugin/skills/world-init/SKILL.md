@@ -1,6 +1,6 @@
 ---
 name: world-init
-description: Create a new Worldbuilding Forge RPG world folder (world.md, system.md, entity files, hooks) through a short tiered interview with the GM. Use when the GM wants to start, set up or initialize a new campaign world ("yeni dünya kur", "world-init", "dünyayı başlat"), or to fill deferred sections of an existing world between sessions.
+description: Create a new Lexis-AI RPG world folder (world.md, system.md, entity files, hooks) through a short tiered interview with the GM. Use when the GM wants to start, set up or initialize a new campaign world ("yeni dünya kur", "world-init", "dünyayı başlat"), or to fill deferred sections of an existing world between sessions.
 ---
 
 # /world-init

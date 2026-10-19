@@ -1,4 +1,4 @@
-# Worldbuilding Forge
+# Lexis-AI
 
 Masa başında çalışan bir **GM asistanı**. Oyunu sen yönetirsin. Agent zar atmaz ve sonuca karar vermez. Bildirdiğin olayları kaydeder, dünyadaki yankılarını gösterir ve dünya dosyalarını yalnızca seans sonunda senin onayınla günceller.
 
@@ -18,7 +18,7 @@ Masa başında çalışan bir **GM asistanı**. Oyunu sen yönetirsin. Agent zar
 | `/help-skills` | "Bu hangi approach'la yapılır?" sorusunu FAE diliyle cevaplar | hiçbir şey |
 | `/close-session` | Seansta birikenleri tek numaralı listede onayına sunar ve yalnızca onayladıklarını dünyaya yazar | canon dosyalar |
 
-**Codex'te:** Codex skill'leri `/` ile çağırmaz. Aynı isimleri `$` ile yaz (`$event Gabriel mezarlık bekçisini korkuttu`). İstersen `@worldbuilding-forge` diyerek eklentiyi seçebilir ya da isteğini doğal dille yazabilirsin.
+**Codex'te:** Codex skill'leri `/` ile çağırmaz. Aynı isimleri `$` ile yaz (`$event Gabriel mezarlık bekçisini korkuttu`). İstersen `@lexis-ai` diyerek eklentiyi seçebilir ya da isteğini doğal dille yazabilirsin.
 
 ## Akış
 ```
