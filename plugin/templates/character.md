@@ -1,27 +1,27 @@
 ---
-tür: karakter
-ad: {{Ad}}
-rol: {{NPC / oyuncu karakteri}}
+type: character
+name: {{Name}}
+role: {{NPC / player character}}
 ---
 
-# {{Ad}}
+# {{Name}}
 
-## Kim
-{{1-3 cümle: görünüş, konum, dünyadaki yeri}}
+## Who
+{{1-3 sentences: appearance, position, place in the world}}
 
-## İstek
-{{Ne istiyor, neden}}
+## Wants
+{{What they want, and why}}
 
-## Aspect'ler
-<!-- Sistem paketi doldurur (Fate: yüksek konsept, sorun, diğerleri). -->
+## Aspects
+<!-- Filled by the system pack (Fate: high concept, trouble, others). -->
 - {{aspect}}
 
-<!-- Yalnızca oyuncu karakterleri: sistem paketi ekler (FAE: ## Approach'lar, ## Stunt'lar). NPC'de bu iki bölüm olmaz. -->
+<!-- Player characters only: the system pack adds ## Approaches and ## Stunts. NPCs do not have these two sections. -->
 
-## 🔒 GM Notları
-{{Oyunculara söylenmeyecek sırlar, gerçek niyet}}
+## 🔒 GM Notes
+{{Secrets and true intentions the players are not told}}
 
-## Bağlantılar
-- [[{{slug}}]] — {{ilişki}}
+## Links
+- [[{{slug}}]] — {{relation}}
 
-## Belirsiz
+## Uncertain

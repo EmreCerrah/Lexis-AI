@@ -1,12 +1,12 @@
 ---
-tür: öneri
-hedef-tür: {{karakter / mekan / grup / hook}}
-hedef-klasör: {{karakterler / mekanlar / gruplar / hooklar}}
-kaynak: {{S003-U2}}
-durum: öneri
+type: proposal
+target-type: {{character / location / group / hook}}
+target-folder: {{characters / locations / groups / hooks}}
+source: {{S003-G2}}
+status: proposal
 ---
 
-<!-- /create-lore çıktısı. Canon DEĞİL. /close-session onayıyla hedef klasöre taşınır;
-     aşağıdaki gövde ilgili şablonun (templates/<tür>.md) aynısıdır, yalnızca frontmatter farklıdır. -->
+<!-- /create-lore output. NOT canon. /close-session approval moves it into the target folder;
+     the body below is the same as the matching template (templates/<type>.md), only the frontmatter differs. -->
 
-{{templates/<tür>.md gövdesi, doldurulmuş}}
+{{body of templates/<type>.md, filled in}}

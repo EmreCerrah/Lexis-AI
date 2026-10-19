@@ -1,20 +1,20 @@
 ---
-tür: hook
-ad: {{Hook adı}}
-durum: {{bekliyor / aktif / çözüldü}}
+type: hook
+name: {{Hook name}}
+status: {{waiting / active / resolved}}
 ---
 
-# {{Hook adı}}
+# {{Hook name}}
 
-## Yüzey
-{{Oyuncuların gördüğü / duyduğu. Masada okunabilir.}}
+## Surface
+{{What the players see or hear. Safe to read at the table.}}
 
-## 🔒 Gizli Gerçek
-<!-- Yalnızca GM. Değişmez canon: agent bunu asla bozmaz; oyuncular bozmaya çalışırsa dünya içi "neden başaramazlar" gerekçesi sunar. -->
-{{Gerçekte olan}}
+## 🔒 Hidden Truth
+<!-- GM only. Fixed canon: the agent never breaks it; if players try to, it offers in-world reasons why they can't. -->
+{{What is really going on}}
 
-## Bağlantılar
-<!-- Zincirli hook için: - [[sonraki-hook]] — sonraki halka -->
-- [[{{slug}}]] — {{ilişki}}
+## Links
+<!-- For a chained hook: - [[next-hook]] — next link in the chain -->
+- [[{{slug}}]] — {{relation}}
 
-## Belirsiz
+## Uncertain

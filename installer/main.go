@@ -16,10 +16,14 @@ var (
 	version     = "dev"
 )
 
+// Offered in the language menu; any other language can be typed in.
+var languages = []string{"English", "Türkçe (Turkish)", "Español (Spanish)", "Deutsch (German)", "Français (French)", "Português (Portuguese)"}
+
 type options struct {
 	platform   string
 	scope      string
 	projectDir string
+	lang       string
 	source     string
 	repo       string
 	ref        string
@@ -30,64 +34,76 @@ type options struct {
 
 func main() {
 	var o options
-	flag.StringVar(&o.platform, "platform", "", "claude | codex | gemini | copilot (boşsa sorulur)")
-	flag.StringVar(&o.scope, "scope", "", "user | project (boşsa sorulur)")
-	flag.StringVar(&o.projectDir, "dir", "", "proje klasörü (scope=project için)")
-	flag.StringVar(&o.source, "source", "", "GitHub yerine yerel kaynak klasörü (repo kökü ya da plugin klasörü)")
-	flag.StringVar(&o.repo, "repo", defaultRepo, "eklentinin indirileceği GitHub reposu (owner/repo)")
-	flag.StringVar(&o.ref, "ref", defaultRef, "dal ya da etiket")
-	flag.BoolVar(&o.yes, "yes", false, "onay sormadan kur")
-	flag.BoolVar(&o.dryRun, "dry-run", false, "hiçbir şey yazmadan ne yapılacağını göster")
-	flag.BoolVar(&o.force, "force", false, "başka bir şeye ait hedef klasörlerin üzerine yaz")
+	flag.StringVar(&o.platform, "platform", "", "claude | codex | gemini | copilot (asked if empty)")
+	flag.StringVar(&o.scope, "scope", "", "user | project (asked if empty)")
+	flag.StringVar(&o.projectDir, "dir", "", "project folder (for scope=project)")
+	flag.StringVar(&o.lang, "lang", "", "language the AI answers in, e.g. English, Turkish (asked if empty)")
+	flag.StringVar(&o.source, "source", "", "local source folder instead of GitHub (repo root or plugin folder)")
+	flag.StringVar(&o.repo, "repo", defaultRepo, "GitHub repository to download the plugin from (owner/repo)")
+	flag.StringVar(&o.ref, "ref", defaultRef, "branch or tag")
+	flag.BoolVar(&o.yes, "yes", false, "install without asking for confirmation")
+	flag.BoolVar(&o.dryRun, "dry-run", false, "show what would be done without writing anything")
+	flag.BoolVar(&o.force, "force", false, "overwrite target folders that belong to something else")
 	flag.Parse()
 
 	if err := run(o, newPrompter(os.Stdin, os.Stdout)); err != nil {
-		fmt.Fprintln(os.Stderr, "\n✖ Hata:", err)
+		fmt.Fprintln(os.Stderr, "\n✖ Error:", err)
 		os.Exit(1)
 	}
 }
 
 func run(o options, p *prompter) error {
-	fmt.Printf("Lexis-AI kurulum (%s)\n\n", version)
+	fmt.Printf("Lexis-AI setup (%s)\n\n", version)
 
 	if o.platform == "" {
-		i := p.choose("Hangi yapay zekâ aracını kullanıyorsun?", []string{"Claude Code", "Codex", "Gemini CLI", "GitHub Copilot"}, 0)
+		i := p.choose("Which AI tool do you use?", []string{"Claude Code", "Codex", "Gemini CLI", "GitHub Copilot"}, 0)
 		o.platform = []string{"claude", "codex", "gemini", "copilot"}[i]
 	}
 	t, ok := targets[o.platform]
 	if !ok {
-		return fmt.Errorf("bilinmeyen platform %q (claude, codex, gemini, copilot)", o.platform)
+		return fmt.Errorf("unknown platform %q (claude, codex, gemini, copilot)", o.platform)
 	}
 
 	if o.scope == "" {
-		i := p.choose("Kurulumu nereye istiyorsun?", []string{"Kullanıcı geneli (tüm projelerde kullanılır)", "Belirli bir proje klasörü"}, 0)
+		i := p.choose("Where do you want to install it?", []string{"For my user (available in every project)", "In a specific project folder"}, 0)
 		o.scope = []string{"user", "project"}[i]
 	}
 	if o.scope != "user" && o.scope != "project" {
-		return fmt.Errorf("bilinmeyen scope %q (user, project)", o.scope)
+		return fmt.Errorf("unknown scope %q (user, project)", o.scope)
 	}
 	if o.scope == "project" && !t.supportsProject {
-		fmt.Printf("⚠ %s eklentileri yalnızca kullanıcı geneline kurulabiliyor; kullanıcı geneline kuruyorum.\n\n", t.title)
+		fmt.Printf("⚠ %s extensions can only be installed for the user; installing for the user.\n\n", t.title)
 		o.scope = "user"
 	}
 	if o.scope == "project" {
 		if o.projectDir == "" {
 			wd, _ := os.Getwd()
-			o.projectDir = p.ask("Proje klasörü", wd)
+			o.projectDir = p.ask("Project folder", wd)
 		}
 		abs, err := filepath.Abs(o.projectDir)
 		if err != nil {
 			return err
 		}
 		if st, err := os.Stat(abs); err != nil || !st.IsDir() {
-			return fmt.Errorf("proje klasörü bulunamadı: %s", abs)
+			return fmt.Errorf("project folder not found: %s", abs)
 		}
 		o.projectDir = abs
 	}
 
+	if o.lang == "" {
+		opts := append(append([]string{}, languages...), "Other (type it)")
+		i := p.choose("Which language should the AI answer in?", opts, 0)
+		if i == len(languages) {
+			o.lang = p.ask("Language", "English")
+		} else {
+			o.lang = languages[i]
+		}
+	}
+	o.lang = strings.TrimSpace(o.lang)
+
 	home, err := os.UserHomeDir()
 	if err != nil {
-		return fmt.Errorf("kullanıcı klasörü bulunamadı: %w", err)
+		return fmt.Errorf("home folder not found: %w", err)
 	}
 
 	src, cleanup, err := fetchSource(o)
@@ -106,16 +122,16 @@ func run(o options, p *prompter) error {
 		return err
 	}
 
-	fmt.Printf("\nKurulum planı — %s %s → %s (%s)\n", meta.Name, meta.Version, t.title, scopeLabel(o))
+	fmt.Printf("\nInstall plan — %s %s → %s (%s, language: %s)\n", meta.Name, meta.Version, t.title, scopeLabel(o), o.lang)
 	for _, s := range pl.steps {
 		fmt.Println("  •", s.desc)
 	}
 	if o.dryRun {
-		fmt.Println("\n(dry-run: hiçbir şey yazılmadı)")
+		fmt.Println("\n(dry run: nothing was written)")
 		return nil
 	}
-	if !o.yes && !p.confirm("\nDevam edilsin mi?", true) {
-		fmt.Println("İptal edildi.")
+	if !o.yes && !p.confirm("\nContinue?", true) {
+		fmt.Println("Cancelled.")
 		return nil
 	}
 
@@ -127,9 +143,9 @@ func run(o options, p *prompter) error {
 		}
 	}
 
-	fmt.Printf("\n✅ %s kuruldu.\n", meta.Name)
+	fmt.Printf("\n✅ %s installed.\n", meta.Name)
 	if len(pl.next) > 0 {
-		fmt.Println("\nSıradaki adımlar:")
+		fmt.Println("\nNext steps:")
 		for _, n := range pl.next {
 			fmt.Println("  " + n)
 		}
@@ -139,9 +155,9 @@ func run(o options, p *prompter) error {
 
 func scopeLabel(o options) string {
 	if o.scope == "project" {
-		return "proje: " + o.projectDir
+		return "project: " + o.projectDir
 	}
-	return "kullanıcı geneli"
+	return "user"
 }
 
 // slash keeps paths readable inside Markdown on every OS.

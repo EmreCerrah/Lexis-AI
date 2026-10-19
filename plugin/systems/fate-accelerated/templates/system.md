@@ -1,27 +1,27 @@
 ---
-tür: sistem
-sistem: fate-accelerated
+type: system
+system: fate-accelerated
 ---
 
-# Sistem: Fate Accelerated
+# System: Fate Accelerated
 
-## Approach'lar
-Standart: Careful (Dikkatli), Clever (Zeki), Flashy (Gösterişli), Forceful (Güçlü), Quick (Hızlı), Sneaky (Sinsi).
-Dağılım: +3, +2, +2, +1, +1, +0.
+## Approaches
+Standard: Careful, Clever, Flashy, Forceful, Quick, Sneaky.
+Spread: +3, +2, +2, +1, +1, +0.
 
-## Stunt'lar
-{{Dünyaya özgü stunt örnekleri / kısıtlar — yoksa: Standart}}
+## Stunts
+{{World-specific stunt examples / limits; otherwise: Standard}}
 
-## Özel Durumlar
-{{ör. korku stresi — yoksa: Standart}}
+## Special Situations
+{{e.g. fear stress; otherwise: Standard}}
 
-## Değişiklikler
-- Stres: 3 kutu
-- Sonuçlar: hafif (2), orta (4), ağır (6)
+## Modifications
+- Stress: 3 boxes
+- Consequences: mild (2), moderate (4), severe (6)
 - Refresh: 3
 
 ## Homebrew
-<!-- Mekanik ev kuralları ve özel sistem. Standart FAE ile çelişirse bu bölüm geçerlidir. -->
-{{yoksa: —}}
+<!-- Mechanical house rules and custom systems. Where this conflicts with standard FAE, this section wins. -->
+{{otherwise: —}}
 
-## Belirsiz
+## Uncertain

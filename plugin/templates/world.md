@@ -1,42 +1,42 @@
 ---
-tür: dünya
-ad: {{Dünyanın adı}}
-dil: tr
-sistem: fate-accelerated
-oluşturuldu: {{YYYY-MM-DD}}
+type: world
+name: {{World name}}
+language: {{Output language, e.g. English}}
+system: fate-accelerated
+created: {{YYYY-MM-DD}}
 ---
 
-# {{Dünyanın adı}}
+# {{World name}}
 
-## Konsept
-{{1-3 cümle: dünya ne hakkında, oyuncular ne yapıyor}}
+## Concept
+{{1-3 sentences: what the world is about, what the players do}}
 
-## Tür ve Ton
-- Tür: {{ör. gotik korku}}
-- Anlatı tarzı: {{ör. ağır, atmosferik, kara mizahsız}}
-- Fantazi seviyesi: {{düşük / orta / yüksek + kısa açıklama}}
+## Genre and Tone
+- Genre: {{e.g. gothic horror}}
+- Narrative style: {{e.g. slow, atmospheric, no comic relief}}
+- Fantasy level: {{low / medium / high + a short note}}
 
-## İlham Kaynakları
-- {{eser / kaynak}}
+## Inspirations
+- {{work / source}}
 
-## Değişmez Kurallar
-<!-- Kurgu kuralları. Agent bunları asla ihlal etmez. Numarayı değiştirme; silinen kuralın numarası tekrar kullanılmaz. -->
-- **K1:** {{kural}}
+## Immutable Rules
+<!-- Fiction rules. The agent never violates them. Never renumber; a deleted rule's number is not reused. -->
+- **IR1:** {{rule}}
 
-## Dünya Notları
-{{Konsept dışındaki serbest dünya bilgisi}}
+## World Notes
+{{Free world notes beyond the concept}}
 
-## Din ve Yaratılış
+## Religion and Creation
 {{—}}
 
-## Tanıtım Sahnesi
-{{Oyunculara okunacak giriş metni}}
+## Intro Scene
+{{Text to read to the players at the start}}
 
-## Açılış Sahnesi
-{{İlk seansın başladığı durum}}
+## Opening Scene
+{{The situation the first session starts in}}
 
-## Bağlantılar
-<!-- - [[slug]] — ilişki -->
+## Links
+<!-- - [[slug]] — relation -->
 
-## Belirsiz
-<!-- Ertelenen veya henüz doğrulanmamış bilgiler. - iddia _(kaynak: …)_ -->
+## Uncertain
+<!-- Deferred or not yet confirmed. - claim _(source: …)_ -->

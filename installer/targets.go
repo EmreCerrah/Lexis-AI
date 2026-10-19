@@ -56,7 +56,7 @@ func skillNames(src string) ([]string, error) {
 }
 
 func manualNext(cmds ...string) []string {
-	out := []string{"Araç bulunamadı ya da eklenti komutlarını desteklemiyor. Kurduktan/güncelledikten sonra şunları çalıştır:"}
+	out := []string{"The tool was not found or does not support plugin commands. After installing/updating it, run:"}
 	for _, c := range cmds {
 		out = append(out, "  "+c)
 	}
@@ -77,7 +77,7 @@ func planClaude(e *env) (*plan, error) {
 	bin := e.runner.findBin([]string{"claude"})
 
 	p := &plan{}
-	p.steps = append(p.steps, step{"Eklenti dosyaları → " + root, func() error {
+	p.steps = append(p.steps, step{"Plugin files → " + root, func() error {
 		if err := prepareDir(root, e.opts.force); err != nil {
 			return err
 		}
@@ -109,6 +109,9 @@ func planClaude(e *env) (*plan, error) {
 		}); err != nil {
 			return err
 		}
+		if err := setLanguage(pdir, e.opts.lang); err != nil {
+			return err
+		}
 		// Claude Code substitutes ${CLAUDE_PLUGIN_ROOT} in skill bodies with the installed plugin path.
 		if err := rewriteSkillPaths(filepath.Join(pdir, "skills"), "${CLAUDE_PLUGIN_ROOT}/"); err != nil {
 			return err
@@ -138,26 +141,26 @@ func planClaude(e *env) (*plan, error) {
 			}
 			return e.runner.run(addDir, bin, addArgs...)
 		}},
-		step{"Claude Code eklentisi: " + selector, func() error {
+		step{"Claude Code plugin: " + selector, func() error {
 			out, _ := e.runner.output(bin, "plugin", "list")
 			for _, old := range legacyNames {
 				if strings.Contains(out, old+"@"+marketplaceName) {
-					fmt.Println("  eski ad kaldırılıyor:", old+"@"+marketplaceName)
+					fmt.Println("  removing old name:", old+"@"+marketplaceName)
 					if err := e.runner.run(workDir(e), bin, "plugin", "uninstall", old+"@"+marketplaceName, "--scope", scope); err != nil {
 						return err
 					}
 				}
 			}
 			if strings.Contains(out, selector) {
-				fmt.Println("  (zaten kurulu; güncelleniyor — aynı sürüm numarası önbellekte kalır)")
+				fmt.Println("  (already installed; updating — an unchanged version number stays cached)")
 				return e.runner.run(workDir(e), bin, "plugin", "update", selector)
 			}
 			return e.runner.run(workDir(e), bin, instArgs...)
 		}},
 	)
 	p.next = []string{
-		"Claude Code'u yeniden başlat (ya da oturumda /reload-plugins).",
-		"Komutlar eklenti adıyla gelir: /" + e.meta.Name + ":world-init, /" + e.meta.Name + ":event …",
+		"Restart Claude Code (or run /reload-plugins in a session).",
+		"Commands carry the plugin name: /" + e.meta.Name + ":world-init, /" + e.meta.Name + ":event …",
 	}
 	return p, nil
 }
@@ -187,18 +190,21 @@ func planCodex(e *env) (*plan, error) {
 		if out, _ := e.runner.output(bin, "plugin", "list"); out != "" {
 			for _, old := range legacyNames {
 				if oldSel := old + "@" + mkt["name"].(string); strings.Contains(out, oldSel+" ") {
-					p.steps = append(p.steps, step{"Eski ad kaldırılıyor: " + oldSel, func() error {
+					p.steps = append(p.steps, step{"Removing old name: " + oldSel, func() error {
 						return e.runner.run(workDir(e), bin, "plugin", "remove", oldSel)
 					}})
 				}
 			}
 		}
 	}
-	p.steps = append(p.steps, step{"Eklenti dosyaları → " + pdir, func() error {
+	p.steps = append(p.steps, step{"Plugin files → " + pdir, func() error {
 		if err := prepareDir(pdir, e.opts.force); err != nil {
 			return err
 		}
 		if err := copyTree(e.src, pdir, nil); err != nil {
+			return err
+		}
+		if err := setLanguage(pdir, e.opts.lang); err != nil {
 			return err
 		}
 		// Codex's own plugins ship this overlay; generate it from the portable plugin.json.
@@ -236,17 +242,17 @@ func planCodex(e *env) (*plan, error) {
 	p.steps = append(p.steps,
 		step{"Codex marketplace: " + mkt["name"].(string), func() error {
 			if out, _ := e.runner.output(bin, "plugin", "marketplace", "list"); strings.Contains(out, mkt["name"].(string)) {
-				fmt.Println("  (zaten kayıtlı)")
+				fmt.Println("  (already registered)")
 				return nil
 			}
 			return e.runner.run(workDir(e), bin, addArgs...)
 		}},
 		// Codex installs a copy into its cache, so this also runs on re-install to refresh it.
-		step{"Codex eklentisi: " + selector, func() error { return e.runner.run(workDir(e), bin, instArgs...) }},
+		step{"Codex plugin: " + selector, func() error { return e.runner.run(workDir(e), bin, instArgs...) }},
 	)
 	p.next = []string{
-		"Codex uygulamasını tamamen kapatıp aç; skill'ler yeni oturumda görünür.",
-		"Skill'leri $ ile çağır: $world-init, $event … (ya da @" + e.meta.Name + ")",
+		"Quit and reopen the Codex app; skills appear in a new session.",
+		"Call skills with $: $world-init, $event … (or @" + e.meta.Name + ")",
 	}
 	return p, nil
 }
@@ -257,7 +263,7 @@ func codexMarketplace(path, plugin string) (map[string]any, error) {
 	m := map[string]any{}
 	if b, err := os.ReadFile(path); err == nil {
 		if err := json.Unmarshal(b, &m); err != nil {
-			return nil, fmt.Errorf("%s okunamadı: %w", path, err)
+			return nil, fmt.Errorf("cannot read %s: %w", path, err)
 		}
 	}
 	if _, ok := m["name"].(string); !ok {
@@ -290,17 +296,20 @@ func planGemini(e *env) (*plan, error) {
 	installed := filepath.Join(e.home, ".gemini", "extensions", e.meta.Name)
 	if _, err := os.Stat(installed); err == nil {
 		if _, err := os.Stat(filepath.Join(installed, markerFile)); err != nil && !e.opts.force {
-			return nil, fmt.Errorf("%s zaten kurulu ve Lexis-AI'ye ait değil (üzerine yazmak için --force)", installed)
+			return nil, fmt.Errorf("%s is already installed and does not belong to Lexis-AI (use --force to overwrite)", installed)
 		}
 	}
 	bin := e.runner.findBin([]string{"gemini"})
 
 	p := &plan{}
-	p.steps = append(p.steps, step{"Eklenti dosyaları → " + stage, func() error {
+	p.steps = append(p.steps, step{"Plugin files → " + stage, func() error {
 		if err := prepareDir(stage, e.opts.force); err != nil {
 			return err
 		}
 		if err := copyTree(e.src, stage, platformManifests); err != nil {
+			return err
+		}
+		if err := setLanguage(stage, e.opts.lang); err != nil {
 			return err
 		}
 		if err := writeJSON(filepath.Join(stage, "gemini-extension.json"), map[string]any{
@@ -317,23 +326,23 @@ func planGemini(e *env) (*plan, error) {
 		p.next = manualNext(quoteCmd("gemini", "extensions", "install", stage))
 		return p, nil
 	}
-	p.steps = append(p.steps, step{"Gemini CLI eklentisi: " + e.meta.Name, func() error {
+	p.steps = append(p.steps, step{"Gemini CLI extension: " + e.meta.Name, func() error {
 		// Some Gemini CLI builds crash on exit on Windows after finishing the work, so the
 		// result is judged by the extension folder, not by the exit code.
 		exists := func() bool { _, err := os.Stat(filepath.Join(installed, "gemini-extension.json")); return err == nil }
 		if exists() {
 			err := e.runner.run(e.home, bin, "extensions", "uninstall", e.meta.Name)
 			if exists() {
-				return fmt.Errorf("eski kurulum kaldırılamadı: %v", err)
+				return fmt.Errorf("could not remove the previous install: %v", err)
 			}
 		}
 		for _, old := range legacyNames {
 			oldDir := filepath.Join(e.home, ".gemini", "extensions", old)
 			if _, err := os.Stat(filepath.Join(oldDir, markerFile)); err == nil {
-				fmt.Println("  eski ad kaldırılıyor:", old)
+				fmt.Println("  removing old name:", old)
 				e.runner.run(e.home, bin, "extensions", "uninstall", old) // checked below by folder
 				if _, err := os.Stat(oldDir); err == nil {
-					return fmt.Errorf("eski eklenti %s kaldırılamadı", old)
+					return fmt.Errorf("could not remove old extension %s", old)
 				}
 			}
 			if err := removeOwned(filepath.Join(lexisBase(e), "gemini", old)); err != nil {
@@ -347,18 +356,18 @@ func planGemini(e *env) (*plan, error) {
 		err := e.runner.run(e.home, bin, args...)
 		if !exists() {
 			if err == nil {
-				err = fmt.Errorf("kurulum sonrası %s bulunamadı", installed)
+				err = fmt.Errorf("%s not found after install", installed)
 			}
 			return err
 		}
 		if err != nil {
-			fmt.Println("  (Gemini CLI hata koduyla çıktı ama eklenti kuruldu)")
+			fmt.Println("  (Gemini CLI exited with an error code, but the extension is installed)")
 		}
 		return nil
 	}})
 	p.next = []string{
-		"Gemini CLI'yi yeniden başlat; /extensions list ile kontrol et.",
-		"Skill'ler isteğine göre devreye girer: \"world-init ile yeni dünya kur\", \"event: …\".",
+		"Restart Gemini CLI; check with /extensions list.",
+		"Skills activate from your request: \"set up a new world with world-init\", \"event: …\".",
 	}
 	return p, nil
 }
@@ -400,13 +409,13 @@ func planCopilot(e *env) (*plan, error) {
 	}
 	for _, n := range names {
 		if _, err := os.Stat(filepath.Join(skillsRoot, n)); err == nil && !owned[n] && !e.opts.force {
-			return nil, fmt.Errorf("%s adında başka bir skill zaten var: %s (üzerine yazmak için --force)", n, filepath.Join(skillsRoot, n))
+			return nil, fmt.Errorf("another skill named %s already exists: %s (use --force to overwrite)", n, filepath.Join(skillsRoot, n))
 		}
 	}
 
 	p := &plan{}
 	p.steps = append(p.steps,
-		step{"Ortak dosyalar (kurallar, şablonlar, FAE) → " + core, func() error {
+		step{"Shared files (rules, templates, FAE) → " + core, func() error {
 			if err := prepareDir(core, e.opts.force); err != nil {
 				return err
 			}
@@ -418,9 +427,12 @@ func planCopilot(e *env) (*plan, error) {
 			if err := copyTree(e.src, core, append(platformManifests, "skills")); err != nil {
 				return err
 			}
+			if err := setLanguage(core, e.opts.lang); err != nil {
+				return err
+			}
 			return writeMarker(core, e, map[string]any{"skills": names})
 		}},
-		step{fmt.Sprintf("%d skill → %s", len(names), skillsRoot), func() error {
+		step{fmt.Sprintf("%d skills → %s", len(names), skillsRoot), func() error {
 			for _, n := range names {
 				dst := filepath.Join(skillsRoot, n)
 				if err := os.RemoveAll(dst); err != nil {
@@ -437,8 +449,8 @@ func planCopilot(e *env) (*plan, error) {
 		}},
 	)
 	p.next = []string{
-		"Copilot CLI'de /skills reload, sonra /skills list ile kontrol et.",
-		"Skill'leri / ile çağır: /world-init, /event …",
+		"In Copilot CLI run /skills reload, then check with /skills list.",
+		"Call skills with /: /world-init, /event …",
 	}
 	return p, nil
 }

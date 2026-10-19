@@ -29,7 +29,7 @@ func (p *prompter) choose(question string, options []string, def int) int {
 		for i, o := range options {
 			fmt.Fprintf(p.out, "%d) %s\n", i+1, o)
 		}
-		fmt.Fprintf(p.out, "Seçim [1-%d] (varsayılan %d): ", len(options), def+1)
+		fmt.Fprintf(p.out, "Choice [1-%d] (default %d): ", len(options), def+1)
 		s := p.line()
 		if s == "" {
 			fmt.Fprintln(p.out)
@@ -39,7 +39,7 @@ func (p *prompter) choose(question string, options []string, def int) int {
 			fmt.Fprintln(p.out)
 			return n - 1
 		}
-		fmt.Fprintf(p.out, "Geçersiz seçim: %q\n\n", s)
+		fmt.Fprintf(p.out, "Invalid choice: %q\n\n", s)
 	}
 }
 
@@ -52,9 +52,9 @@ func (p *prompter) ask(question, def string) string {
 }
 
 func (p *prompter) confirm(question string, def bool) bool {
-	hint := "E/h"
+	hint := "Y/n"
 	if !def {
-		hint = "e/H"
+		hint = "y/N"
 	}
 	fmt.Fprintf(p.out, "%s [%s]: ", question, hint)
 	switch strings.ToLower(p.line()) {

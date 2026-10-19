@@ -43,7 +43,7 @@ func fetchSource(o options) (dir string, cleanup func(), err error) {
 		if err != nil {
 			return "", noop, err
 		}
-		fmt.Println("Kaynak (yerel):", d)
+		fmt.Println("Source (local):", d)
 		return d, noop, nil
 	}
 
@@ -52,7 +52,7 @@ func fetchSource(o options) (dir string, cleanup func(), err error) {
 		return "", noop, err
 	}
 	cleanup = func() { os.RemoveAll(tmp) }
-	fmt.Printf("Eklenti indiriliyor: github.com/%s (%s)\n", o.repo, o.ref)
+	fmt.Printf("Downloading plugin: github.com/%s (%s)\n", o.repo, o.ref)
 	if err := downloadTarball(o.repo, o.ref, tmp); err != nil {
 		cleanup()
 		return "", noop, err
@@ -77,11 +77,11 @@ func downloadTarball(repo, ref, dst string) error {
 	}
 	resp, err := (&http.Client{Timeout: 2 * time.Minute}).Do(req)
 	if err != nil {
-		return fmt.Errorf("indirme başarısız: %w", err)
+		return fmt.Errorf("download failed: %w", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("indirme başarısız: %s → HTTP %d (repo herkese açık mı? özel repo için GITHUB_TOKEN ayarla; ya da --source kullan)", url, resp.StatusCode)
+		return fmt.Errorf("download failed: %s → HTTP %d (is the repo public? set GITHUB_TOKEN for a private repo, or use --source)", url, resp.StatusCode)
 	}
 	return extractTarGz(resp.Body, dst)
 }
@@ -103,7 +103,7 @@ func extractTarGz(r io.Reader, dst string) error {
 		}
 		target := filepath.Join(dst, filepath.FromSlash(h.Name))
 		if !strings.HasPrefix(target, root) {
-			return fmt.Errorf("arşivde güvensiz yol: %s", h.Name)
+			return fmt.Errorf("unsafe path in archive: %s", h.Name)
 		}
 		switch h.Typeflag {
 		case tar.TypeDir:
@@ -149,7 +149,7 @@ func locatePlugin(root string) (string, error) {
 			return c, nil
 		}
 	}
-	return "", fmt.Errorf("eklenti bulunamadı: %s altında plugin.json + skills/ olan bir klasör yok", root)
+	return "", fmt.Errorf("plugin not found: no folder with plugin.json + skills/ under %s", root)
 }
 
 func readMeta(dir string) (pluginMeta, error) {
@@ -159,10 +159,10 @@ func readMeta(dir string) (pluginMeta, error) {
 		return m, err
 	}
 	if err := json.Unmarshal(b, &m); err != nil {
-		return m, fmt.Errorf("plugin.json okunamadı: %w", err)
+		return m, fmt.Errorf("cannot read plugin.json: %w", err)
 	}
 	if m.Name == "" || m.Version == "" {
-		return m, fmt.Errorf("plugin.json içinde name/version eksik")
+		return m, fmt.Errorf("plugin.json is missing name/version")
 	}
 	return m, nil
 }

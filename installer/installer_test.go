@@ -24,7 +24,7 @@ func newEnv(t *testing.T, platform, scope string) *env {
 	if err != nil {
 		t.Fatal(err)
 	}
-	o := options{platform: platform, scope: scope}
+	o := options{platform: platform, scope: scope, lang: "Türkçe (Turkish)"}
 	if scope == "project" {
 		o.projectDir = t.TempDir()
 	}
@@ -223,7 +223,7 @@ func TestPrompterFlow(t *testing.T) {
 	if p.confirm("ok?", true) {
 		t.Error("'h' should mean no")
 	}
-	if !strings.Contains(out.String(), "4) d") || !strings.Contains(out.String(), "Geçersiz seçim") {
+	if !strings.Contains(out.String(), "4) d") || !strings.Contains(out.String(), "Invalid choice") {
 		t.Errorf("menu output unexpected:\n%s", out.String())
 	}
 }
@@ -280,5 +280,33 @@ func TestCodexMarketplaceDropsLegacyEntry(t *testing.T) {
 	}
 	if strings.Join(names, ",") != "other,lexis-ai" {
 		t.Errorf("plugins = %v", names)
+	}
+}
+
+func TestLanguageWrittenForEveryPlatform(t *testing.T) {
+	dirs := map[string]func(e *env) string{
+		"claude":  func(e *env) string { return filepath.Join(e.home, ".lexis-ai", "claude-code", "lexis-ai") },
+		"codex":   func(e *env) string { return filepath.Join(e.home, ".lexis-ai", "codex", "plugins", "lexis-ai") },
+		"gemini":  func(e *env) string { return filepath.Join(e.home, ".lexis-ai", "gemini", "lexis-ai") },
+		"copilot": func(e *env) string { return filepath.Join(e.home, ".copilot", "lexis-ai") },
+	}
+	for platform, dir := range dirs {
+		e := newEnv(t, platform, "user")
+		apply(t, e)
+		agents := read(t, filepath.Join(dir(e), "AGENTS.md"))
+		if !strings.Contains(agents, "- **Default output language:** Türkçe (Turkish) <!-- lexis:language -->") {
+			t.Errorf("%s: language not set in AGENTS.md", platform)
+		}
+		if strings.Count(agents, "lexis:language") != 1 {
+			t.Errorf("%s: language marker duplicated or lost", platform)
+		}
+	}
+}
+
+func TestSetLanguageNeedsMarker(t *testing.T) {
+	d := t.TempDir()
+	os.WriteFile(filepath.Join(d, "AGENTS.md"), []byte("# rules\n"), 0o644)
+	if err := setLanguage(d, "English"); err == nil {
+		t.Error("expected an error when the language line is missing")
 	}
 }

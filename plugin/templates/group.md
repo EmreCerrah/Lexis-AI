@@ -1,27 +1,27 @@
 ---
-tür: grup
-ad: {{Ad}}
+type: group
+name: {{Name}}
 ---
 
-# {{Ad}}
+# {{Name}}
 
-## Ne
-{{Grup ne, kime hizmet eder, dışarıdan nasıl görünür}}
+## What
+{{What the group is, whom it serves, how it looks from outside}}
 
-## Amaç
-{{Grubun istediği}}
+## Goal
+{{What the group wants}}
 
-## Kaynaklar ve Yöntemler
-{{Para, adam, büyü, bilgi ağı…}}
+## Resources and Methods
+{{Money, people, magic, an information network …}}
 
-## Aspect'ler
-- {{grup aspect'i}}
+## Aspects
+- {{group aspect}}
 
-## 🔒 GM Notları
-{{İç çekişmeler, gerçek lider, gizli amaç}}
+## 🔒 GM Notes
+{{Internal conflicts, the real leader, the secret goal}}
 
-## Bağlantılar
-<!-- Üyeler: - [[karakter]] — üye / lider -->
-- [[{{slug}}]] — {{ilişki}}
+## Links
+<!-- Members: - [[character]] — member / leader -->
+- [[{{slug}}]] — {{relation}}
 
-## Belirsiz
+## Uncertain

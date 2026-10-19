@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -108,7 +109,7 @@ func prepareDir(dir string, force bool) error {
 		return nil
 	}
 	if _, err := os.Stat(filepath.Join(dir, markerFile)); err != nil && !force {
-		return fmt.Errorf("%s zaten var ve Lexis-AI'ye ait değil (üzerine yazmak için --force)", dir)
+		return fmt.Errorf("%s already exists and does not belong to Lexis-AI (use --force to overwrite)", dir)
 	}
 	return os.RemoveAll(dir)
 }
@@ -133,4 +134,20 @@ func removeOwned(dir string) error {
 		return nil
 	}
 	return os.RemoveAll(dir)
+}
+
+var languageLine = regexp.MustCompile(`(?m)^- \*\*Default output language:\*\* .*<!-- lexis:language -->\r?$`)
+
+// setLanguage writes the user's chosen answer language into the installed AGENTS.md.
+func setLanguage(pluginDir, lang string) error {
+	p := filepath.Join(pluginDir, "AGENTS.md")
+	b, err := os.ReadFile(p)
+	if err != nil {
+		return err
+	}
+	if !languageLine.Match(b) {
+		return fmt.Errorf("%s has no language line (<!-- lexis:language -->); plugin and installer versions do not match", p)
+	}
+	line := "- **Default output language:** " + lang + " <!-- lexis:language -->"
+	return os.WriteFile(p, languageLine.ReplaceAll(b, []byte(line)), 0o644)
 }

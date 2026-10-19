@@ -1,23 +1,23 @@
 ---
-tür: mekan
-ad: {{Ad}}
+type: location
+name: {{Name}}
 ---
 
-# {{Ad}}
+# {{Name}}
 
-## Tasvir
-{{Duyulara hitap eden 2-3 cümle}}
+## Description
+{{2-3 sentences that appeal to the senses}}
 
-## Kim Bulunur
-{{Burada yaşayan, çalışan, takılan kişiler/gruplar — bağlantı olarak da yaz}}
+## Who Is Found Here
+{{People and groups who live, work or hang out here; add them as links too}}
 
-## Aspect'ler
-- {{mekan aspect'i}}
+## Aspects
+- {{location aspect}}
 
-## 🔒 GM Notları
-{{Gizli geçitler, saklı şeyler}}
+## 🔒 GM Notes
+{{Secret passages, hidden things}}
 
-## Bağlantılar
-- [[{{slug}}]] — {{ilişki: bekçi, sahibi, müdavim, içinde, yakınında…}}
+## Links
+- [[{{slug}}]] — {{relation: keeper, owner, regular, inside, near …}}
 
-## Belirsiz
+## Uncertain

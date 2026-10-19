@@ -1,10 +1,10 @@
-# {{Dünyanın adı}} — Lexis-AI dünyası
+# {{World name}} — Lexis-AI world
 
-Bu klasör bir Lexis-AI dünyasıdır. Bu klasörde çalışan her agent için:
+This folder is a Lexis-AI world. For any agent working in this folder:
 
-- Kurallar: Lexis-AI eklentisinin `AGENTS.md` dosyası geçerlidir. Eklenti yüklü değilse dünya dosyalarını yalnızca oku.
-- Canon dosyaları (`world.md`, `system.md`, `karakterler/`, `mekanlar/`, `gruplar/`, `hooklar/`) yalnızca `/close-session` onayıyla değişir.
-- Seans sırasında yalnızca açık seans günlüğüne (`seanslar/`, `durum: açık`) ekleme yapılır.
-- `## Değişmez Kurallar` ve hook'ların `## 🔒 Gizli Gerçek` bölümleri asla ihlal edilmez.
-- `🔒` işaretli içerik oyunculara okunmaz.
-- Çıktı dili: Türkçe.
+- Rules: the `AGENTS.md` of the Lexis-AI plugin applies. If the plugin is not installed, only read the world files.
+- Canon files (`world.md`, `system.md`, `characters/`, `locations/`, `groups/`, `hooks/`) change only with `/close-session` approval.
+- During a session, only append to the open session log (`sessions/`, `status: open`).
+- Never violate `## Immutable Rules` or a hook's `## 🔒 Hidden Truth`.
+- Never read content marked `🔒` to the players.
+- Output language: {{language}}.
