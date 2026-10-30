@@ -135,25 +135,49 @@ func planClaude(e *env) (*plan, error) {
 	}
 	p.steps = append(p.steps,
 		step{"Claude Code marketplace: " + marketplaceName, func() error {
-			if out, _ := e.runner.output(bin, "plugin", "marketplace", "list"); strings.Contains(out, marketplaceName) {
-				// Claude Code reads its own copy of the marketplace; refresh it from the files just written.
-				return e.runner.run(workDir(e), bin, "plugin", "marketplace", "update", marketplaceName)
+			registered, known := claudeMarketplacePath(e.runner, bin)
+			switch {
+			case !known:
+				// No JSON listing: fall back to the name check.
+				if out, _ := e.runner.output(bin, "plugin", "marketplace", "list"); !strings.Contains(out, marketplaceName) {
+					return e.runner.run(addDir, bin, addArgs...)
+				}
+			case registered == "":
+				return e.runner.run(addDir, bin, addArgs...)
+			case !samePath(registered, root):
+				// Left over from an install elsewhere (e.g. a deleted project folder): point it here.
+				fmt.Println("  marketplace was registered at", registered, "— re-registering it here")
+				if err := e.runner.run(workDir(e), bin, "plugin", "marketplace", "remove", marketplaceName); err != nil {
+					return err
+				}
+				return e.runner.run(addDir, bin, addArgs...)
 			}
-			return e.runner.run(addDir, bin, addArgs...)
+			// Claude Code reads its own copy of the marketplace; refresh it from the files just written.
+			return e.runner.run(workDir(e), bin, "plugin", "marketplace", "update", marketplaceName)
 		}},
 		step{"Claude Code plugin: " + selector, func() error {
-			out, _ := e.runner.output(bin, "plugin", "list")
-			for _, old := range legacyNames {
-				if strings.Contains(out, old+"@"+marketplaceName) {
-					fmt.Println("  removing old name:", old+"@"+marketplaceName)
-					if err := e.runner.run(workDir(e), bin, "plugin", "uninstall", old+"@"+marketplaceName, "--scope", scope); err != nil {
-						return err
+			installed := claudePlugins(e.runner, bin)
+			for _, pl := range installed {
+				if !isLegacy(strings.TrimSuffix(pl.ID, "@"+marketplaceName)) || !strings.HasSuffix(pl.ID, "@"+marketplaceName) {
+					continue
+				}
+				fmt.Println("  removing old name:", pl.ID, "("+pl.Scope+")")
+				dir := workDir(e)
+				if pl.ProjectPath != "" {
+					if st, err := os.Stat(pl.ProjectPath); err == nil && st.IsDir() {
+						dir = pl.ProjectPath
 					}
 				}
+				if err := e.runner.run(dir, bin, "plugin", "uninstall", pl.ID, "--scope", pl.Scope); err != nil {
+					// A stale entry must not block the new install.
+					fmt.Printf("  ⚠ could not remove %s; remove it later with: claude plugin uninstall %s --scope %s\n", pl.ID, pl.ID, pl.Scope)
+				}
 			}
-			if strings.Contains(out, selector) {
-				fmt.Println("  (already installed; updating — an unchanged version number stays cached)")
-				return e.runner.run(workDir(e), bin, "plugin", "update", selector)
+			for _, pl := range installed {
+				if pl.ID == selector && pl.Scope == scope {
+					fmt.Println("  (already installed; updating — an unchanged version number stays cached)")
+					return e.runner.run(workDir(e), bin, "plugin", "update", selector, "--scope", scope)
+				}
 			}
 			return e.runner.run(workDir(e), bin, instArgs...)
 		}},
@@ -470,4 +494,66 @@ func isLegacy(name any) bool {
 		}
 	}
 	return false
+}
+
+// claudeMarketplacePath returns where Claude Code has the lexis-ai marketplace registered
+// ("" if it isn't). known is false when this Claude Code version has no JSON listing.
+func claudeMarketplacePath(r *runner, bin string) (path string, known bool) {
+	out, err := r.output(bin, "plugin", "marketplace", "list", "--json")
+	var list []struct {
+		Name, Path, InstallLocation string
+	}
+	if err != nil || json.Unmarshal([]byte(jsonPart(out)), &list) != nil {
+		return "", false
+	}
+	for _, m := range list {
+		if m.Name == marketplaceName {
+			if m.Path != "" {
+				return m.Path, true
+			}
+			return m.InstallLocation, true
+		}
+	}
+	return "", true
+}
+
+type claudePlugin struct {
+	ID          string `json:"id"`
+	Scope       string `json:"scope"`
+	ProjectPath string `json:"projectPath"`
+}
+
+func claudePlugins(r *runner, bin string) []claudePlugin {
+	out, err := r.output(bin, "plugin", "list", "--json")
+	var list []claudePlugin
+	if err == nil && json.Unmarshal([]byte(jsonPart(out)), &list) == nil {
+		return list
+	}
+	// No JSON listing: assume user scope for anything the plain listing names.
+	plain, _ := r.output(bin, "plugin", "list")
+	for _, name := range append([]string{marketplaceName}, legacyNames...) {
+		if id := name + "@" + marketplaceName; strings.Contains(plain, id) {
+			list = append(list, claudePlugin{ID: id, Scope: "user"})
+		}
+	}
+	return list
+}
+
+// jsonPart drops any log lines a CLI prints before its JSON output.
+func jsonPart(s string) string {
+	if i := strings.IndexAny(s, "[{"); i >= 0 {
+		return s[i:]
+	}
+	return s
+}
+
+func samePath(a, b string) bool {
+	a, b = filepath.Clean(strings.TrimPrefix(a, `\?\`)), filepath.Clean(strings.TrimPrefix(b, `\?\`))
+	if a == b || strings.EqualFold(a, b) {
+		return true
+	}
+	// Windows can report the same folder as a long or a short (8.3) path.
+	ra, err1 := filepath.EvalSymlinks(a)
+	rb, err2 := filepath.EvalSymlinks(b)
+	return err1 == nil && err2 == nil && strings.EqualFold(ra, rb)
 }

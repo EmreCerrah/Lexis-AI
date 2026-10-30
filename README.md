@@ -17,7 +17,7 @@ Then run it:
 ```bash
 lexis-setup
 ```
-`go install` puts the program in Go's bin folder: `%USERPROFILE%\go\bin` on Windows, `~/go/bin` on macOS and Linux. If your terminal says `lexis-setup` is not found, add that folder to your `PATH`, or run the program with its full path. To update the setup tool later, run the same `go install` command again.
+`go install` prints nothing when it succeeds. It puts the program in Go's bin folder: `%USERPROFILE%\go\bin` on Windows, `~/go/bin` on macOS and Linux. If your terminal says `lexis-setup` is not found, add that folder to your `PATH`, or run the program with its full path. To update the setup tool later, run the same `go install` command again.
 
 The tool asks three questions:
 1. **Which AI tool do you use?** Claude Code, Codex, Gemini CLI or GitHub Copilot.
