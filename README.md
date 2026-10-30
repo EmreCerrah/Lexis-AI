@@ -59,6 +59,70 @@ Every folder the tool writes carries a `.lexis-ai.json` marker. When the tool ru
 
 For a private repository, set the `GITHUB_TOKEN` environment variable.
 
+## Usage
+Lexis-AI helps you **while you run the game**. You stay in charge: it never rolls dice and never decides whether an action succeeds. You tell it what happened; it records that, shows how it ripples through the world, and helps with rules and scene material. Your world files change only when you approve the changes at the end of the session.
+
+### How to call a command
+Make an empty folder for your world, open your AI tool in that folder, then call a command.
+
+| Tool | How to call it | Example |
+|---|---|---|
+| Claude Code | `/lexis-ai:<command>` | `/lexis-ai:event The players broke into the crypt` |
+| Codex | `$<command>` (or pick `@lexis-ai`) | `$event The players broke into the crypt` |
+| GitHub Copilot | `/<command>` | `/event The players broke into the crypt` |
+| Gemini CLI | describe what you want | `event: the players broke into the crypt` |
+
+Plain requests work in every tool too, for example "record what just happened" or "close the session". Below, commands are written as `/event`, `/ripples` and so on.
+
+### Commands
+| Command | When to use it | What you get | What it writes |
+|---|---|---|---|
+| `/world-init` | once, before the first session | A short interview: name, concept, genre, language, tone, inspirations, fantasy level, **Immutable Rules**, system. Characters, places, groups and hooks can be skipped ("later") or drafted by the AI ("you suggest"). | creates the world files |
+| `/event <what happened>` | at the table, right after something happens | The event is recorded at once. You get 3-5 short **ripples** (possible consequences) and a **who might know** list. | session log only |
+| `/ripples [E2]` | between scenes, when you want more | The event examined through lenses (power and politics, society and rumor, faith and the supernatural), and how word of it spreads 2-3 steps. | session log only |
+| `/create-aspect [scene]` | you need an aspect for the scene | One Fate aspect, with an invoke and a compel example. | session log (proposal) |
+| `/create-obstacle [scene]` | you need a lock, trap, puzzle, hazard or social obstacle | The fiction first (what it is, why it is here), then Fate: an aspect, a suggested difficulty, fitting approaches, cost options. | session log (proposal) |
+| `/create-lore <what you need>` | you need an NPC, place, faction or hook | One ready entity with aspects and links. | `proposals/` (proposal) |
+| `/help-skills <what the player does>` | a rules question at the table | Which action fits (Overcome, Create an Advantage, Attack, Defend), 2-3 fitting approaches, a difficulty range, matching stunts or aspects. | nothing |
+| `/close-session` | at the end of the session | Everything from the session in one numbered list, each with a suggested answer. You answer once; only what you approve is written. | world files |
+
+### A session, step by step
+1. **Set up the world:** `/world-init`. Answer the core questions in one go. Say "later" to anything you don't want to decide yet; it goes to the world's `## Uncertain` section.
+2. **Report what happens:** `/event Gabriel caught the gravekeeper next to an empty coffin. The keeper ran and dropped a theater ticket with a yellow sign on it.`
+   ```
+   📌 E1 recorded (session-001) · Lens: society-rumor, faith-supernatural
+   Ripples (hypothesis):
+   - R1 The keeper hides in the tavern and mutters "it wasn't a vampire"
+   - R2 By morning the town says "the hunter attacked the keeper"
+   - R3 🔒 The troupe notices the lost ticket and sends a marked corpse after the keeper
+   Who might know:
+   - [[gravekeeper]] — there
+   - [[order-of-light]] — may hear (member → [[gabriel]])
+   ```
+3. **Ask rules questions:** `/help-skills Gabriel wants to scare the keeper into talking`. **Get scene material:** `/create-obstacle the cellar door the keeper locked behind him`.
+4. **Dig deeper when there is time:** `/ripples E1`.
+5. **Close the session:** `/close-session`. You get a numbered list (events to write into world files, ripples to keep or drop, new links, which generated items you used). Answer once, for example `all as suggested, 3 ❌, defer 7`.
+
+### Table mode and prep mode
+- **Table mode** is the default: at most 5 short bullets, no questions unless they are needed, and no approval questions in the middle of the game.
+- **Prep mode:** add `prep` or `detailed` to a command, for example `/ripples E1 prep`, for a longer analysis between sessions.
+
+### What it never does
+- It never changes your world files during the session. Events, ripples and generated items wait in the session log (`sessions/`) until `/close-session`.
+- It never breaks an **Immutable Rule** in anything it suggests. If you report an event that breaks one, it records the event anyway, flags `⚠ rule conflict` and offers three choices: (a) it only looks like a violation, (b) a costly exception, (c) the rule changes (decided at `/close-session`).
+- It never reveals a hook's **🔒 Hidden Truth**. If players try to break it, it suggests in-world reasons why they can't.
+- Lines marked `🔒` are for the GM only. Don't read them to the players.
+
+### Your world folder
+```
+world.md        # concept, tone, Immutable Rules (IR1, IR2 …)
+system.md       # Fate Accelerated settings and Homebrew
+characters/  locations/  groups/  hooks/   # one Markdown file per entity
+sessions/       # one log per session
+proposals/      # /create-lore output waiting for approval
+```
+These are plain Markdown files with `[[links]]`, and you can edit them yourself. Open the folder in Obsidian if you want a linked view. "Who might know" only uses the `## Links` section of each file, so put relations there, one per line: `- [[order-of-light]] — member`.
+
 ## Build
 ```bash
 cd lexis-setup && go test ./... && go build -o lexis-setup.exe .
