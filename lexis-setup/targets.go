@@ -22,7 +22,7 @@ type target struct {
 var targets = map[string]target{
 	"claude":  {"Claude Code", true, planClaude},
 	"codex":   {"Codex", true, planCodex},
-	"gemini":  {"Gemini CLI", false, planGemini},
+	"gemini":  {"Gemini CLI", true, planGemini},
 	"copilot": {"GitHub Copilot", true, planCopilot},
 }
 
@@ -66,6 +66,9 @@ func manualNext(cmds ...string) []string {
 // ---------- Claude Code ----------
 
 func planClaude(e *env) (*plan, error) {
+	if e.opts.scope == "project" {
+		return planClaudeProject(e)
+	}
 	root := filepath.Join(lexisBase(e), "claude-code")
 	pdir := filepath.Join(root, e.meta.Name)
 	scope := e.opts.scope
@@ -192,6 +195,9 @@ func planClaude(e *env) (*plan, error) {
 // ---------- Codex ----------
 
 func planCodex(e *env) (*plan, error) {
+	if e.opts.scope == "project" {
+		return planCodexProject(e)
+	}
 	var root string
 	if e.opts.scope == "project" {
 		root = e.opts.projectDir // repo marketplace: <repo>/.agents/plugins + <repo>/plugins/<name>
@@ -316,6 +322,9 @@ func codexMarketplace(path, plugin string) (map[string]any, error) {
 // ---------- Gemini CLI ----------
 
 func planGemini(e *env) (*plan, error) {
+	if e.opts.scope == "project" {
+		return planGeminiProject(e)
+	}
 	stage := filepath.Join(lexisBase(e), "gemini", e.meta.Name)
 	installed := filepath.Join(e.home, ".gemini", "extensions", e.meta.Name)
 	if _, err := os.Stat(installed); err == nil {
@@ -399,17 +408,139 @@ func planGemini(e *env) (*plan, error) {
 // ---------- GitHub Copilot ----------
 
 func planCopilot(e *env) (*plan, error) {
-	var base, prefix string
+	base := filepath.Join(e.home, ".copilot")
+	prefix := slash(filepath.Join(base, e.meta.Name)) + "/"
 	if e.opts.scope == "project" {
 		base = filepath.Join(e.opts.projectDir, ".github")
 		prefix = "../../" + e.meta.Name + "/" // committed with the repo, so keep it relative
-	} else {
-		base = filepath.Join(e.home, ".copilot")
 	}
+	p, err := planSkillsInto(e, base, prefix)
+	if err != nil {
+		return nil, err
+	}
+	p.next = []string{
+		"In Copilot CLI run /skills reload, then check with /skills list.",
+		"Call skills with /: /world-init, /event …",
+	}
+	return p, nil
+}
+
+// ---------- Project installs (all tools) ----------
+
+// Project installs copy the files straight into the folder each tool already scans for project
+// skills, so nothing has to be registered with the tool.
+func planClaudeProject(e *env) (*plan, error) {
+	p, err := planSkillsInto(e, filepath.Join(e.opts.projectDir, ".claude"), "../../"+e.meta.Name+"/")
+	if err != nil {
+		return nil, err
+	}
+	var cleanup []step
+	if s, ok := oldProjectLayoutStep(e, "claude-code"); ok {
+		cleanup = append(cleanup, s)
+	}
+	// An older project install registered a marketplace; drop it if it points into this
+	// project or at a folder that no longer exists.
+	if bin := e.runner.findBin([]string{"claude"}); bin != "" {
+		if registered, _ := claudeMarketplacePath(e.runner, bin); registered != "" && (isInside(registered, e.opts.projectDir) || !exists(registered)) {
+			cleanup = append(cleanup, step{"Remove old Claude Code marketplace registration (" + registered + ")", func() error {
+				return e.runner.run(e.home, bin, "plugin", "marketplace", "remove", marketplaceName)
+			}})
+		}
+	}
+	settings := filepath.Join(e.opts.projectDir, ".claude", "settings.json")
+	if hasOldClaudeEnable(settings, e.meta.Name) {
+		cleanup = append(cleanup, step{"Remove old plugin entry from " + settings, func() error {
+			return dropOldClaudeEnable(settings, e.meta.Name)
+		}})
+	}
+	p.steps = append(cleanup, p.steps...)
+	p.next = []string{
+		"Open Claude Code in " + e.opts.projectDir + " (restart it if it is already open).",
+		"Call skills with /: /world-init, /event …",
+	}
+	return p, nil
+}
+
+func planCodexProject(e *env) (*plan, error) {
+	proj := e.opts.projectDir
+	p, err := planSkillsInto(e, filepath.Join(proj, ".agents"), "../../"+e.meta.Name+"/")
+	if err != nil {
+		return nil, err
+	}
+	// Older project installs used a repo marketplace: <project>/plugins/<name> + .agents/plugins/marketplace.json.
+	var cleanup []step
+	oldPlugin := filepath.Join(proj, "plugins", e.meta.Name)
+	if _, err := os.Stat(filepath.Join(oldPlugin, markerFile)); err == nil {
+		mktFile := filepath.Join(proj, ".agents", "plugins", "marketplace.json")
+		bin := e.runner.findBin(codexCandidates(), "plugin", "marketplace", "list")
+		cleanup = append(cleanup, step{"Remove old Codex project plugin (" + oldPlugin + ")", func() error {
+			mktName := marketplaceName
+			if m, err := codexMarketplace(mktFile, e.meta.Name); err == nil {
+				mktName = m["name"].(string)
+			}
+			if bin != "" {
+				if out, _ := e.runner.output(bin, "plugin", "list"); strings.Contains(out, e.meta.Name+"@"+mktName+" ") {
+					if err := e.runner.run(proj, bin, "plugin", "remove", e.meta.Name+"@"+mktName); err != nil {
+						return err
+					}
+				}
+			}
+			if err := removeOwned(oldPlugin); err != nil {
+				return err
+			}
+			removeEmpty(filepath.Join(proj, "plugins"))
+			emptied, err := dropCodexEntries(mktFile, e.meta.Name)
+			if err != nil {
+				return err
+			}
+			if emptied && bin != "" && mktName == marketplaceName {
+				return e.runner.run(proj, bin, "plugin", "marketplace", "remove", marketplaceName)
+			}
+			return nil
+		}})
+	}
+	p.steps = append(cleanup, p.steps...)
+	p.next = []string{
+		"Open Codex in " + proj + " (restart it if it is already open).",
+		"Call skills with $: $world-init, $event …",
+	}
+	return p, nil
+}
+
+func planGeminiProject(e *env) (*plan, error) {
+	p, err := planSkillsInto(e, filepath.Join(e.opts.projectDir, ".gemini"), "../../"+e.meta.Name+"/")
+	if err != nil {
+		return nil, err
+	}
+	if s, ok := oldProjectLayoutStep(e, "gemini"); ok {
+		p.steps = append([]step{s}, p.steps...)
+	}
+	p.next = []string{
+		"Start Gemini CLI in " + e.opts.projectDir + "; check with /skills list.",
+		"Skills activate from your request: \"set up a new world with world-init\", \"event: …\".",
+	}
+	return p, nil
+}
+
+// oldProjectLayoutStep removes <project>/.lexis-ai/<sub>, where earlier versions put project installs.
+func oldProjectLayoutStep(e *env, sub string) (step, bool) {
+	old := filepath.Join(e.opts.projectDir, ".lexis-ai", sub)
+	if _, err := os.Stat(filepath.Join(old, markerFile)); err != nil {
+		return step{}, false
+	}
+	return step{"Remove old project layout (" + old + ")", func() error {
+		if err := removeOwned(old); err != nil {
+			return err
+		}
+		removeEmpty(filepath.Dir(old))
+		return nil
+	}}, true
+}
+
+// planSkillsInto copies each skill to <base>/skills/<name> and the shared files (rules, references,
+// templates, system packs) to <base>/<plugin>. prefix replaces "../../" in every SKILL.md.
+func planSkillsInto(e *env, base, prefix string) (*plan, error) {
 	core := filepath.Join(base, e.meta.Name)
-	if prefix == "" {
-		prefix = slash(core) + "/"
-	}
 	skillsRoot := filepath.Join(base, "skills")
 
 	names, err := skillNames(e.src)
@@ -472,11 +603,59 @@ func planCopilot(e *env) (*plan, error) {
 			return nil
 		}},
 	)
-	p.next = []string{
-		"In Copilot CLI run /skills reload, then check with /skills list.",
-		"Call skills with /: /world-init, /event …",
-	}
 	return p, nil
+}
+
+// dropCodexEntries removes this plugin (and legacy names) from a repo marketplace file.
+// It deletes the file when no plugins are left; emptied reports that.
+func dropCodexEntries(path, plugin string) (emptied bool, err error) {
+	b, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	m := map[string]any{}
+	if err := json.Unmarshal(b, &m); err != nil {
+		return false, fmt.Errorf("cannot read %s: %w", path, err)
+	}
+	var keep []any
+	if list, ok := m["plugins"].([]any); ok {
+		for _, x := range list {
+			if xm, ok := x.(map[string]any); ok && (xm["name"] == plugin || isLegacy(xm["name"])) {
+				continue
+			}
+			keep = append(keep, x)
+		}
+	}
+	if len(keep) == 0 {
+		if err := os.Remove(path); err != nil {
+			return false, err
+		}
+		removeEmpty(filepath.Dir(path))
+		return true, nil
+	}
+	m["plugins"] = keep
+	return false, writeJSON(path, m)
+}
+
+func exists(p string) bool {
+	_, err := os.Stat(p)
+	return err == nil
+}
+
+// isInside reports whether p is dir or below it (case-insensitive, for Windows paths).
+func isInside(p, dir string) bool {
+	p, dir = strings.ToLower(filepath.Clean(p)), strings.ToLower(filepath.Clean(dir))
+	return p == dir || strings.HasPrefix(p, dir+string(filepath.Separator))
+}
+
+// removeEmpty deletes dir only if it is empty.
+func removeEmpty(dir string) {
+	if entries, err := os.ReadDir(dir); err == nil && len(entries) == 0 {
+		os.Remove(dir)
+	}
 }
 
 func mustRel(base, target string) string {
@@ -548,7 +727,7 @@ func jsonPart(s string) string {
 }
 
 func samePath(a, b string) bool {
-	a, b = filepath.Clean(strings.TrimPrefix(a, `\?\`)), filepath.Clean(strings.TrimPrefix(b, `\?\`))
+	a, b = filepath.Clean(strings.TrimPrefix(a, `\\?\`)), filepath.Clean(strings.TrimPrefix(b, `\\?\`))
 	if a == b || strings.EqualFold(a, b) {
 		return true
 	}
@@ -556,4 +735,58 @@ func samePath(a, b string) bool {
 	ra, err1 := filepath.EvalSymlinks(a)
 	rb, err2 := filepath.EvalSymlinks(b)
 	return err1 == nil && err2 == nil && strings.EqualFold(ra, rb)
+}
+
+// oldClaudeIDs are the plugin IDs earlier project installs enabled in <project>/.claude/settings.json.
+func oldClaudeIDs(plugin string) []string {
+	ids := []string{plugin + "@" + marketplaceName}
+	for _, old := range legacyNames {
+		ids = append(ids, old+"@"+marketplaceName)
+	}
+	return ids
+}
+
+func readClaudeSettings(path string) (map[string]any, bool) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return nil, false
+	}
+	m := map[string]any{}
+	if json.Unmarshal(b, &m) != nil {
+		return nil, false
+	}
+	return m, true
+}
+
+func hasOldClaudeEnable(path, plugin string) bool {
+	m, ok := readClaudeSettings(path)
+	if !ok {
+		return false
+	}
+	enabled, _ := m["enabledPlugins"].(map[string]any)
+	for _, id := range oldClaudeIDs(plugin) {
+		if _, ok := enabled[id]; ok {
+			return true
+		}
+	}
+	return false
+}
+
+// dropOldClaudeEnable removes only our enabledPlugins keys; the file is deleted only if nothing else is left.
+func dropOldClaudeEnable(path, plugin string) error {
+	m, ok := readClaudeSettings(path)
+	if !ok {
+		return nil
+	}
+	enabled, _ := m["enabledPlugins"].(map[string]any)
+	for _, id := range oldClaudeIDs(plugin) {
+		delete(enabled, id)
+	}
+	if len(enabled) == 0 {
+		delete(m, "enabledPlugins")
+	}
+	if len(m) == 0 {
+		return os.Remove(path)
+	}
+	return writeJSON(path, m)
 }

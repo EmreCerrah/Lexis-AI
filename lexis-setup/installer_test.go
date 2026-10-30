@@ -89,13 +89,36 @@ func TestClaudeUser(t *testing.T) {
 	}
 }
 
-func TestClaudeProjectUsesRelativeMarketplace(t *testing.T) {
-	e := newEnv(t, "claude", "project")
-	p := apply(t, e)
-	mustExist(t, filepath.Join(e.opts.projectDir, ".lexis-ai", "claude-code", "lexis-ai", "skills", "close-session", "SKILL.md"))
-	if !strings.Contains(strings.Join(p.next, "\n"), "marketplace add ./.lexis-ai/claude-code --scope project") {
-		t.Errorf("project marketplace should be relative: %v", p.next)
+// Project installs land in each tool's own project folder, and every rewritten path resolves.
+func TestProjectInstallsUseToolFolders(t *testing.T) {
+	for platform, folder := range map[string]string{"claude": ".claude", "codex": ".agents", "gemini": ".gemini", "copilot": ".github"} {
+		e := newEnv(t, platform, "project")
+		p := apply(t, e)
+		base := filepath.Join(e.opts.projectDir, folder)
+		skillDir := filepath.Join(base, "skills", "event")
+		skill := read(t, filepath.Join(skillDir, "SKILL.md"))
+		if !strings.Contains(skill, "../../lexis-ai/AGENTS.md") {
+			t.Errorf("%s: skill paths not rewritten", platform)
+		}
+		mustExist(t,
+			filepath.Join(skillDir, "..", "..", "lexis-ai", "AGENTS.md"),
+			filepath.Join(skillDir, "..", "..", "lexis-ai", "references", "lenses", "index.md"),
+			filepath.Join(base, "skills", "close-session", "SKILL.md"))
+		mustNotExist(t, filepath.Join(e.opts.projectDir, ".lexis-ai"), filepath.Join(base, "lexis-ai", "skills"))
+		if strings.Contains(strings.Join(p.next, "\n"), "plugin install") {
+			t.Errorf("%s: project install should not need plugin commands: %v", platform, p.next)
+		}
 	}
+}
+
+func TestProjectInstallRemovesOldLayout(t *testing.T) {
+	e := newEnv(t, "claude", "project")
+	old := filepath.Join(e.opts.projectDir, ".lexis-ai", "claude-code")
+	os.MkdirAll(filepath.Join(old, "lexis-ai"), 0o755)
+	os.WriteFile(filepath.Join(old, markerFile), []byte(`{}`), 0o644)
+	apply(t, e)
+	mustNotExist(t, filepath.Join(e.opts.projectDir, ".lexis-ai"))
+	mustExist(t, filepath.Join(e.opts.projectDir, ".claude", "skills", "event", "SKILL.md"))
 }
 
 func TestCodexUserKeepsCodexManifestAndPaths(t *testing.T) {
@@ -124,24 +147,34 @@ func TestCodexUserKeepsCodexManifestAndPaths(t *testing.T) {
 	}
 }
 
-func TestCodexProjectMergesExistingMarketplace(t *testing.T) {
+// An older Codex project install (repo marketplace) is removed; other plugins in the file stay.
+func TestCodexProjectRemovesOldRepoMarketplace(t *testing.T) {
 	e := newEnv(t, "codex", "project")
-	mkt := filepath.Join(e.opts.projectDir, ".agents", "plugins", "marketplace.json")
-	existing := `{"name":"team","plugins":[{"name":"other","source":{"source":"local","path":"./plugins/other"}}]}`
+	proj := e.opts.projectDir
+	oldPlugin := filepath.Join(proj, "plugins", "lexis-ai")
+	os.MkdirAll(oldPlugin, 0o755)
+	os.WriteFile(filepath.Join(oldPlugin, markerFile), []byte(`{}`), 0o644)
+	mkt := filepath.Join(proj, ".agents", "plugins", "marketplace.json")
 	os.MkdirAll(filepath.Dir(mkt), 0o755)
-	os.WriteFile(mkt, []byte(existing), 0o644)
-	p := apply(t, e)
-	var m struct {
-		Name    string
-		Plugins []struct{ Name string }
-	}
+	os.WriteFile(mkt, []byte(`{"name":"team","plugins":[{"name":"other"},{"name":"lexis-ai"}]}`), 0o644)
+	apply(t, e)
+	mustNotExist(t, oldPlugin)
+	var m struct{ Plugins []struct{ Name string } }
 	json.Unmarshal([]byte(read(t, mkt)), &m)
-	if m.Name != "team" || len(m.Plugins) != 2 || m.Plugins[0].Name != "other" || m.Plugins[1].Name != "lexis-ai" {
-		t.Errorf("merge wrong: %+v", m)
+	if len(m.Plugins) != 1 || m.Plugins[0].Name != "other" {
+		t.Errorf("marketplace should keep only other plugins: %+v", m)
 	}
-	if !strings.Contains(strings.Join(p.next, "\n"), "lexis-ai@team") {
-		t.Errorf("selector should use existing marketplace name: %v", p.next)
-	}
+	mustExist(t, filepath.Join(proj, ".agents", "skills", "event", "SKILL.md"))
+
+	// When our entry was the only one, the file goes away.
+	e2 := newEnv(t, "codex", "project")
+	os.MkdirAll(filepath.Join(e2.opts.projectDir, "plugins", "lexis-ai"), 0o755)
+	os.WriteFile(filepath.Join(e2.opts.projectDir, "plugins", "lexis-ai", markerFile), []byte(`{}`), 0o644)
+	mkt2 := filepath.Join(e2.opts.projectDir, ".agents", "plugins", "marketplace.json")
+	os.MkdirAll(filepath.Dir(mkt2), 0o755)
+	os.WriteFile(mkt2, []byte(`{"name":"lexis-ai","plugins":[{"name":"lexis-ai"}]}`), 0o644)
+	apply(t, e2)
+	mustNotExist(t, mkt2, filepath.Join(e2.opts.projectDir, "plugins"))
 }
 
 func TestGeminiManifest(t *testing.T) {
@@ -309,4 +342,25 @@ func TestSetLanguageNeedsMarker(t *testing.T) {
 	if err := setLanguage(d, "English"); err == nil {
 		t.Error("expected an error when the language line is missing")
 	}
+}
+
+func TestClaudeProjectCleansOldSettingsEntry(t *testing.T) {
+	e := newEnv(t, "claude", "project")
+	settings := filepath.Join(e.opts.projectDir, ".claude", "settings.json")
+	os.MkdirAll(filepath.Dir(settings), 0o755)
+	os.WriteFile(settings, []byte(`{"enabledPlugins":{"lexis-ai@lexis-ai":true,"other@x":true},"model":"opus"}`), 0o644)
+	apply(t, e)
+	var m map[string]any
+	json.Unmarshal([]byte(read(t, settings)), &m)
+	enabled, _ := m["enabledPlugins"].(map[string]any)
+	if _, ok := enabled["lexis-ai@lexis-ai"]; ok || enabled["other@x"] != true || m["model"] != "opus" {
+		t.Errorf("settings cleanup wrong: %v", m)
+	}
+
+	e2 := newEnv(t, "claude", "project")
+	s2 := filepath.Join(e2.opts.projectDir, ".claude", "settings.json")
+	os.MkdirAll(filepath.Dir(s2), 0o755)
+	os.WriteFile(s2, []byte(`{"enabledPlugins":{"lexis-ai@lexis-ai":true}}`), 0o644)
+	apply(t, e2)
+	mustNotExist(t, s2)
 }

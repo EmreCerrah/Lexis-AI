@@ -26,22 +26,24 @@ The tool asks three questions:
 
 It then downloads the plugin from GitHub (`EmreCerrah/Lexis-AI`, branch `main`), shows the install plan and asks for confirmation.
 
-| Tool | What happens | User install | Project install |
-|---|---|---|---|
-| Claude Code | local marketplace + `claude plugin install` | `~/.lexis-ai/claude-code` | `<project>/.lexis-ai/claude-code` |
-| Codex | local marketplace + `codex plugin add` | `~/.lexis-ai/codex` | `<project>/plugins/` + `<project>/.agents/plugins/marketplace.json` |
-| Gemini CLI | `gemini-extension.json` + `gemini extensions install` | `~/.gemini/extensions/lexis-ai` | (Gemini supports user installs only) |
-| GitHub Copilot | skills and shared files are copied | `~/.copilot/skills` + `~/.copilot/lexis-ai` | `<project>/.github/skills` + `<project>/.github/lexis-ai` |
+| Tool | User install | Project install |
+|---|---|---|
+| Claude Code | plugin via a local marketplace (`~/.lexis-ai/claude-code`) + `claude plugin install` | `<project>/.claude/skills` + `<project>/.claude/lexis-ai` |
+| Codex | plugin via a local marketplace (`~/.lexis-ai/codex`) + `codex plugin add` | `<project>/.agents/skills` + `<project>/.agents/lexis-ai` |
+| Gemini CLI | extension `~/.gemini/extensions/lexis-ai` via `gemini extensions install` | `<project>/.gemini/skills` + `<project>/.gemini/lexis-ai` |
+| GitHub Copilot | `~/.copilot/skills` + `~/.copilot/lexis-ai` | `<project>/.github/skills` + `<project>/.github/lexis-ai` |
+
+A **project install** is a plain copy into the folder each tool already scans for project skills: the skills go to `skills/`, the shared files (rules, references, templates, the FAE pack) go to `lexis-ai/` next to it. Nothing is registered with the tool, so the skills are there as soon as you open the tool in that folder, and you can commit them with the project. In Claude Code, project skills are called without the plugin prefix (`/event` instead of `/lexis-ai:event`). Re-running a project install removes what older versions put in `<project>/.lexis-ai/` or `<project>/plugins/`.
 
 **Language:** the chosen language is written into the installed `AGENTS.md` as the default output language. `/world-init` offers it as the world's language and stores it in `world.md`, so each world can use its own. File names, headings and frontmatter keys stay in English so every skill can find them; only the content is in the chosen language.
 
 The repo has a single manifest, `plugin/plugin.json`. The installer generates each tool's own manifest from it.
 
 Skills refer to the plugin root as `../../`. The installer rewrites that path for each tool:
-- Claude Code: `${CLAUDE_PLUGIN_ROOT}/`
+- Claude Code, user install: `${CLAUDE_PLUGIN_ROOT}/`
 - Copilot, user install: the absolute path
-- Copilot, project install: `../../lexis-ai/`
-- Codex and Gemini CLI: unchanged
+- Every project install: `../../lexis-ai/`
+- Codex and Gemini CLI, user install: unchanged
 
 ### Flags
 | Flag | Meaning |
@@ -67,7 +69,7 @@ Make an empty folder for your world, open your AI tool in that folder, then call
 
 | Tool | How to call it | Example |
 |---|---|---|
-| Claude Code | `/lexis-ai:<command>` | `/lexis-ai:event The players broke into the crypt` |
+| Claude Code | `/lexis-ai:<command>` (user install), `/<command>` (project install) | `/lexis-ai:event The players broke into the crypt` |
 | Codex | `$<command>` (or pick `@lexis-ai`) | `$event The players broke into the crypt` |
 | GitHub Copilot | `/<command>` | `/event The players broke into the crypt` |
 | Gemini CLI | describe what you want | `event: the players broke into the crypt` |
