@@ -4,14 +4,21 @@ The **Lexis-AI** plugin, a GM assistant for the live tabletop RPG table, plus `l
 
 ```
 plugin/      # the plugin (platform-neutral skills, rules, templates, FAE pack)
-installer/   # the installer, written in Go
+lexis-setup/ # the installer, written in Go
 .agents/plugins/marketplace.json   # Codex: the repo can be added directly as a marketplace
 ```
 
 ## Install
+You need [Go](https://go.dev/dl/) 1.22 or newer. Install the setup tool straight from GitHub; there is nothing to clone or build:
+```bash
+go install github.com/EmreCerrah/Lexis-AI/lexis-setup@latest
+```
+Then run it:
 ```bash
 lexis-setup
 ```
+`go install` puts the program in Go's bin folder: `%USERPROFILE%\go\bin` on Windows, `~/go/bin` on macOS and Linux. If your terminal says `lexis-setup` is not found, add that folder to your `PATH`, or run the program with its full path. To update the setup tool later, run the same `go install` command again.
+
 The tool asks three questions:
 1. **Which AI tool do you use?** Claude Code, Codex, Gemini CLI or GitHub Copilot.
 2. **Where do you want to install it?** For your user, or in a specific project folder.
@@ -54,10 +61,10 @@ For a private repository, set the `GITHUB_TOKEN` environment variable.
 
 ## Build
 ```bash
-cd installer && go test ./... && go build -o lexis-setup.exe .
+cd lexis-setup && go test ./... && go build -o lexis-setup.exe .
 ```
 The version label and the repository can be set at build time:
 ```bash
-cd installer && go build -ldflags "-X main.version=v0.1.0 -X main.defaultRepo=EmreCerrah/Lexis-AI" -o lexis-setup.exe .
+cd lexis-setup && go build -ldflags "-X main.version=v0.1.0 -X main.defaultRepo=EmreCerrah/Lexis-AI" -o lexis-setup.exe .
 ```
 For other operating systems, build with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.

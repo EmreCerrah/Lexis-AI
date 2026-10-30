@@ -1,5 +1,5 @@
 # installer build output
 /dist/
-/installer/lexis-setup
-/installer/lexis-setup.exe
+/lexis-setup/lexis-setup
+/lexis-setup/lexis-setup.exe
 *.test

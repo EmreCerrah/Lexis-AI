@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 )
 
@@ -53,7 +54,7 @@ func main() {
 }
 
 func run(o options, p *prompter) error {
-	fmt.Printf("Lexis-AI setup (%s)\n\n", version)
+	fmt.Printf("Lexis-AI setup (%s)\n\n", buildVersion())
 
 	if o.platform == "" {
 		i := p.choose("Which AI tool do you use?", []string{"Claude Code", "Codex", "Gemini CLI", "GitHub Copilot"}, 0)
@@ -158,6 +159,17 @@ func scopeLabel(o options) string {
 		return "project: " + o.projectDir
 	}
 	return "user"
+}
+
+// buildVersion prefers the -ldflags version, then the module version `go install` records.
+func buildVersion() string {
+	if version != "dev" {
+		return version
+	}
+	if bi, ok := debug.ReadBuildInfo(); ok && bi.Main.Version != "" && bi.Main.Version != "(devel)" {
+		return bi.Main.Version
+	}
+	return version
 }
 
 // slash keeps paths readable inside Markdown on every OS.
