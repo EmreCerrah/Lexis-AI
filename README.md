@@ -125,6 +125,9 @@ proposals/      # /create-lore output waiting for approval
 ```
 These are plain Markdown files with `[[links]]`, and you can edit them yourself. Open the folder in Obsidian if you want a linked view. "Who might know" only uses the `## Links` section of each file, so put relations there, one per line: `- [[order-of-light]] — member`.
 
+## Roadmap
+Planned work, in priority order: [ROADMAP.md](ROADMAP.md).
+
 ## Build
 ```bash
 cd lexis-setup && go test ./... && go build -o lexis-setup.exe .
