@@ -6,7 +6,7 @@ A world is a plain folder of Markdown files the GM owns. The plugin never stores
 <world>/
   AGENTS.md              # short pointer written by /world-init (platform agents auto-load it)
   world.md               # canon: concept, tone, ## Immutable Rules …
-  system.md              # system pack settings: stunts, special situations, Homebrew
+  system.md              # system pack settings and Homebrew
   characters/<slug>.md
   locations/<slug>.md
   groups/<slug>.md

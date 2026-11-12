@@ -8,12 +8,12 @@ description: Generate one persistent world entity (NPC, location, group/faction 
 Produces **one** persistent entity as a **proposal**. It becomes canon only if the GM approves it at `/close-session`.
 
 ## Read first
-`../../AGENTS.md`; `../../references/world-layout.md`; the matching template `../../templates/<character|location|group|hook>.md`; `../../templates/proposal.md`; `../../systems/<system>/aspects.md` (for the `## Aspects` section); `world.md` (tone, language, `## Immutable Rules`); the entities the GM mentions and their links; existing slugs (to avoid duplicates).
+`../../AGENTS.md`; `../../references/world-layout.md`; the matching template `../../templates/<character|location|group|hook>.md`; `../../templates/proposal.md`; `world.md` (`system:`, tone, language, `## Immutable Rules`); `../../systems/<system>/entities.md` (the system sections) and `scene-tags.md`; the entities the GM mentions and their links; existing slugs (to avoid duplicates).
 
 ## Steps
 1. **Type.** character / location / group / hook, from the GM's words. If the GM names an existing entity, stop, say it exists (`[[slug]]`) and suggest `/event` for changes.
 2. **Fiction (core).** Fill the template body in the world's voice and language. Keep it short: 1-3 sentences per section. Obey every `IR<n>`. Never contradict an existing `## 🔒 Hidden Truth`; a new hook gets its own hidden truth, consistent with all the others.
-3. **Aspects (pack).** 1-3 aspects per `aspects.md` (for a character: high concept + trouble).
+3. **System sections (pack).** Replace the template's `{{system sections}}` line with the sections `entities.md` lists for this entity type (NPC, not PC, unless the GM says otherwise). Keep them light: what the table needs, nothing more.
 4. **Links.** At least 1 and at most 4 `## Links` lines to existing slugs: the relations that make this entity matter at the table (whom it serves, where it lives, which hook it feeds). "Who might know" runs on these.
 5. **Uncertain parts** → its own `## Uncertain` (e.g. "Real name unknown").
 6. **Write** `proposals/<slug>.md` = the proposal frontmatter (`templates/proposal.md`) + the filled body. Append `- G<n> lore: [[<slug>]] (<type>) · proposals/<slug>.md` to `## Generated` of the open log (create the log if there is none).
@@ -23,7 +23,7 @@ Produces **one** persistent entity as a **proposal**. It becomes canon only if t
 📜 G<n> · <Name> (<type>) → proposals/<slug>.md
 - Who/what: …
 - Wants / goal: …
-- Aspects: "…" · "…"
+- System: <the key line: aspects in Fate, the stat line in 5E …>
 - Links: [[…]] — …
 - 🔒 …
 ```

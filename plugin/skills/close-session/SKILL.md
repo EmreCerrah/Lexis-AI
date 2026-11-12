@@ -26,7 +26,7 @@ Number the items continuously across groups. Give each one a **suggested** answe
 **D. Link proposals** (`L<j>`) → the target file's `## Links`. ✅ / ❌.
 
 **E. Generated items** (`G<n>`): ask "was it used at the table?"
-- aspect/obstacle: used and lasting (a place or group aspect) → propose adding it to that file's `## Aspects`; used and transient → only marked as used in the log; unused → marked unused.
+- scene tag/obstacle: used and lasting (a place or group tag) → propose adding it to that file's system section (`entities.md` of the pack: `## Aspects` in Fate, `## Features` in 5E); used and transient → only marked as used in the log; unused → marked unused.
 - lore: ✅ canon (move `proposals/<slug>.md` into its folder, drop the proposal frontmatter, `type:` = target-type) · ⏸ keep (stays in proposals/) · ❌ delete.
 
 **F. Old uncertain items**

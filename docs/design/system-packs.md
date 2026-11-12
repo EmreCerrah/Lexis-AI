@@ -1,6 +1,6 @@
 # Design: System Packs
 
-Status: draft for review · Roadmap item 1 · Branch `feat/system-packs`
+Status: contract implemented with packs 1-2 (`fate-accelerated`, `srd5`) · Roadmap item 1 · Branch `feat/system-packs`
 
 ## Goal
 The GM chooses a game system in `/world-init`, and every command gives rules help in that system's own terms. The world core (events, ripples, links, canon, hooks) does not change between systems. The MVP has one pack, Fate Accelerated (FAE); this design adds a second and a third pack without forking the skills.
@@ -11,7 +11,7 @@ The GM chooses a game system in `/world-init`, and every command gives rules hel
 | `/help-skills` | answers in approaches + the 4 actions + the ladder | answers in the pack's resolution terms (`resolution.md`) |
 | `/create-aspect` | produces a Fate aspect with invoke/compel | produces the pack's **scene tag** (`scene-tags.md`): an aspect in Fate, an environmental feature or condition elsewhere |
 | `/create-obstacle` | FAE difficulty ladder and approaches | the pack's difficulty and opposition (`obstacles.md`) |
-| `/create-lore` | `## Aspects` section | the pack's NPC/entity sections (`characters.md`) |
+| `/create-lore` | `## Aspects` section | the pack's entity sections (`entities.md`) |
 | `/world-init` | FAE is the only choice; FAE setup questions | lists the installed packs; asks that pack's `init-questions.md` |
 | `templates/character.md` | `## Aspects`, PC `## Approaches` / `## Stunts` | core keeps `## Who`, `## Wants` …; the pack adds its own sections |
 | `AGENTS.md` §3, §10 | approach names as game terms | "keep the pack's game terms" from the pack glossary |
@@ -27,7 +27,7 @@ Every pack is a folder `systems/<id>/` with the same files. Skills ask for a fil
 | `resolution.md` | how an action resolves: dice, the difficulty scale, outcome bands; the answer shape for a rules question | `/help-skills`, `/create-obstacle` |
 | `scene-tags.md` | what a "scene item" is in this system and its output block | `/create-aspect` |
 | `obstacles.md` | difficulty choice, passive vs active opposition, hazards, cost/complication options, output block | `/create-obstacle` |
-| `characters.md` | sections a PC and an NPC get in their file, and a light NPC stat line | `/world-init`, `/create-lore` |
+| `entities.md` | the system sections of character (PC/NPC), location and group files, character math, a light NPC stat line | `/world-init`, `/create-lore`, `/close-session` |
 | `init-questions.md` | the system part of the world setup | `/world-init` |
 | `templates/system.md` | the world's `system.md` (settings + `## Homebrew`) | `/world-init` |
 
@@ -60,7 +60,7 @@ A pack is **the rules engine and nothing else**. This is a hard rule for every p
 - Setting lore: worlds, planes, nations, cities, gods, religions, factions, history.
 - Named characters, named monsters or creatures tied to a setting, adventures, story text, plot hooks.
 - Spell, item or monster lists copied wholesale; art; trade dress.
-- Trademarks as names. A pack is named by its mechanics or its open license (e.g. `srd5` "5E SRD", `brp` "Basic Roleplaying"), never by a brand. A brand may appear only in a "compatible with" line, and only where the license allows it.
+- Trademarks as names. A pack is named by its mechanics or its open license (e.g. `srd5` "5E SRD", `brp` "Basic Roleplaying"), never by a brand. A brand may appear only where its owner's license or policy allows it (e.g. SRD 5.2.1 allows "compatible with fifth edition"), never as a claim of endorsement.
 - Rule text from a system that is not open-licensed. For such systems, the pack would describe the mechanic in our own words and point to the GM's own book.
 
 **Wording:** even for open-licensed sources, we write the pack in our own short words and do not paste whole SRD sections. The pack is a GM cheat sheet, not a rulebook copy.
@@ -74,26 +74,31 @@ A pack is **the rules engine and nothing else**. This is a hard rule for every p
 - Output in the world's language; game terms stay as the pack names them (with a gloss on first use if the language differs).
 
 ## Changes to the skills
-- Skills read `systems/<system>/<role-file>` instead of `approaches.md` / `aspects.md`. FAE's files are renamed to the contract: `approaches.md` → `resolution.md`, `aspects.md` → `scene-tags.md`, plus a new `characters.md` (from the stress/stunt parts of `approaches.md` and the character template).
+- Skills read `systems/<system>/<role-file>` instead of `approaches.md` / `aspects.md`. FAE's files are renamed to the contract: `approaches.md` → `resolution.md`, `aspects.md` → `scene-tags.md`, plus a new `entities.md` (from the stress/stunt parts of `approaches.md` and the `## Aspects` sections of the templates).
 - `/help-skills` keeps its name; its answer shape comes from `resolution.md`.
 - `/create-aspect` keeps its name for now (it is the locked MVP name); in non-Fate packs it produces the pack's scene tag. **Open decision:** add a system-neutral alias such as `/create-tag`.
-- `templates/character.md` loses `## Aspects`; the pack's `characters.md` says which sections to add (FAE: `## Aspects`, PC `## Approaches`, `## Stunts`).
+- `templates/character.md`, `location.md` and `group.md` lose `## Aspects` and get a `{{system sections}}` line; the pack's `entities.md` says which sections replace it (FAE: `## Aspects`, PC `## Approaches`, `## Stunts`, `## Stress`; 5E: NPC `## Stat Line`, PC `## Abilities`, `## Proficiencies`, `## Combat` …; location `## Features`).
 - Old worlds keep working: a world whose `system.md` says `fate-accelerated` gets the same output as today.
 
-## Candidate packs
-| Pack | Why | License | Effort |
-|---|---|---|---|
-| **D&D 5e (SRD 5.2)** | the most played system; forces the contract to cover d20, DCs, conditions, HP | SRD 5.2 is CC-BY-4.0: may quote rules text with the required attribution | medium |
-| **Basic Roleplaying (BRP)**, Call of Cthulhu-style percentile horror | fits gothic/cosmic horror worlds like the sample; covers d100 and sanity-style harm | BRP core is released under the ORC License: rules may be used with attribution | medium |
-| **Fate Core** | closest to FAE: skills instead of approaches; cheap check of the contract | CC-BY | low |
-| World of Darkness / Chronicles of Darkness | asked for earlier; dice pools, attributes + abilities | **not open-licensed**: the pack could only explain how to apply the GM's own book, without rule text | medium, legally limited |
+## Pack order and licenses
+The GM's order. Licenses were checked against the publishers' own pages; re-check before each pack ships.
 
-Recommendation: **D&D 5e SRD as the second pack** (largest audience, most different from FAE), then **BRP as the third** (horror fit, d100, open license). Fate Core can come any time as a small extra.
+| # | System | Pack id | Source and license | What the pack may contain | Status |
+|---|---|---|---|---|---|
+| 1 | Fate Accelerated | `fate-accelerated` | FAE SRD, **CC-BY 3.0** | mechanics in our words + attribution | done (refactored to the contract) |
+| 2 | 5E (fifth edition) | `srd5` | SRD 5.2.1, **CC-BY-4.0** | mechanics in our words + attribution; "compatible with fifth edition" only; no setting, spells, items or monsters | done |
+| 3 | d20 remaster rules (2nd edition) | `orc-d20` (tbd) | Player Core / GM Core, **ORC License** | mechanics; no trademarks or setting (the ORC excludes "Reserved Material") | next |
+| 4 | World of Darkness–style d10 pools | tbd | **not open**: Paradox's Dark Pack is a non-commercial, revocable fan license | our own description of the dice-pool mechanic only, no rule text, no setting terms; the GM uses their own book; needs the Dark Pack notice and a legal check before shipping | needs a decision |
+| 5 | Fate Core / Condensed | `fate-core` | **CC-BY** | mechanics + attribution | planned |
+| 6 | Basic Roleplaying (d100) | `brp` | BRP Universal Game Engine, **ORC License** (Chaosium) | mechanics; no setting or Call of Cthulhu content | planned |
+| 7 | Forged in the Dark (d6 pools, clocks) | `fitd` | Blades in the Dark SRD, **CC-BY 3.0** | mechanics + attribution; no setting | planned |
+| 8 | Mörk Borg–compatible (d20, doom) | tbd | **MÖRK BORG Third Party License** | mechanics restated in our own words only; no book text or art; "compatible" logo rules apply | planned |
+| 9 | Mutants & Masterminds 3e–style (d20 effects) | tbd | **OGL 1.0a** Open Game Content (Product Identity excluded, e.g. "hero points") | mechanics; no Product Identity, no setting | planned |
 
 ## Install and selection
 - `lexis-setup` already copies every folder under `systems/`, so new packs ship with no installer change.
 - `/world-init` lists the packs it finds in `systems/` (name from each `pack.md`) instead of offering only FAE.
-- The world's `system` frontmatter field stores the pack id (`fate-accelerated`, `srd5`, `brp`).
+- The world's `system` frontmatter field stores the pack id (`fate-accelerated`, `srd5` …).
 
 ## Testing
 - Contract check (a small Go test in `lexis-setup`, it already reads the plugin): every `systems/*/` folder has all contract files, and `pack.md` has a glossary row for every role.
@@ -105,7 +110,10 @@ Recommendation: **D&D 5e SRD as the second pack** (largest audience, most differ
 - Same scenario, three systems: run `/help-skills "climb the crypt wall in the rain"` and `/create-obstacle` against one world per pack; the fiction part should match, the mechanics block should be in each system's terms.
 - Regression: the Karcsa Vadisi sample world (FAE) gives the same kind of output as before.
 
-## Open decisions (for the GM)
-1. Second and third system: D&D 5e SRD + BRP as recommended, or another choice?
-2. `/create-aspect`: keep only that name, or add a neutral alias such as `/create-tag`?
-3. One world, one system (current model), or should a world be able to switch systems later (then `/close-session` would have to convert sheets)? Recommendation: one system per world for now.
+## Decisions
+1. Systems and order: the table above (GM's choice).
+2. `/create-aspect` keeps its name; it makes the pack's scene tag in every system. A neutral alias can come later.
+3. One world, one system. A world without a `system:` field uses `fate-accelerated`.
+
+## Open
+- Pack 4 (World of Darkness–style): ship under the Dark Pack terms, or replace it with an open dice-pool system?

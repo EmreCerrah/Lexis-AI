@@ -2,7 +2,7 @@
 
 A **GM assistant** for the live table. You run the game; the agent never rolls dice and never decides outcomes. It records the events you report, shows how they ripple through the world, and updates your world files only with your approval at the end of the session.
 
-- System: **Fate Accelerated** (MVP)
+- Systems: **Fate Accelerated**, **5E SRD** (fifth-edition rules). One per world, chosen in `/world-init`. Packs hold rules only, never setting content.
 - Format: plain Markdown + `[[wiki-links]]`. Opens in Obsidian, but doesn't need it.
 - Your world lives in your own folder. The plugin contains no world data.
 - Language: the AI answers in the language you pick at install (each world can override it in `world.md`).
@@ -10,13 +10,13 @@ A **GM assistant** for the live table. You run the game; the agent never rolls d
 ## Commands
 | Command | What it does | What it writes |
 |---|---|---|
-| `/world-init` | Sets up a world in tiers: required core, deferrable parts, parts the agent can draft, FAE settings | all world files (only at setup) |
+| `/world-init` | Sets up a world in tiers: required core, deferrable parts, parts the agent can draft, system settings | all world files (only at setup) |
 | `/event` | You report what happened at the table. It becomes canon at once; you get 3-5 ripples and a "who might know" list | the session log only |
 | `/ripples` | Deepens a recorded event through lenses and shows how word of it spreads 2-3 steps | the session log only (hypotheses) |
-| `/create-aspect` | Writes one aspect for the scene, with invoke and compel examples | the log (proposal) |
-| `/create-obstacle` | Creates an obstacle, puzzle or hazard: fiction first, then FAE difficulty and approaches | the log (proposal) |
+| `/create-aspect` | Writes one scene tag in the world's system (a Fate aspect, a 5E scene feature) | the log (proposal) |
+| `/create-obstacle` | Creates an obstacle, puzzle or hazard: fiction first, then the system's difficulty and fitting checks | the log (proposal) |
 | `/create-lore` | Creates a persistent NPC, location, group or hook | `proposals/` (proposal) |
-| `/help-skills` | Answers "which approach is this?" in FAE terms | nothing |
+| `/help-skills` | Answers rules questions in the world's system terms | nothing |
 | `/close-session` | Gathers everything from the session into one numbered list for your approval and writes only what you approve | canon files |
 
 How you call them depends on the tool: Claude Code `/lexis-ai:event`, Codex `$event` (or `@lexis-ai`), Copilot `/event`. In Gemini CLI, just describe what you want. A plain-language request works everywhere.
@@ -55,6 +55,6 @@ AGENTS.md                   # core rules every skill reads first
 skills/<command>/SKILL.md   # 8 MVP skills (platform-neutral)
 references/                 # knowledge model, folder layout, lenses (hidden references, not skills)
 templates/                  # world core templates
-systems/fate-accelerated/   # FAE system pack
+systems/<id>/               # system packs: fate-accelerated, srd5 (same files each)
 ```
 The repo has a single `plugin.json`. `lexis-setup` generates each tool's own manifest (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `gemini-extension.json`) from it at install time.

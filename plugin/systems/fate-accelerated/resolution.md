@@ -1,4 +1,7 @@
-# FAE: Approaches, Actions, Outcomes
+# FAE: Resolution
+
+## The roll
+The player rolls 4 Fate dice (each −1, 0 or +1) and adds the approach rating. The result is compared with the difficulty on the ladder. You explain; the GM reads the roll.
 
 ## Approaches
 | Approach | Fits when the character… |
@@ -10,10 +13,6 @@
 | Quick | moves fast, reacts first, is nimble |
 | Sneaky | misdirects, hides, deceives, acts unseen |
 
-Keep the English approach names; in another output language add a short gloss the first time (`AGENTS.md` §3).
-
-Standard character spread: one at Good (+3), two at Fair (+2), two at Average (+1), one at Mediocre (+0). Check `system.md` for Homebrew.
-
 **The same action can use different approaches.** The approach follows from *how* the character does it, as the player describes it. When the GM asks "which skill/approach?", give 2-3 approaches with the fiction that would justify each, best fit first.
 
 ## Four actions
@@ -24,7 +23,7 @@ Standard character spread: one at Good (+3), two at Fair (+2), two at Average (+
 | Attack | trying to harm someone, physically or mentally |
 | Defend | actively stopping someone else's attack or advantage |
 
-## Outcomes (the GM reads the roll; you only explain)
+## Outcomes
 - **Fail:** fail, or succeed at a serious cost.
 - **Tie:** succeed at a minor cost, or get a boost instead.
 - **Success (+1, +2):** succeed.
@@ -45,14 +44,18 @@ Standard character spread: one at Good (+3), two at Fair (+2), two at Average (+
 | −1 | Poor |
 | −2 | Terrible |
 
-## Stunts
-Format: *"Because I [describe how I'm awesome], I get a +2 when I [approach] [action] when [circumstance]."* or *"Because I [...], once per session I can [do something cool]."* Look up the PC's stunts in their character file or `system.md` before answering; a matching stunt is the most useful thing to mention.
-
-## Stress and consequences
-- Stress: 3 boxes (1, 2, 3) by default.
-- Consequences: mild (2), moderate (4), severe (6). A consequence is an aspect.
-- Taken out: the attacker decides how the character leaves the scene (the GM rules on it).
-- Concede: before the roll, the player gives up on their own terms and gets fate points.
-
 ## Fate points
-Refresh 3 by default. Invoke: spend 1 → +2 or a reroll. Compel: the GM offers 1 → an aspect complicates the character's life.
+Refresh 3 by default. Invoke an aspect: spend 1 → +2 or a reroll. Compel: the GM offers 1 → an aspect complicates the character's life.
+
+## Answer shape for /help-skills
+1. **Action:** Overcome / Create an Advantage / Attack / Defend.
+2. **Approaches:** 2-3, best fit first, each with the fiction that makes it fit ("vaulting the wall fast is Quick; testing each handhold is Careful"). The player's description decides; say so.
+3. **Opposition:** a passive difficulty range on the ladder, or the active opponent's likely approach.
+4. **Rule hooks:** a matching stunt, an aspect worth invoking, a possible compel, only if one exists in the files or the scene.
+
+```
+🎲 <Action: Overcome>
+- Approach: Quick — … · Careful — …
+- Suggested difficulty: Fair–Good (+2/+3) — …
+- Stunt/aspect: …
+```

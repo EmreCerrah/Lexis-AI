@@ -1,11 +1,11 @@
-# FAE: Aspects
+# FAE: Scene Tags = Aspects
 
-An aspect is a short phrase that is **true in the fiction** and can be **invoked** (for a bonus) and **compelled** (for a complication).
+In Fate the scene tag is the **aspect**: a short phrase that is **true in the fiction** and can be **invoked** (for a bonus) and **compelled** (for a complication).
 
 ## Kinds
 | Kind | Lasts | Example |
 |---|---|---|
-| Character aspect (high concept, trouble, others) | until changed | *Last Hunter of the Order of Light*, *The Blood Keeps Calling* |
+| Character aspect (high concept, trouble, others) | until changed | *Last Hunter of the Order*, *The Blood Keeps Calling* |
 | Situation / scene aspect | until the scene or situation ends | *Fog Swallows the Gravestones*, *Toppled Barrels* |
 | Consequence | until healed | *Cracked Ribs* |
 | Boost | one free invoke, then gone | *A Moment's Opening* |
@@ -23,7 +23,7 @@ Write aspects in the output language; the examples above are only examples.
 - Create an Advantage success → 1 free invoke (with style → 2). Tie → a boost.
 - A newly discovered aspect on a hidden thing → note "whoever discovers it gets 1 free invoke", as a reminder only.
 
-## Output block for an aspect
+## Output block
 ```
 **"<Aspect>"** — <kind: scene / situation / consequence / boost / permanent>
 - Invoke: <who can use it, for what, one line>

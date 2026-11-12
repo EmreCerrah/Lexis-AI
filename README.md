@@ -3,7 +3,7 @@
 The **Lexis-AI** plugin, a GM assistant for the live tabletop RPG table, plus `lexis-setup`, the tool that installs it into different AI tools.
 
 ```
-plugin/      # the plugin (platform-neutral skills, rules, templates, FAE pack)
+plugin/      # the plugin (platform-neutral skills, rules, templates, system packs)
 lexis-setup/ # the installer, written in Go
 .agents/plugins/marketplace.json   # Codex: the repo can be added directly as a marketplace
 ```
@@ -33,7 +33,7 @@ It then downloads the plugin from GitHub (`EmreCerrah/Lexis-AI`, branch `main`),
 | Gemini CLI | extension `~/.gemini/extensions/lexis-ai` via `gemini extensions install` | `<project>/.gemini/skills` + `<project>/.gemini/lexis-ai` |
 | GitHub Copilot | `~/.copilot/skills` + `~/.copilot/lexis-ai` | `<project>/.github/skills` + `<project>/.github/lexis-ai` |
 
-A **project install** is a plain copy into the folder each tool already scans for project skills: the skills go to `skills/`, the shared files (rules, references, templates, the FAE pack) go to `lexis-ai/` next to it. Nothing is registered with the tool, so the skills are there as soon as you open the tool in that folder, and you can commit them with the project. In Claude Code, project skills are called without the plugin prefix (`/event` instead of `/lexis-ai:event`). Re-running a project install removes what older versions put in `<project>/.lexis-ai/` or `<project>/plugins/`.
+A **project install** is a plain copy into the folder each tool already scans for project skills: the skills go to `skills/`, the shared files (rules, references, templates, system packs) go to `lexis-ai/` next to it. Nothing is registered with the tool, so the skills are there as soon as you open the tool in that folder, and you can commit them with the project. In Claude Code, project skills are called without the plugin prefix (`/event` instead of `/lexis-ai:event`). Re-running a project install removes what older versions put in `<project>/.lexis-ai/` or `<project>/plugins/`.
 
 **Language:** the chosen language is written into the installed `AGENTS.md` as the default output language. `/world-init` offers it as the world's language and stores it in `world.md`, so each world can use its own. File names, headings and frontmatter keys stay in English so every skill can find them; only the content is in the chosen language.
 
@@ -62,7 +62,7 @@ Every folder the tool writes carries a `.lexis-ai.json` marker. When the tool ru
 For a private repository, set the `GITHUB_TOKEN` environment variable.
 
 ## Usage
-Lexis-AI helps you **while you run the game**. You stay in charge: it never rolls dice and never decides whether an action succeeds. You tell it what happened; it records that, shows how it ripples through the world, and helps with rules and scene material. Your world files change only when you approve the changes at the end of the session.
+Lexis-AI helps you **while you run the game**. Game systems: **Fate Accelerated** and **5E SRD** (fifth-edition rules); you choose one per world in `/world-init`. System packs hold only rules, never a published setting. You stay in charge: it never rolls dice and never decides whether an action succeeds. You tell it what happened; it records that, shows how it ripples through the world, and helps with rules and scene material. Your world files change only when you approve the changes at the end of the session.
 
 ### How to call a command
 Make an empty folder for your world, open your AI tool in that folder, then call a command.
@@ -82,10 +82,10 @@ Plain requests work in every tool too, for example "record what just happened" o
 | `/world-init` | once, before the first session | A short interview: name, concept, genre, language, tone, inspirations, fantasy level, **Immutable Rules**, system. Characters, places, groups and hooks can be skipped ("later") or drafted by the AI ("you suggest"). | creates the world files |
 | `/event <what happened>` | at the table, right after something happens | The event is recorded at once. You get 3-5 short **ripples** (possible consequences) and a **who might know** list. | session log only |
 | `/ripples [E2]` | between scenes, when you want more | The event examined through lenses (power and politics, society and rumor, faith and the supernatural), and how word of it spreads 2-3 steps. | session log only |
-| `/create-aspect [scene]` | you need an aspect for the scene | One Fate aspect, with an invoke and a compel example. | session log (proposal) |
-| `/create-obstacle [scene]` | you need a lock, trap, puzzle, hazard or social obstacle | The fiction first (what it is, why it is here), then Fate: an aspect, a suggested difficulty, fitting approaches, cost options. | session log (proposal) |
-| `/create-lore <what you need>` | you need an NPC, place, faction or hook | One ready entity with aspects and links. | `proposals/` (proposal) |
-| `/help-skills <what the player does>` | a rules question at the table | Which action fits (Overcome, Create an Advantage, Attack, Defend), 2-3 fitting approaches, a difficulty range, matching stunts or aspects. | nothing |
+| `/create-aspect [scene]` | you need a scene tag | One scene tag in your system: a Fate aspect with an invoke and a compel, or a 5E scene feature (light, cover, terrain, hazard, condition) with its rule effect. | session log (proposal) |
+| `/create-obstacle [scene]` | you need a lock, trap, puzzle, hazard or social obstacle | The fiction first (what it is, why it is here), then your system's block: a suggested difficulty (ladder or DC), fitting approaches or checks, cost options; for traps, the save and its effect. | session log (proposal) |
+| `/create-lore <what you need>` | you need an NPC, place, faction or hook | One ready entity with its system sections (aspects, a stat line …) and links. | `proposals/` (proposal) |
+| `/help-skills <what the player does>` | a rules question at the table | The answer in your system's terms: in Fate the action and 2-3 approaches, in 5E the ability check and skills; a suggested difficulty; matching stunts, features or scene tags. | nothing |
 | `/close-session` | at the end of the session | Everything from the session in one numbered list, each with a suggested answer. You answer once; only what you approve is written. | world files |
 
 ### A session, step by step
@@ -118,7 +118,7 @@ Plain requests work in every tool too, for example "record what just happened" o
 ### Your world folder
 ```
 world.md        # concept, tone, Immutable Rules (IR1, IR2 …)
-system.md       # Fate Accelerated settings and Homebrew
+system.md       # system pack settings and Homebrew
 characters/  locations/  groups/  hooks/   # one Markdown file per entity
 sessions/       # one log per session
 proposals/      # /create-lore output waiting for approval

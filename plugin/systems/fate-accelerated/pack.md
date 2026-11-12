@@ -1,19 +1,46 @@
+---
+type: system-pack
+id: fate-accelerated
+name: Fate Accelerated
+version: 0.2.0
+---
+
 # System Pack: Fate Accelerated (FAE)
 
-This pack adds Fate Accelerated mechanics on top of the world core. The core produces fiction; this pack adds numbers, approaches and aspect mechanics. There is no plugin API: a skill that needs mechanics reads this folder directly.
+Fate Accelerated mechanics on top of the world core. The core produces fiction; this pack adds approaches, aspects and the ladder. Use this pack when the GM asks for Fate Accelerated or FAE.
+
+## License
+Based on Fate Accelerated Edition (found at http://www.faterpg.com/), a product of Evil Hat Productions, LLC, developed, authored, and edited by Clark Valentine, Leonard Balsera, Fred Hicks, Mike Olson, and Amanda Valentine, and licensed for our use under the Creative Commons Attribution 3.0 Unported license (http://creativecommons.org/licenses/by/3.0/).
+
+## Content scope
+Mechanics only: dice, approaches, actions, outcomes, aspects, stress and consequences, character math. No setting content: no worlds, places, characters, creatures or story from any published book. Rules are summarized in our own words.
+
+## Glossary
+| Role | Term in this system |
+|---|---|
+| check | approach roll (4dF + approach) against a difficulty |
+| trait | approach (Careful, Clever, Flashy, Forceful, Quick, Sneaky) |
+| difficulty | the ladder (+0 Mediocre … +8 Legendary), passive or active opposition |
+| scene-tag | aspect (situation aspect, boost, consequence) |
+| special-ability | stunt |
+| harm | stress boxes + consequences |
+| meta-currency | fate points |
+
+Keep these terms in English in every output language (`AGENTS.md` §3).
 
 ## Files
-| File | Used by | Content |
-|---|---|---|
-| `approaches.md` | `/help-skills`, `/create-obstacle` | the six approaches, four actions, outcomes, the ladder |
-| `aspects.md` | `/create-aspect`, `/create-lore`, `/world-init` | how to write, invoke and compel aspects |
-| `obstacles.md` | `/create-obstacle` | difficulty, passive vs active opposition, hazards as characters |
-| `init-questions.md` | `/world-init` | the FAE part of world setup |
-| `templates/system.md` | `/world-init` | the world's `system.md` |
+| File | Content |
+|---|---|
+| `resolution.md` | approaches, the four actions, outcomes, the ladder, fate points, the `/help-skills` answer shape |
+| `scene-tags.md` | how to write, invoke and compel aspects; the aspect output block |
+| `obstacles.md` | difficulty, passive vs active opposition, hazards as characters, the obstacle output block |
+| `entities.md` | the system sections of character, location and group files; stunts, stress, consequences |
+| `init-questions.md` | the FAE part of world setup |
+| `templates/system.md` | the world's `system.md` |
 
 ## Seam (core → pack)
-1. The skill writes the **fiction block** first, without numbers: what it is, how it looks, why it fits the world, which `## Immutable Rules` and hooks it respects.
-2. Then it appends a **`Fate` block** from this pack: aspects, suggested difficulty, fitting approaches, stress/consequences if relevant, invoke/compel ideas.
+1. The skill writes the **fiction block** first, without numbers.
+2. Then it appends a **`Fate` block** from this pack.
 3. Homebrew in the world's `system.md` overrides anything here.
 
 ## Never

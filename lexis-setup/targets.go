@@ -570,7 +570,7 @@ func planSkillsInto(e *env, base, prefix string) (*plan, error) {
 
 	p := &plan{}
 	p.steps = append(p.steps,
-		step{"Shared files (rules, templates, FAE) → " + core, func() error {
+		step{"Shared files (rules, templates, system packs) → " + core, func() error {
 			if err := prepareDir(core, e.opts.force); err != nil {
 				return err
 			}

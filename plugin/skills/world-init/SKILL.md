@@ -9,7 +9,7 @@ Sets up a world in tiers so the GM is never forced to answer everything up front
 
 ## Read first
 1. `../../AGENTS.md` (core rules), `../../references/world-layout.md`, `../../references/knowledge-model.md`.
-2. Templates: `../../templates/*.md`. System pack: `../../systems/<system>/pack.md` and `init-questions.md`.
+2. Templates: `../../templates/*.md`. System packs: every `../../systems/*/pack.md` (to list them); after the GM chooses, that pack's `init-questions.md` and `entities.md`.
 
 ## 0. Where
 - Target folder = the current working directory unless the GM names another. It must not be inside the plugin folder.
@@ -25,7 +25,7 @@ Ask in the default output language (`AGENTS.md` §3), numbered, with a one-line 
 6. Inspirations
 7. Fantasy level
 8. Immutable Rules: the fiction's unbreakable rules (e.g. "The dead never rise on their own", "Sunlight burns vampires"). At least 1.
-9. System (MVP: Fate Accelerated)
+9. System: list the installed packs by their `name` (from each `pack.md`), e.g. "Fate Accelerated, 5E SRD". If the GM names a game, match it to the pack whose `pack.md` says it covers it. If no pack fits, say so: the GM can pick the closest pack and put the differences under Homebrew.
 
 Do not continue until 1, 2, 8 and 9 have answers. Others may stay empty → `## Uncertain`. If the GM picks a different language in item 4, switch to it from the next message on.
 
@@ -41,6 +41,7 @@ For each answer:
 For items the GM asked you to draft (intro scene, opening scene, characters, locations, groups, hooks):
 - Draft briefly, in the world's tone and language, obeying every `IR<n>`. For hooks, write `## Surface`, `## 🔒 Hidden Truth` and `## Links`; never leave the hidden truth for later. If the GM wants to write it themselves, leave `{{GM writes this}}` and add an `## Uncertain` line.
 - Show all drafts in one message; the GM accepts, edits or drops each. Write only accepted drafts.
+- Every entity replaces the template's `{{system sections}}` line with the sections the pack's `entities.md` lists for it.
 - Every entity gets `## Links` at creation (character↔group membership, character↔location presence, hook↔its people and places, hook→next hook). "Who might know" runs on these links, so don't skip them.
 
 ## 4. System pack
@@ -48,7 +49,7 @@ Ask the questions in `../../systems/<system>/init-questions.md` as one batch. Un
 
 ## 5. Write
 Create (see `references/world-layout.md`):
-- `world.md` from the template, with `language:` set and Immutable Rules numbered `IR1…`; `system.md`; `AGENTS.md` from `templates/world-AGENTS.md`
+- `world.md` from the template, with `language:` and `system:` (the pack `id`) set and Immutable Rules numbered `IR1…`; `system.md`; `AGENTS.md` from `templates/world-AGENTS.md`
 - `characters/`, `locations/`, `groups/`, `hooks/`, `sessions/`, `proposals/` (create the empty folders too)
 - one file per accepted entity, with slugs following the layout rules
 Do **not** create a session log; `/event` opens one.
