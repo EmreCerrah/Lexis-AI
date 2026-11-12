@@ -1,6 +1,6 @@
 # Commands
 
-Lexis-AI has eight commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
+Lexis-AI has nine commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
 
 | Command | Use it | Writes |
 |---|---|---|
@@ -12,6 +12,7 @@ Lexis-AI has eight commands. Call them as described in [Getting started](getting
 | [`/create-obstacle`](#create-obstacle) | for a lock, trap, puzzle, hazard or social obstacle | the session log |
 | [`/create-lore`](#create-lore) | for a new NPC, place, group or story hook | `proposals/` + the session log |
 | [`/close-session`](#close-session) | at the end of the session | the world files (only what you approve) |
+| [`/lexis-help`](#lexis-help) | when you forget a command or what to do next | nothing |
 
 ## Two modes
 - **Table mode** (default): short. At most 5 bullets per block, no introduction, no approval questions in the middle of the game.
@@ -134,4 +135,23 @@ Answer in plain words: `all as suggested`, `3 ✅, 5 ❌, rest as suggested`, `1
 - Updated files: [[old-cemetery]], [[gravekeeper]]
 - Added to uncertain: 3 · Rejected: 2 · Proposals kept: 1
 - Rule change: —
+```
+
+## /lexis-help
+```
+/lexis-help [a command | a question]
+```
+A short guide that writes nothing.
+- **No argument:** every command with one line on what it does, shown in the form your tool uses (`/event`, `/lexis-ai:event`, `$event` …). In a world it adds the world's name, system and language, the open session (`E3 R7 G1 D0`) and one suggested next step: `/world-init` if the world is missing something, `/close-session` if a log is pending, and so on.
+- **A command name** (`/lexis-help event`): that command's usage, what it writes and an example.
+- **A question** (`/lexis-help how do I add a PC?`): the command that does it, with an example.
+
+```
+📖 Lexis-AI
+- /world-init — creates a world, or completes an existing one
+- /event — records what happened, ripples, who might know
+…
+🌍 Vespera · 5E SRD · Türkçe
+- Session: session-002 open, E3 R7 G1 D0
+- Next: keep reporting with /event; /close-session at the end
 ```
