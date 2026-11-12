@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -176,4 +177,53 @@ func section(text, heading string) string {
 		body = body[:j]
 	}
 	return body
+}
+
+func TestOnlyChosenSystemIsInstalled(t *testing.T) {
+	e := newEnv(t, "copilot", "project")
+	packs, err := listPacks(e.src)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if packs[0].id != "srd5" {
+		t.Fatalf("menu order: first pack = %s, want srd5", packs[0].id)
+	}
+	chosen, err := selectPacks("srd5", packs, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	staged, cleanup, err := stageSource(e.src, chosen)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cleanup()
+	e.src = staged
+	apply(t, e)
+	systems := filepath.Join(e.opts.projectDir, ".github", "lexis-ai", "systems")
+	mustExist(t, filepath.Join(systems, "srd5", "pack.md"), filepath.Join(e.opts.projectDir, ".github", "lexis-ai", "AGENTS.md"))
+	entries, _ := os.ReadDir(systems)
+	if len(entries) != 1 {
+		t.Fatalf("installed systems = %d, want only srd5", len(entries))
+	}
+}
+
+func TestSelectPacks(t *testing.T) {
+	packs := []pack{{id: "srd5", name: "5E"}, {id: "fate-accelerated", name: "Fate"}}
+	if got, _ := selectPacks("all", packs, nil); len(got) != 2 {
+		t.Errorf("all → %d packs", len(got))
+	}
+	if got, _ := selectPacks("fate-accelerated, srd5", packs, nil); len(got) != 2 || got[0].id != "fate-accelerated" {
+		t.Errorf("list → %v", got)
+	}
+	if _, err := selectPacks("gurps", packs, nil); err == nil {
+		t.Error("unknown system accepted")
+	}
+	p := newPrompter(strings.NewReader("2\n"), io.Discard)
+	if got, _ := selectPacks("", packs, p); len(got) != 1 || got[0].id != "fate-accelerated" {
+		t.Errorf("menu choice 2 → %v", got)
+	}
+	p = newPrompter(strings.NewReader("3\n"), io.Discard)
+	if got, _ := selectPacks("", packs, p); len(got) != 2 {
+		t.Errorf("menu choice all → %v", got)
+	}
 }

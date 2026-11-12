@@ -19,10 +19,11 @@ lexis-setup
 ```
 `go install` prints nothing when it succeeds. It puts the program in Go's bin folder: `%USERPROFILE%\go\bin` on Windows, `~/go/bin` on macOS and Linux. If your terminal says `lexis-setup` is not found, add that folder to your `PATH`, or run the program with its full path. To update the setup tool later, run the same `go install` command again.
 
-The tool asks three questions:
+The tool asks four questions:
 1. **Which AI tool do you use?** Claude Code, Codex, Gemini CLI or GitHub Copilot.
 2. **Where do you want to install it?** For your user, or in a specific project folder.
 3. **Which language should the AI answer in?** English, Türkçe, Español, Deutsch, Français, Português, or any other language you type.
+4. **Which game system do you play?** 5E SRD (fifth edition compatible), Fate Accelerated, or all of them. Only the systems you choose are installed; the others' files are never written. To add a system later, run `lexis-setup` again and choose it (or "All systems").
 
 It then downloads the plugin from GitHub (`EmreCerrah/Lexis-AI`, branch `main`), shows the install plan and asks for confirmation.
 
@@ -51,6 +52,7 @@ Skills refer to the plugin root as `../../`. The installer rewrites that path fo
 | `--platform claude\|codex\|gemini\|copilot` | skips the tool question |
 | `--scope user\|project`, `--dir <folder>` | where to install |
 | `--lang <language>` | skips the language question (e.g. `--lang English`, `--lang Turkish`) |
+| `--system <id>` | skips the game system question: `srd5`, `fate-accelerated`, several separated by commas, or `all` |
 | `--source <folder>` | installs from a local copy instead of GitHub (for development) |
 | `--repo owner/repo`, `--ref <branch/tag>` | another repository or version |
 | `--dry-run` | shows the plan without writing anything |
@@ -62,7 +64,7 @@ Every folder the tool writes carries a `.lexis-ai.json` marker. When the tool ru
 For a private repository, set the `GITHUB_TOKEN` environment variable.
 
 ## Usage
-Lexis-AI helps you **while you run the game**. Game systems: **Fate Accelerated** and **5E SRD** (fifth-edition rules); you choose one per world in `/world-init`. System packs hold only rules, never a published setting. You stay in charge: it never rolls dice and never decides whether an action succeeds. You tell it what happened; it records that, shows how it ripples through the world, and helps with rules and scene material. Your world files change only when you approve the changes at the end of the session.
+Lexis-AI helps you **while you run the game**. Game systems: **Fate Accelerated** and **5E SRD** (fifth-edition rules); you pick the systems at install, and each world uses one of them (`/world-init` picks it automatically when only one is installed). System packs hold only rules, never a published setting. You stay in charge: it never rolls dice and never decides whether an action succeeds. You tell it what happened; it records that, shows how it ripples through the world, and helps with rules and scene material. Your world files change only when you approve the changes at the end of the session.
 
 ### How to call a command
 Make an empty folder for your world, open your AI tool in that folder, then call a command.

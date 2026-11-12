@@ -25,7 +25,7 @@ Ask in the default output language (`AGENTS.md` §3), numbered, with a one-line 
 6. Inspirations
 7. Fantasy level
 8. Immutable Rules: the fiction's unbreakable rules (e.g. "The dead never rise on their own", "Sunlight burns vampires"). At least 1.
-9. System: list the installed packs by their `name` (from each `pack.md`), e.g. "Fate Accelerated, 5E SRD". If the GM names a game, match it to the pack whose `pack.md` says it covers it. If no pack fits, say so: the GM can pick the closest pack and put the differences under Homebrew.
+9. System: only the packs chosen at install are present (`../../systems/*/pack.md`). If there is exactly one, don't ask: state it in this item ("System: <name>, installed") and use it. If there are several, list them by `name`. If the GM wants a system that is not installed, say so: they can re-run `lexis-setup` and choose it, or pick an installed pack and put the differences under Homebrew.
 
 Do not continue until 1, 2, 8 and 9 have answers. Others may stay empty → `## Uncertain`. If the GM picks a different language in item 4, switch to it from the next message on.
 

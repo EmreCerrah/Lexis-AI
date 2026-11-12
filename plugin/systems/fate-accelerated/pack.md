@@ -2,6 +2,7 @@
 type: system-pack
 id: fate-accelerated
 name: Fate Accelerated
+order: 4
 version: 0.2.0
 ---
 

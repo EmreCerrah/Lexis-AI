@@ -1,7 +1,8 @@
 ---
 type: system-pack
 id: srd5
-name: 5E SRD
+name: 5E SRD (fifth edition compatible)
+order: 1
 version: 0.1.0
 ---
 

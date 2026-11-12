@@ -2,7 +2,7 @@
 
 A **GM assistant** for the live table. You run the game; the agent never rolls dice and never decides outcomes. It records the events you report, shows how they ripple through the world, and updates your world files only with your approval at the end of the session.
 
-- Systems: **Fate Accelerated**, **5E SRD** (fifth-edition rules). One per world, chosen in `/world-init`. Packs hold rules only, never setting content.
+- Systems: **Fate Accelerated**, **5E SRD** (fifth-edition rules). `lexis-setup` installs only the systems the GM picks; each world uses one. Packs hold rules only, never setting content.
 - Format: plain Markdown + `[[wiki-links]]`. Opens in Obsidian, but doesn't need it.
 - Your world lives in your own folder. The plugin contains no world data.
 - Language: the AI answers in the language you pick at install (each world can override it in `world.md`).

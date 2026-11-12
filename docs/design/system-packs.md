@@ -96,8 +96,8 @@ The GM's order. Licenses were checked against the publishers' own pages; re-chec
 | 9 | Mutants & Masterminds 3e–style (d20 effects) | tbd | **OGL 1.0a** Open Game Content (Product Identity excluded, e.g. "hero points") | mechanics; no Product Identity, no setting | planned |
 
 ## Install and selection
-- `lexis-setup` already copies every folder under `systems/`, so new packs ship with no installer change.
-- `/world-init` lists the packs it finds in `systems/` (name from each `pack.md`) instead of offering only FAE.
+- `lexis-setup` asks "Which game system do you play?" (packs listed by `name`, menu order from the `order` field in `pack.md`, plus "All systems"; flag `--system`). It installs **only the chosen packs**; the other packs' files are never written. A re-run with another choice replaces the installed set. New packs need no installer change.
+- `/world-init` uses the installed pack directly when there is one, and lists them when there are several.
 - The world's `system` frontmatter field stores the pack id (`fate-accelerated`, `srd5` …).
 
 ## Testing
