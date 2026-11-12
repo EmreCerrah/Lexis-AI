@@ -3,18 +3,20 @@
 Lexis-AI keeps your world (events, ripples, links, hooks, canon) the same in every game. The **rules help** comes from a *system pack*: a small set of files that explains one game's mechanics. You choose the packs when you install ([Installation](installation.md)), and each world uses one of them (the `system:` field in `world.md`).
 
 ## Supported systems
-| Pack (menu name) | `--system` id | For players of | The roll | Scene tag | Meta-currency | License |
+| Pack (menu name) | `--system` id | Based on (the open source it restates) | The roll | Scene tag | Meta-currency | License |
 |---|---|---|---|---|---|---|
-| 5E SRD (fifth edition compatible) | `srd5` | fifth-edition fantasy (2024 core rules) | d20 + modifier vs DC; Advantage/Disadvantage | scene feature | Heroic Inspiration | CC-BY-4.0 (SRD 5.2.1) |
-| ORC 2E Core (three-action d20, remaster rules) | `orc-d20` | the second-edition remaster rules Paizo released under the ORC License | d20 + modifier vs DC, four degrees of success | circumstance | Hero Points | ORC License |
-| Fate Accelerated | `fate-accelerated` | Fate Accelerated (FAE) | 4dF + approach vs the ladder | aspect | fate points | CC-BY 3.0 |
-| Fate Core | `fate-core` | Fate Core | 4dF + skill vs the ladder | aspect | fate points | CC-BY 3.0 |
-| d100 Percentile Core (ORC) | `d100` | percentile roll-under games, including classic investigative horror | d100 ≤ skill %, five success levels | situational modifier | power points as fate points (optional) | ORC License (Chaosium's Basic Roleplaying engine) |
-| Forged in the Dark Core | `fitd` | Forged in the Dark games | d6 pool, highest die; position and effect | factor or clock | stress | CC-BY 3.0 (Blades in the Dark SRD) |
-| Doom d20 Core (OSR, four abilities, Omens) | `doom-d20` | MÖRK BORG–compatible play | d20 + ability vs DR | DR shift or hazard | Omens | MÖRK BORG Third Party License |
-| Superhero d20 Effects Core (OGL) | `hero-d20` | effects-based superhero d20 (third edition) | d20 + rank vs DC, degrees of success | circumstance or condition | Victory Points | OGL 1.0a |
+| 5E SRD (fifth edition compatible) | `srd5` | System Reference Document 5.2.1 by Wizards of the Coast: the free 2024 fifth-edition core rules | d20 + modifier vs DC; Advantage/Disadvantage | scene feature | Heroic Inspiration | CC-BY-4.0 (SRD 5.2.1) |
+| ORC 2E Core (three-action d20, remaster rules) | `orc-d20` | Pathfinder Player Core and GM Core (Paizo, remaster): their ORC-licensed rules | d20 + modifier vs DC, four degrees of success | circumstance | Hero Points | ORC License |
+| Fate Accelerated | `fate-accelerated` | Fate Accelerated Edition (Evil Hat) | 4dF + approach vs the ladder | aspect | fate points | CC-BY 3.0 |
+| Fate Core | `fate-core` | Fate Core System (Evil Hat) | 4dF + skill vs the ladder | aspect | fate points | CC-BY 3.0 |
+| d100 Percentile Core (ORC) | `d100` | Basic Roleplaying: Universal Game Engine (Chaosium): the percentile engine behind classic investigative horror | d100 ≤ skill %, five success levels | situational modifier | power points as fate points (optional) | ORC License (Chaosium's Basic Roleplaying engine) |
+| Forged in the Dark Core | `fitd` | Blades in the Dark SRD (One Seven Design) and Forged in the Dark games | d6 pool, highest die; position and effect | factor or clock | stress | CC-BY 3.0 (Blades in the Dark SRD) |
+| Doom d20 Core (OSR, four abilities, Omens) | `doom-d20` | MÖRK BORG (compatible, under its Third Party License) | d20 + ability vs DR | DR shift or hazard | Omens | MÖRK BORG Third Party License |
+| Superhero d20 Effects Core (OGL) | `hero-d20` | the effects-based superhero d20 SRD, third edition (OGL)¹ | d20 + rank vs DC, degrees of success | circumstance or condition | Victory Points | OGL 1.0a |
 
-**Why the generic names?** Most game names are trademarks that the open licenses do not cover. The packs are named after their mechanics, and their `pack.md` files carry the exact license and attribution text.
+**Why the generic names?** Most game names are trademarks that the open licenses do not cover. The packs are named after their mechanics, and their `pack.md` files carry the exact license and attribution text. The *Based on* column names each source the way its license attribution does, so you can tell which game a pack is for. All trademarks belong to their owners; no pack is affiliated with or endorsed by them.
+
+¹ The source's product name is Product Identity under the OGL, which forbids using it to claim compatibility, so it is not printed here. The pack follows the third-edition superhero d20 rules published as Open Game Content (ranks, effects, degrees of success, Toughness checks).
 
 ## What a pack contains, and what it never contains
 **Contains:** how rolls work, difficulty scales, character math (modifiers, hit points, derived values), conditions and harm, how to set up an obstacle, the setup questions for `/world-init`, and the system sections of character and place files.

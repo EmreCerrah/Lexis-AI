@@ -35,18 +35,18 @@ Who might know:
 | Gemini CLI | user-wide extension |
 | GitHub Copilot | user-wide or project folder |
 
-| Game system | For | License |
+| Game system | Based on | License |
 |---|---|---|
-| 5E SRD | fifth-edition fantasy (2024 core rules) | CC-BY-4.0 |
-| ORC 2E Core | the second-edition remaster rules Paizo released under the ORC License | ORC |
-| Fate Accelerated | Fate Accelerated | CC-BY |
-| Fate Core | Fate Core | CC-BY |
-| d100 Percentile Core | percentile roll-under play, including investigative horror (Chaosium's Basic Roleplaying engine) | ORC |
-| Forged in the Dark Core | d6 pools, position and effect, clocks | CC-BY |
-| Doom d20 Core | MÖRK BORG–compatible play | MÖRK BORG Third Party License |
-| Superhero d20 Effects Core | effects-based superhero d20 (third edition) | OGL 1.0a |
+| 5E SRD | System Reference Document 5.2.1 by Wizards of the Coast (2024 fifth-edition core rules) | CC-BY-4.0 |
+| ORC 2E Core | Pathfinder Player Core and GM Core (Paizo, remaster) | ORC |
+| Fate Accelerated | Fate Accelerated Edition (Evil Hat) | CC-BY |
+| Fate Core | Fate Core System (Evil Hat) | CC-BY |
+| d100 Percentile Core | Basic Roleplaying: Universal Game Engine (Chaosium), the percentile engine behind classic investigative horror | ORC |
+| Forged in the Dark Core | Blades in the Dark SRD (One Seven Design) | CC-BY |
+| Doom d20 Core | MÖRK BORG (compatible) | MÖRK BORG Third Party License |
+| Superhero d20 Effects Core | the effects-based superhero d20 SRD, third edition (OGL) | OGL 1.0a |
 
-System packs contain **game mechanics only**: no published setting, characters, places or story, and no copied rule text. Details: [Game systems](docs/game-systems.md).
+System packs contain **game mechanics only**: no published setting, characters, places or story, and no copied rule text. Source names are given as their license attributions give them; all trademarks belong to their owners, and Lexis-AI is not affiliated with or endorsed by them. Details: [Game systems](docs/game-systems.md).
 
 ## Quick start
 1. Install [Go](https://go.dev/dl/) 1.22+ and the setup tool:

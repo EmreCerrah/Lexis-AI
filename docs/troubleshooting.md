@@ -32,7 +32,10 @@ Lexis-AI looks for `world.md` (with `type: world`) in the folder you started the
 The world's `language:` in `world.md` wins; otherwise the default chosen at install. Change `language:` in `world.md`, or run `lexis-setup` again with another `--lang`.
 
 **It uses the wrong game system, or says the system is not installed.**
-The world's `system:` field in `world.md` names the pack (`srd5`, `fate-core` …). Only the systems you chose at install exist. Run `lexis-setup` again and choose that system (or "All systems").
+The world's `system:` field in `world.md` names the pack (`srd5`, `fate-core` …). Only the systems you chose at install exist. Run `lexis-setup` again and choose that system (or "All systems"), or switch the world to an installed system: run `/world-init` in the world and say "switch to <system>".
+
+**There is no `system.md`, or the world has no characters yet.**
+Run `/world-init` in the world. In an existing world it lists everything missing and fills in what you choose ([Commands](commands.md#world-init)).
 
 **It changed a world file during the session.**
 It should not: during play only `sessions/` and `proposals/` are written; world files change only at `/close-session`. If it happens, it is a bug; please report it with the command you used.

@@ -36,7 +36,16 @@ Creates a world in the current folder, in three tiers so you are never forced to
 
 It writes `world.md`, `system.md`, a short `AGENTS.md`, the folders `characters/ locations/ groups/ hooks/ sessions/ proposals/` and one file per accepted entity. It does not open a session log; `/event` does that.
 
-**Fill mode:** run `/world-init` again in an existing world. It never overwrites; it lists what you deferred and fills in only what you answer now.
+**Fill mode (complete an existing world):** run `/world-init` in a folder that already has `world.md`. It never overwrites; it scans the world and shows one numbered list of what is missing, with a suggested action for each:
+- a missing `system.md` (it asks your system's setup questions), or a `system:` that names a system that is not installed;
+- empty folders (no characters yet …) and empty `world.md` sections;
+- items you deferred (`## Uncertain` lines from `/world-init`);
+- character, location and group files without your system's sections or without `## Links`;
+- hooks without a hidden truth.
+
+Missing folders and the world's `AGENTS.md` are created without asking. You answer the list once (`all`, `1, 3: Gabriel, Ayşe (PC); rest later`, `3 you suggest`), and it fills in only what you chose. Characters can be marked **PC** or **NPC**.
+
+**Switching the game system:** say so in fill mode ("switch to 5E"). It sets `system:` in `world.md`, asks the new system's setup questions, rewrites `system.md` (keeping your homebrew, flagged for a check) and offers to redraw the system sections of every character, location and group file from their fiction. Only installed systems can be chosen; run `lexis-setup` again to add one.
 
 ## /event
 ```
