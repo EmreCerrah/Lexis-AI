@@ -14,8 +14,8 @@ name: {{Name}}
 ## Resources and Methods
 {{Money, people, magic, an information network …}}
 
-## Aspects
-- {{group aspect}}
+<!-- System sections: replace the next line with the sections in systems/<system>/entities.md. -->
+{{system sections}}
 
 ## 🔒 GM Notes
 {{Internal conflicts, the real leader, the secret goal}}

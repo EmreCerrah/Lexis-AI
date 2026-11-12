@@ -25,6 +25,7 @@ type options struct {
 	scope      string
 	projectDir string
 	lang       string
+	systems    string
 	source     string
 	repo       string
 	ref        string
@@ -39,6 +40,7 @@ func main() {
 	flag.StringVar(&o.scope, "scope", "", "user | project (asked if empty)")
 	flag.StringVar(&o.projectDir, "dir", "", "project folder (for scope=project)")
 	flag.StringVar(&o.lang, "lang", "", "language the AI answers in, e.g. English, Turkish (asked if empty)")
+	flag.StringVar(&o.systems, "system", "", "game system pack id, several separated by commas, or all (asked if empty)")
 	flag.StringVar(&o.source, "source", "", "local source folder instead of GitHub (repo root or plugin folder)")
 	flag.StringVar(&o.repo, "repo", defaultRepo, "GitHub repository to download the plugin from (owner/repo)")
 	flag.StringVar(&o.ref, "ref", defaultRef, "branch or tag")
@@ -117,13 +119,27 @@ func run(o options, p *prompter) error {
 		return err
 	}
 
+	packs, err := listPacks(src)
+	if err != nil {
+		return err
+	}
+	chosen, err := selectPacks(o.systems, packs, p)
+	if err != nil {
+		return err
+	}
+	src, cleanStage, err := stageSource(src, chosen)
+	if err != nil {
+		return err
+	}
+	defer cleanStage()
+
 	e := &env{opts: o, home: home, src: src, meta: meta, runner: &runner{dryRun: o.dryRun}}
 	pl, err := t.plan(e)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("\nInstall plan — %s %s → %s (%s, language: %s)\n", meta.Name, meta.Version, t.title, scopeLabel(o), o.lang)
+	fmt.Printf("\nInstall plan — %s %s → %s (%s, language: %s, game system: %s)\n", meta.Name, meta.Version, t.title, scopeLabel(o), o.lang, packNames(chosen))
 	for _, s := range pl.steps {
 		fmt.Println("  •", s.desc)
 	}

@@ -1,139 +1,125 @@
 # Lexis-AI
 
-The **Lexis-AI** plugin, a GM assistant for the live tabletop RPG table, plus `lexis-setup`, the tool that installs it into different AI tools.
+**A GM assistant for the live tabletop RPG table.** Lexis-AI runs inside the AI tool you already use (Claude Code, Codex, Gemini CLI or GitHub Copilot) and keeps your campaign world as plain Markdown files in your own folder.
+
+You run the game. Lexis-AI never rolls dice and never decides whether an action succeeds. You tell it what happened; it records it, shows how it ripples through the world and who might hear about it, helps with rules in your game system's own terms, and changes your world files only with your approval at the end of the session.
 
 ```
-plugin/      # the plugin (platform-neutral skills, rules, templates, FAE pack)
-lexis-setup/ # the installer, written in Go
-.agents/plugins/marketplace.json   # Codex: the repo can be added directly as a marketplace
+/event Gabriel caught the gravekeeper next to an empty coffin. The keeper ran and dropped a theater ticket.
+
+📌 E1 recorded (session-001) · Lens: society-rumor, faith-supernatural
+Ripples (hypothesis):
+- R1 The keeper hides in the tavern and mutters "it wasn't a vampire"
+- R2 By morning the town says "the hunter attacked the keeper"
+- R3 🔒 The troupe notices the lost ticket and sends someone after the keeper
+Who might know:
+- [[gravekeeper]] — there
+- [[order-of-light]] — may hear (member → [[gabriel]])
 ```
 
-## Install
-You need [Go](https://go.dev/dl/) 1.22 or newer. Install the setup tool straight from GitHub; there is nothing to clone or build:
-```bash
-go install github.com/EmreCerrah/Lexis-AI/lexis-setup@latest
-```
-Then run it:
-```bash
-lexis-setup
-```
-`go install` prints nothing when it succeeds. It puts the program in Go's bin folder: `%USERPROFILE%\go\bin` on Windows, `~/go/bin` on macOS and Linux. If your terminal says `lexis-setup` is not found, add that folder to your `PATH`, or run the program with its full path. To update the setup tool later, run the same `go install` command again.
+## Features
+- **Events become canon instantly**, consequences stay hypotheses until you decide. Nothing in your world changes behind your back.
+- **Ripples through lenses:** power and politics, society and rumor, faith and the supernatural.
+- **Who might know:** follows the links between your characters, places and groups.
+- **Immutable Rules and hidden truths:** suggestions never break your world's core rules and never reveal a hook's secret. If *you* break a rule, it is recorded and you choose how the world deals with it.
+- **Rules help in 8 game systems**, with scene material (scene tags, obstacles, traps, NPCs) in each system's terms.
+- **One end-of-session list:** approve, keep as uncertain, or drop each item with a single answer.
+- **Your language:** answers in English, Türkçe, Español, Deutsch, Français, Português or any language you choose; each world can have its own.
+- **Plain Markdown with `[[links]]`:** readable, editable, Obsidian-compatible, easy to back up with git.
 
-The tool asks three questions:
-1. **Which AI tool do you use?** Claude Code, Codex, Gemini CLI or GitHub Copilot.
-2. **Where do you want to install it?** For your user, or in a specific project folder.
-3. **Which language should the AI answer in?** English, Türkçe, Español, Deutsch, Français, Português, or any other language you type.
-
-It then downloads the plugin from GitHub (`EmreCerrah/Lexis-AI`, branch `main`), shows the install plan and asks for confirmation.
-
-| Tool | User install | Project install |
-|---|---|---|
-| Claude Code | plugin via a local marketplace (`~/.lexis-ai/claude-code`) + `claude plugin install` | `<project>/.claude/skills` + `<project>/.claude/lexis-ai` |
-| Codex | plugin via a local marketplace (`~/.lexis-ai/codex`) + `codex plugin add` | `<project>/.agents/skills` + `<project>/.agents/lexis-ai` |
-| Gemini CLI | extension `~/.gemini/extensions/lexis-ai` via `gemini extensions install` | `<project>/.gemini/skills` + `<project>/.gemini/lexis-ai` |
-| GitHub Copilot | `~/.copilot/skills` + `~/.copilot/lexis-ai` | `<project>/.github/skills` + `<project>/.github/lexis-ai` |
-
-A **project install** is a plain copy into the folder each tool already scans for project skills: the skills go to `skills/`, the shared files (rules, references, templates, the FAE pack) go to `lexis-ai/` next to it. Nothing is registered with the tool, so the skills are there as soon as you open the tool in that folder, and you can commit them with the project. In Claude Code, project skills are called without the plugin prefix (`/event` instead of `/lexis-ai:event`). Re-running a project install removes what older versions put in `<project>/.lexis-ai/` or `<project>/plugins/`.
-
-**Language:** the chosen language is written into the installed `AGENTS.md` as the default output language. `/world-init` offers it as the world's language and stores it in `world.md`, so each world can use its own. File names, headings and frontmatter keys stay in English so every skill can find them; only the content is in the chosen language.
-
-The repo has a single manifest, `plugin/plugin.json`. The installer generates each tool's own manifest from it.
-
-Skills refer to the plugin root as `../../`. The installer rewrites that path for each tool:
-- Claude Code, user install: `${CLAUDE_PLUGIN_ROOT}/`
-- Copilot, user install: the absolute path
-- Every project install: `../../lexis-ai/`
-- Codex and Gemini CLI, user install: unchanged
-
-### Flags
-| Flag | Meaning |
+## Supported AI tools and game systems
+| AI tool | Install |
 |---|---|
-| `--platform claude\|codex\|gemini\|copilot` | skips the tool question |
-| `--scope user\|project`, `--dir <folder>` | where to install |
-| `--lang <language>` | skips the language question (e.g. `--lang English`, `--lang Turkish`) |
-| `--source <folder>` | installs from a local copy instead of GitHub (for development) |
-| `--repo owner/repo`, `--ref <branch/tag>` | another repository or version |
-| `--dry-run` | shows the plan without writing anything |
-| `--yes` | doesn't ask for confirmation |
-| `--force` | overwrites a folder that does not belong to Lexis-AI |
+| Claude Code | user-wide plugin or project folder |
+| Codex | user-wide plugin or project folder |
+| Gemini CLI | user-wide extension |
+| GitHub Copilot | user-wide or project folder |
 
-Every folder the tool writes carries a `.lexis-ai.json` marker. When the tool runs again, it only replaces folders that carry this marker. The plugin used to be called `worldbuilding-forge`; an install under that name is removed and replaced by `lexis-ai` when `lexis-setup` runs again.
-
-For a private repository, set the `GITHUB_TOKEN` environment variable.
-
-## Usage
-Lexis-AI helps you **while you run the game**. You stay in charge: it never rolls dice and never decides whether an action succeeds. You tell it what happened; it records that, shows how it ripples through the world, and helps with rules and scene material. Your world files change only when you approve the changes at the end of the session.
-
-### How to call a command
-Make an empty folder for your world, open your AI tool in that folder, then call a command.
-
-| Tool | How to call it | Example |
+| Game system | Based on | License |
 |---|---|---|
-| Claude Code | `/lexis-ai:<command>` (user install), `/<command>` (project install) | `/lexis-ai:event The players broke into the crypt` |
-| Codex | `$<command>` (or pick `@lexis-ai`) | `$event The players broke into the crypt` |
-| GitHub Copilot | `/<command>` | `/event The players broke into the crypt` |
-| Gemini CLI | describe what you want | `event: the players broke into the crypt` |
+| 5E SRD | System Reference Document 5.2.1 by Wizards of the Coast: the 2024 core rules of D&D fifth edition¹ | CC-BY-4.0 |
+| ORC 2E Core | Pathfinder Player Core and GM Core (Paizo, remaster) | ORC |
+| Fate Accelerated | Fate Accelerated Edition (Evil Hat) | CC-BY |
+| Fate Core | Fate Core System (Evil Hat) | CC-BY |
+| d100 Percentile Core | Basic Roleplaying: Universal Game Engine (Chaosium), the percentile engine behind classic investigative horror | ORC |
+| Forged in the Dark Core | Blades in the Dark SRD (One Seven Design) | CC-BY |
+| Doom d20 Core | MÖRK BORG (compatible) | MÖRK BORG Third Party License |
+| Superhero d20 Effects Core | the effects-based superhero d20 rules, third edition, from the [d20 Hero SRD](https://www.d20herosrd.com/) (OGL) | OGL 1.0a |
 
-Plain requests work in every tool too, for example "record what just happened" or "close the session". Below, commands are written as `/event`, `/ripples` and so on.
+System packs contain **game mechanics only**: no published setting, characters, places or story, and no copied rule text. Game names appear only to say which game a pack's rules come from; all trademarks belong to their owners, and Lexis-AI is not affiliated with or endorsed by them. Details: [Game systems](docs/game-systems.md).
 
-### Commands
-| Command | When to use it | What you get | What it writes |
-|---|---|---|---|
-| `/world-init` | once, before the first session | A short interview: name, concept, genre, language, tone, inspirations, fantasy level, **Immutable Rules**, system. Characters, places, groups and hooks can be skipped ("later") or drafted by the AI ("you suggest"). | creates the world files |
-| `/event <what happened>` | at the table, right after something happens | The event is recorded at once. You get 3-5 short **ripples** (possible consequences) and a **who might know** list. | session log only |
-| `/ripples [E2]` | between scenes, when you want more | The event examined through lenses (power and politics, society and rumor, faith and the supernatural), and how word of it spreads 2-3 steps. | session log only |
-| `/create-aspect [scene]` | you need an aspect for the scene | One Fate aspect, with an invoke and a compel example. | session log (proposal) |
-| `/create-obstacle [scene]` | you need a lock, trap, puzzle, hazard or social obstacle | The fiction first (what it is, why it is here), then Fate: an aspect, a suggested difficulty, fitting approaches, cost options. | session log (proposal) |
-| `/create-lore <what you need>` | you need an NPC, place, faction or hook | One ready entity with aspects and links. | `proposals/` (proposal) |
-| `/help-skills <what the player does>` | a rules question at the table | Which action fits (Overcome, Create an Advantage, Attack, Defend), 2-3 fitting approaches, a difficulty range, matching stunts or aspects. | nothing |
-| `/close-session` | at the end of the session | Everything from the session in one numbered list, each with a suggested answer. You answer once; only what you approve is written. | world files |
+¹ D&D is a trademark of Wizards of the Coast LLC. Lexis-AI is not affiliated with, endorsed or sponsored by Wizards of the Coast.
 
-### A session, step by step
-1. **Set up the world:** `/world-init`. Answer the core questions in one go. Say "later" to anything you don't want to decide yet; it goes to the world's `## Uncertain` section.
-2. **Report what happens:** `/event Gabriel caught the gravekeeper next to an empty coffin. The keeper ran and dropped a theater ticket with a yellow sign on it.`
+## Quick start
+1. Install [Go](https://go.dev/dl/) 1.22+ and the setup tool:
+   ```bash
+   go install github.com/EmreCerrah/Lexis-AI/lexis-setup@latest
    ```
-   📌 E1 recorded (session-001) · Lens: society-rumor, faith-supernatural
-   Ripples (hypothesis):
-   - R1 The keeper hides in the tavern and mutters "it wasn't a vampire"
-   - R2 By morning the town says "the hunter attacked the keeper"
-   - R3 🔒 The troupe notices the lost ticket and sends a marked corpse after the keeper
-   Who might know:
-   - [[gravekeeper]] — there
-   - [[order-of-light]] — may hear (member → [[gabriel]])
+2. Run it and answer four questions (AI tool, where to install, answer language, game system):
+   ```bash
+   lexis-setup
    ```
-3. **Ask rules questions:** `/help-skills Gabriel wants to scare the keeper into talking`. **Get scene material:** `/create-obstacle the cellar door the keeper locked behind him`.
-4. **Dig deeper when there is time:** `/ripples E1`.
-5. **Close the session:** `/close-session`. You get a numbered list (events to write into world files, ripples to keep or drop, new links, which generated items you used). Answer once, for example `all as suggested, 3 ❌, defer 7`.
+3. Make an empty folder for your campaign, open your AI tool there and create the world:
+   ```
+   /world-init
+   ```
+   (Claude Code user install: `/lexis-ai:world-init` · Codex: `$world-init` · Gemini CLI: "set up a new world")
+4. At the table: `/event …` whenever something happens, `/help-skills …` for rules, `/create-obstacle …` for scene material.
+5. At the end: `/close-session`, answer once, done.
 
-### Table mode and prep mode
-- **Table mode** is the default: at most 5 short bullets, no questions unless they are needed, and no approval questions in the middle of the game.
-- **Prep mode:** add `prep` or `detailed` to a command, for example `/ripples E1 prep`, for a longer analysis between sessions.
+Full walk-through: [Getting started](docs/getting-started.md).
 
-### What it never does
-- It never changes your world files during the session. Events, ripples and generated items wait in the session log (`sessions/`) until `/close-session`.
-- It never breaks an **Immutable Rule** in anything it suggests. If you report an event that breaks one, it records the event anyway, flags `⚠ rule conflict` and offers three choices: (a) it only looks like a violation, (b) a costly exception, (c) the rule changes (decided at `/close-session`).
-- It never reveals a hook's **🔒 Hidden Truth**. If players try to break it, it suggests in-world reasons why they can't.
-- Lines marked `🔒` are for the GM only. Don't read them to the players.
+## Commands
+| Command | What it does |
+|---|---|
+| `/world-init` | creates a world through a short interview (anything can be "later" or "you suggest") |
+| `/event` | records what happened, lists 3-5 ripples and who might know |
+| `/ripples` | deepens an event through lenses and traces how the news spreads |
+| `/help-skills` | answers a rules question in your system's terms |
+| `/create-aspect` | one scene tag (aspect, scene feature, circumstance, clock …) |
+| `/create-obstacle` | one obstacle, trap, puzzle or hazard: fiction first, then the numbers |
+| `/create-lore` | one NPC, place, group or story hook, as a proposal |
+| `/close-session` | one numbered list of everything to change; writes only what you approve |
 
-### Your world folder
+Details and examples: [Commands](docs/commands.md).
+
+## Documentation
+| Guide | |
+|---|---|
+| [Installation](docs/installation.md) | install, flags, where files go, updating, test versions, uninstalling |
+| [Getting started](docs/getting-started.md) | your first world and session, step by step |
+| [Commands](docs/commands.md) | every command in detail |
+| [Game systems](docs/game-systems.md) | the 8 system packs, how each answers, licenses |
+| [Your world files](docs/world-files.md) | layout, canon vs hypothesis, links, editing, moving and backing up a world |
+| [Troubleshooting](docs/troubleshooting.md) | common problems and fixes |
+| [Creating a system pack](docs/creating-a-system-pack.md) | add a new game system |
+
+## Repository layout
 ```
-world.md        # concept, tone, Immutable Rules (IR1, IR2 …)
-system.md       # Fate Accelerated settings and Homebrew
-characters/  locations/  groups/  hooks/   # one Markdown file per entity
-sessions/       # one log per session
-proposals/      # /create-lore output waiting for approval
+plugin/                    # the plugin: platform-neutral skills, core rules, templates, system packs
+  AGENTS.md                # core rules every command reads first
+  skills/<command>/        # the 8 commands
+  references/              # knowledge model, world layout, lenses
+  templates/               # world file templates
+  systems/<id>/            # one folder per game system pack
+lexis-setup/               # the installer (Go)
+docs/                      # documentation
+.agents/plugins/marketplace.json   # lets Codex add this repo directly as a marketplace
 ```
-These are plain Markdown files with `[[links]]`, and you can edit them yourself. Open the folder in Obsidian if you want a linked view. "Who might know" only uses the `## Links` section of each file, so put relations there, one per line: `- [[order-of-light]] — member`.
+
+## Development
+```bash
+cd lexis-setup
+go test ./...
+go build -o lexis-setup .
+go run . --source ../plugin --dry-run
+```
+Build with a version label: `go build -ldflags "-X main.version=v0.2.0" -o lexis-setup .`. Cross-compile with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.
+
+The tests also check every system pack against the pack contract and the content rule ([Creating a system pack](docs/creating-a-system-pack.md#4-test-it)).
 
 ## Roadmap
 Planned work, in priority order: [ROADMAP.md](ROADMAP.md).
 
-## Build
-```bash
-cd lexis-setup && go test ./... && go build -o lexis-setup.exe .
-```
-The version label and the repository can be set at build time:
-```bash
-cd lexis-setup && go build -ldflags "-X main.version=v0.1.0 -X main.defaultRepo=EmreCerrah/Lexis-AI" -o lexis-setup.exe .
-```
-For other operating systems, build with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.
+## License
+The plugin and the installer are MIT-licensed (`plugin/plugin.json`). Each system pack follows its source's license, stated in its `pack.md`: the ORC packs (`orc-d20`, `d100`) are released under the ORC License, the OGL pack (`hero-d20`) under the OGL 1.0a, and the others carry the attribution their CC-BY or third-party license requires.

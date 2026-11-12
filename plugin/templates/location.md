@@ -11,8 +11,8 @@ name: {{Name}}
 ## Who Is Found Here
 {{People and groups who live, work or hang out here; add them as links too}}
 
-## Aspects
-- {{location aspect}}
+<!-- System sections: replace the next line with the sections in systems/<system>/entities.md. -->
+{{system sections}}
 
 ## 🔒 GM Notes
 {{Secret passages, hidden things}}

@@ -12,11 +12,8 @@ role: {{NPC / player character}}
 ## Wants
 {{What they want, and why}}
 
-## Aspects
-<!-- Filled by the system pack (Fate: high concept, trouble, others). -->
-- {{aspect}}
-
-<!-- Player characters only: the system pack adds ## Approaches and ## Stunts. NPCs do not have these two sections. -->
+<!-- System sections: replace the next line with the sections in systems/<system>/entities.md (NPC or PC). -->
+{{system sections}}
 
 ## 🔒 GM Notes
 {{Secrets and true intentions the players are not told}}

@@ -16,7 +16,7 @@ The unit of knowledge is **file + section**. There is no per-line tagging. Which
 - Later events can make an old `## Uncertain` line true or false. `/close-session` points these out and proposes promotion or removal.
 
 ### Inference
-- What you derive right now: who might know, which approach fits, which lens matters.
+- What you derive right now: who might know, which check or approach fits, which lens matters.
 - **Never persisted.** Re-derive it every time from the current files, so it never goes stale.
 
 ### Proposal

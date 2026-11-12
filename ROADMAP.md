@@ -22,10 +22,8 @@ Goal: a second system, then a third, with the GM choosing it in `/world-init`.
 - **Make the skills system-neutral.** `/help-skills`, `/create-aspect` and `/create-obstacle` are FAE-shaped today. Each becomes "core fiction + the pack's add-on":
   - `/create-aspect` maps to a condition or tag in systems without aspects.
   - `/help-skills` answers in the pack's own terms: skills, attributes or approaches.
-- **Candidates:**
-  - **D&D 5e:** ability checks, DCs, skills, conditions. Use only SRD content (CC-BY-4.0) and credit it.
-  - **A World of Darkness–style game:** dice pools, attributes + abilities, difficulty. Its rules are not open-licensed, so the pack may only describe how to use them, never reproduce rule text.
-  - **Fate Core:** the closest to FAE. A cheap third pack that tests the contract.
+- **Order (GM's choice):** 5E SRD ✅ → 2nd-edition d20 remaster (ORC) ✅ → ~~World of Darkness–style~~ (skipped: not open-licensed) → Fate Core ✅ → d100 percentile (BRP engine, ORC) ✅ → Forged in the Dark ✅ → Mörk Borg–compatible ✅ → M&M 3e–style ✅. All planned packs are done; next: a real-table test per system. Licenses and limits: [docs/design/system-packs.md](docs/design/system-packs.md).
+- **Content rule:** packs hold mechanics only, no setting, and a Go test enforces it.
 - **Homebrew stays per world** in `system.md` and overrides any pack.
 - **`lexis-setup`** installs every pack; `/world-init` lists the installed packs.
 

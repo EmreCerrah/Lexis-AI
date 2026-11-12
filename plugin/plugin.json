@@ -2,27 +2,27 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "lexis-ai",
   "version": "0.1.0",
-  "description": "Live-table GM assistant for tabletop RPGs: records reported events as canon, lists their ripples as hypotheses, and updates world files only after end-of-session approval. MVP system: Fate Accelerated.",
+  "description": "Live-table GM assistant for tabletop RPGs: records reported events as canon, lists their ripples as hypotheses, and updates world files only after end-of-session approval. Game systems: 5E SRD, ORC 2E Core, Fate Accelerated, Fate Core, d100 Percentile Core, Forged in the Dark Core, Doom d20 Core and Superhero d20 Effects Core.",
   "author": {
     "name": "Emre Cerrah"
   },
   "homepage": "https://github.com/EmreCerrah/Lexis-AI",
   "repository": "https://github.com/EmreCerrah/Lexis-AI",
   "license": "MIT",
-  "keywords": ["rpg", "ttrpg", "gm", "worldbuilding", "fate", "fate-accelerated", "markdown"],
+  "keywords": ["rpg", "ttrpg", "gm", "worldbuilding", "fate", "fate-accelerated", "5e", "srd", "markdown"],
   "extensions": {
     "com.openai": {
       "onboardingSkill": "./skills/world-init/SKILL.md",
       "interface": {
         "displayName": "Lexis-AI",
-        "shortDescription": "Live-table GM assistant (Fate Accelerated)",
-        "longDescription": "Records the events you report at the table as canon, lists their ripples through the world as hypotheses, creates aspects and obstacles, and updates your world files only with your approval at the end of the session. Plain Markdown + [[wiki-links]].",
+        "shortDescription": "Live-table GM assistant for tabletop RPGs",
+        "longDescription": "Records the events you report at the table as canon, lists their ripples through the world as hypotheses, creates scene tags and obstacles in your game system, and updates your world files only with your approval at the end of the session. Plain Markdown + [[wiki-links]].",
         "developerName": "Emre Cerrah",
         "category": "Productivity",
         "capabilities": ["Read", "Write"],
         "websiteURL": "https://github.com/EmreCerrah/Lexis-AI",
         "defaultPrompt": [
-          "Set up a new Fate Accelerated world",
+          "Set up a new campaign world",
           "Record what just happened at the table and list its ripples",
           "Close the session and show the changes for approval"
         ]

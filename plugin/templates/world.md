@@ -2,7 +2,7 @@
 type: world
 name: {{World name}}
 language: {{Output language, e.g. English}}
-system: fate-accelerated
+system: {{system pack id, e.g. fate-accelerated or srd5}}
 created: {{YYYY-MM-DD}}
 ---
 
