@@ -1,6 +1,6 @@
 # Design: System Packs
 
-Status: contract implemented with packs `srd5`, `orc-d20`, `fate-accelerated` · Roadmap item 1 · Branch `feat/system-packs`
+Status: contract implemented with packs `srd5`, `orc-d20`, `fate-accelerated`, `fate-core` · Roadmap item 1 · Branch `feat/system-packs`
 
 ## Goal
 The GM chooses a game system in `/world-init`, and every command gives rules help in that system's own terms. The world core (events, ripples, links, canon, hooks) does not change between systems. The MVP has one pack, Fate Accelerated (FAE); this design adds a second and a third pack without forking the skills.
@@ -88,8 +88,8 @@ The GM's order. Licenses were checked against the publishers' own pages; re-chec
 | 1 | Fate Accelerated | `fate-accelerated` | FAE SRD, **CC-BY 3.0** | mechanics in our words + attribution | done (refactored to the contract) |
 | 2 | 5E (fifth edition) | `srd5` | SRD 5.2.1, **CC-BY-4.0** | mechanics in our words + attribution; "compatible with fifth edition" only; no setting, spells, items or monsters | done |
 | 3 | d20 remaster rules (2nd edition) | `orc-d20` | Player Core / GM Core, **ORC License** | mechanics; no trademarks or setting (the ORC excludes "Reserved Material"); the pack folder itself is released under the ORC License (it adapts Licensed Material) and carries the ORC, attribution and Reserved Material notices | done |
-| 4 | World of Darkness–style d10 pools | tbd | **not open**: Paradox's Dark Pack is a non-commercial, revocable fan license | our own description of the dice-pool mechanic only, no rule text, no setting terms; the GM uses their own book; needs the Dark Pack notice and a legal check before shipping | needs a decision |
-| 5 | Fate Core / Condensed | `fate-core` | **CC-BY** | mechanics + attribution | planned |
+| 4 | World of Darkness–style d10 pools | — | **not open**: Paradox's Dark Pack is a non-commercial, revocable fan license | — | **skipped** (GM's decision) |
+| 5 | Fate Core | `fate-core` | **CC-BY 3.0** | mechanics + attribution + the Fate™ trademark line | done |
 | 6 | Basic Roleplaying (d100) | `brp` | BRP Universal Game Engine, **ORC License** (Chaosium) | mechanics; no setting or Call of Cthulhu content | planned |
 | 7 | Forged in the Dark (d6 pools, clocks) | `fitd` | Blades in the Dark SRD, **CC-BY 3.0** | mechanics + attribution; no setting | planned |
 | 8 | Mörk Borg–compatible (d20, doom) | tbd | **MÖRK BORG Third Party License** | mechanics restated in our own words only; no book text or art; "compatible" logo rules apply | planned |
@@ -115,5 +115,4 @@ The GM's order. Licenses were checked against the publishers' own pages; re-chec
 2. `/create-aspect` keeps its name; it makes the pack's scene tag in every system. A neutral alias can come later.
 3. One world, one system. A world without a `system:` field uses `fate-accelerated`.
 
-## Open
-- Pack 4 (World of Darkness–style): ship under the Dark Pack terms, or replace it with an open dice-pool system?
+4. World of Darkness–style: skipped, its rules are not open-licensed.
