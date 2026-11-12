@@ -2,7 +2,7 @@
 
 A **GM assistant** for the live table. You run the game; the agent never rolls dice and never decides outcomes. It records the events you report, shows how they ripple through the world, and updates your world files only with your approval at the end of the session.
 
-- Systems: **Fate Accelerated**, **5E SRD** (fifth-edition rules). `lexis-setup` installs only the systems the GM picks; each world uses one. Packs hold rules only, never setting content.
+- Systems: **5E SRD** (fifth-edition rules), **ORC 2E Core** (second-edition remaster rules, ORC License), **Fate Accelerated**. `lexis-setup` installs only the systems the GM picks; each world uses one. Packs hold rules only, never setting content.
 - Format: plain Markdown + `[[wiki-links]]`. Opens in Obsidian, but doesn't need it.
 - Your world lives in your own folder. The plugin contains no world data.
 - Language: the AI answers in the language you pick at install (each world can override it in `world.md`).
@@ -55,6 +55,6 @@ AGENTS.md                   # core rules every skill reads first
 skills/<command>/SKILL.md   # 8 MVP skills (platform-neutral)
 references/                 # knowledge model, folder layout, lenses (hidden references, not skills)
 templates/                  # world core templates
-systems/<id>/               # system packs: fate-accelerated, srd5 (same files each)
+systems/<id>/               # system packs: srd5, orc-d20, fate-accelerated (same files each)
 ```
 The repo has a single `plugin.json`. `lexis-setup` generates each tool's own manifest (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `gemini-extension.json`) from it at install time.

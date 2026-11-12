@@ -22,7 +22,7 @@ Goal: a second system, then a third, with the GM choosing it in `/world-init`.
 - **Make the skills system-neutral.** `/help-skills`, `/create-aspect` and `/create-obstacle` are FAE-shaped today. Each becomes "core fiction + the pack's add-on":
   - `/create-aspect` maps to a condition or tag in systems without aspects.
   - `/help-skills` answers in the pack's own terms: skills, attributes or approaches.
-- **Order (GM's choice):** 5E SRD ✅ → 2nd-edition d20 remaster (ORC) → World of Darkness–style (license decision needed) → Fate Core → BRP → Forged in the Dark → Mörk Borg–compatible → M&M 3e–style. Licenses and limits: [docs/design/system-packs.md](docs/design/system-packs.md).
+- **Order (GM's choice):** 5E SRD ✅ → 2nd-edition d20 remaster (ORC) ✅ → World of Darkness–style (license decision needed) → Fate Core → BRP → Forged in the Dark → Mörk Borg–compatible → M&M 3e–style. Licenses and limits: [docs/design/system-packs.md](docs/design/system-packs.md).
 - **Content rule:** packs hold mechanics only, no setting, and a Go test enforces it.
 - **Homebrew stays per world** in `system.md` and overrides any pack.
 - **`lexis-setup`** installs every pack; `/world-init` lists the installed packs.
