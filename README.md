@@ -37,16 +37,18 @@ Who might know:
 
 | Game system | Based on | License |
 |---|---|---|
-| 5E SRD | System Reference Document 5.2.1 by Wizards of the Coast (2024 fifth-edition core rules) | CC-BY-4.0 |
+| 5E SRD | System Reference Document 5.2.1 by Wizards of the Coast: the 2024 core rules of D&D fifth edition¹ | CC-BY-4.0 |
 | ORC 2E Core | Pathfinder Player Core and GM Core (Paizo, remaster) | ORC |
 | Fate Accelerated | Fate Accelerated Edition (Evil Hat) | CC-BY |
 | Fate Core | Fate Core System (Evil Hat) | CC-BY |
 | d100 Percentile Core | Basic Roleplaying: Universal Game Engine (Chaosium), the percentile engine behind classic investigative horror | ORC |
 | Forged in the Dark Core | Blades in the Dark SRD (One Seven Design) | CC-BY |
 | Doom d20 Core | MÖRK BORG (compatible) | MÖRK BORG Third Party License |
-| Superhero d20 Effects Core | the effects-based superhero d20 SRD, third edition (OGL) | OGL 1.0a |
+| Superhero d20 Effects Core | the effects-based superhero d20 rules, third edition, from the [d20 Hero SRD](https://www.d20herosrd.com/) (OGL) | OGL 1.0a |
 
-System packs contain **game mechanics only**: no published setting, characters, places or story, and no copied rule text. Source names are given as their license attributions give them; all trademarks belong to their owners, and Lexis-AI is not affiliated with or endorsed by them. Details: [Game systems](docs/game-systems.md).
+System packs contain **game mechanics only**: no published setting, characters, places or story, and no copied rule text. Game names appear only to say which game a pack's rules come from; all trademarks belong to their owners, and Lexis-AI is not affiliated with or endorsed by them. Details: [Game systems](docs/game-systems.md).
+
+¹ D&D is a trademark of Wizards of the Coast LLC. Lexis-AI is not affiliated with, endorsed or sponsored by Wizards of the Coast.
 
 ## Quick start
 1. Install [Go](https://go.dev/dl/) 1.22+ and the setup tool:
