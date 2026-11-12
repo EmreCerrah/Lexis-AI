@@ -1,6 +1,6 @@
 # Design: System Packs
 
-Status: contract implemented with packs `srd5`, `orc-d20`, `fate-accelerated`, `fate-core`, `d100`, `fitd` · Roadmap item 1 · Branch `feat/system-packs`
+Status: contract implemented with packs `srd5`, `orc-d20`, `fate-accelerated`, `fate-core`, `d100`, `fitd`, `doom-d20` · Roadmap item 1 · Branch `feat/system-packs`
 
 ## Goal
 The GM chooses a game system in `/world-init`, and every command gives rules help in that system's own terms. The world core (events, ripples, links, canon, hooks) does not change between systems. The MVP has one pack, Fate Accelerated (FAE); this design adds a second and a third pack without forking the skills.
@@ -92,7 +92,7 @@ The GM's order. Licenses were checked against the publishers' own pages; re-chec
 | 5 | Fate Core | `fate-core` | **CC-BY 3.0** | mechanics + attribution + the Fate™ trademark line | done |
 | 6 | Percentile d100 engine | `d100` (not `brp`: "Basic Roleplaying" is a trademark) | Basic Roleplaying: Universal Game Engine ORC Content Document, **ORC License** (Chaosium) | mechanics in our words; no setting, powers lists or creatures; the pack folder is released under the ORC License with the ORC, attribution and Reserved Material notices | done |
 | 7 | Forged in the Dark (d6 pools, clocks) | `fitd` | Blades in the Dark SRD, **CC-BY 3.0** | mechanics + attribution + trademark line; no setting (the SRD license excludes the city, NPCs, art, maps); "Blades in the Dark" not in the pack name | done |
-| 8 | Mörk Borg–compatible (d20, doom) | tbd | **MÖRK BORG Third Party License** | mechanics restated in our own words only; no book text or art; "compatible" logo rules apply | planned |
+| 8 | Mörk Borg–compatible (d20, doom) | `doom-d20` | **MÖRK BORG Third Party License** | mechanics restated in our own words only; no book text, art or logos; the required independence/license/copyright notice; uncertain details (Omen uses, broken table) point to the GM's book | done |
 | 9 | Mutants & Masterminds 3e–style (d20 effects) | tbd | **OGL 1.0a** Open Game Content (Product Identity excluded, e.g. "hero points") | mechanics; no Product Identity, no setting | planned |
 
 ## Install and selection

@@ -44,7 +44,8 @@ var packDenylist = []string{
 	"arkham", "innsmouth", "miskatonic", "dunwich", "nyarlathotep", "azathoth", "yog-sothoth",
 	"camarilla", "sabbat", "anarch",
 	"doskvol", "duskwall",
-	"galgenbeck", "freedom city",
+	"galgenbeck", "nechrubel", "kergüs", "kergus", "sarkash", "bergen chrypt", "graven-tosk", "wästland", "anthelia", "schleswig",
+	"freedom city",
 }
 
 func TestSystemPacksContract(t *testing.T) {
