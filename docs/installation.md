@@ -97,10 +97,11 @@ To **add or change a game system**, run `lexis-setup` again and choose the syste
 ## Installing a test version
 To try a branch before it is merged (for example `feat/system-packs`):
 ```bash
-go install github.com/EmreCerrah/Lexis-AI/lexis-setup@feat/system-packs
+git ls-remote https://github.com/EmreCerrah/Lexis-AI refs/heads/feat/system-packs
+go install github.com/EmreCerrah/Lexis-AI/lexis-setup@<commit>
 lexis-setup --ref feat/system-packs
 ```
-The first line builds the setup tool from that branch; `--ref` makes it download the plugin from the same branch. If the Go module proxy still serves an older build, use the commit id instead of the branch name (`…/lexis-setup@<commit>`).
+The first line prints the branch's latest commit id. The second builds the setup tool from that commit: Go does not accept branch names that contain `/` as a version, so use the commit id (the first 7-12 characters are enough). `--ref` makes `lexis-setup` download the plugin from the same branch.
 
 ## Uninstalling
 - **Project install:** delete `lexis-ai/` and the eight command folders (`world-init`, `event`, `ripples`, `create-aspect`, `create-obstacle`, `create-lore`, `help-skills`, `close-session`) from the tool's `skills/` folder in your project.
