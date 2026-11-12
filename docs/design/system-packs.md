@@ -23,7 +23,7 @@ Every pack is a folder `systems/<id>/` with the same files. Skills ask for a fil
 
 | File | Role | Used by |
 |---|---|---|
-| `pack.md` | identity: name, id, version, license and attribution; the **glossary** (see below); what the pack never does | every skill that touches mechanics |
+| `pack.md` | identity: name, id, version; `## License` (source, license, attribution); `## Content scope`; the **glossary** (see below); what the pack never does | every skill that touches mechanics |
 | `resolution.md` | how an action resolves: dice, the difficulty scale, outcome bands; the answer shape for a rules question | `/help-skills`, `/create-obstacle` |
 | `scene-tags.md` | what a "scene item" is in this system and its output block | `/create-aspect` |
 | `obstacles.md` | difficulty choice, passive vs active opposition, hazards, cost/complication options, output block | `/create-obstacle` |
@@ -45,6 +45,27 @@ Skills speak in roles; the glossary in `pack.md` translates them. The agent uses
 | `meta-currency` | fate points | heroic inspiration | luck (optional) |
 
 A pack may leave a role empty ("—"); skills then skip that line in their output.
+
+### Pack content rule: mechanics only (legal scope)
+A pack is **the rules engine and nothing else**. This is a hard rule for every pack, open-licensed or not.
+
+**Allowed in a pack:**
+- Resolution: dice, how a roll is read, the difficulty scale, outcome bands, advantage/bonus mechanics.
+- Character math: how traits are generated and calculated (ability scores → modifiers, proficiency bonus, skill %, half/fifth values, HP and derived stats, advancement formulas).
+- Generic conditions and harm (prone, frightened, wounded, stress …), generic GM procedures (setting a difficulty, opposition, cost of failure).
+- Generic, setting-free examples written by us ("a locked iron door", "a guard dog").
+- The license attribution the source requires.
+
+**Never in a pack:**
+- Setting lore: worlds, planes, nations, cities, gods, religions, factions, history.
+- Named characters, named monsters or creatures tied to a setting, adventures, story text, plot hooks.
+- Spell, item or monster lists copied wholesale; art; trade dress.
+- Trademarks as names. A pack is named by its mechanics or its open license (e.g. `srd5` "5E SRD", `brp` "Basic Roleplaying"), never by a brand. A brand may appear only in a "compatible with" line, and only where the license allows it.
+- Rule text from a system that is not open-licensed. For such systems, the pack would describe the mechanic in our own words and point to the GM's own book.
+
+**Wording:** even for open-licensed sources, we write the pack in our own short words and do not paste whole SRD sections. The pack is a GM cheat sheet, not a rulebook copy.
+
+**The same rule applies to worlds.** The agent never brings published setting content (names, places, gods, NPCs) into a world on its own. A world contains only what the GM created or explicitly wrote in. This goes into `AGENTS.md` as a core rule.
 
 ### What stays fixed in every pack
 - The seam: **fiction first (core), then the pack's add-on block.**
@@ -72,10 +93,15 @@ Recommendation: **D&D 5e SRD as the second pack** (largest audience, most differ
 ## Install and selection
 - `lexis-setup` already copies every folder under `systems/`, so new packs ship with no installer change.
 - `/world-init` lists the packs it finds in `systems/` (name from each `pack.md`) instead of offering only FAE.
-- The world's `system` frontmatter field stores the pack id (`fate-accelerated`, `dnd5e-srd`, `brp`).
+- The world's `system` frontmatter field stores the pack id (`fate-accelerated`, `srd5`, `brp`).
 
 ## Testing
 - Contract check (a small Go test in `lexis-setup`, it already reads the plugin): every `systems/*/` folder has all contract files, and `pack.md` has a glossary row for every role.
+- Content-rule check (same Go test):
+  - A pack folder may hold **only** the contract files; any extra file fails the test.
+  - `pack.md` must have `## License` (source, license, attribution) and `## Content scope` (the statement "mechanics only, no setting content").
+  - A denylist of setting and brand terms (setting names, gods, famous NPCs and creatures of each source system) is kept in the test; a pack file that contains one fails the test.
+- Human review: every new pack is read once against the content rule before it is merged.
 - Same scenario, three systems: run `/help-skills "climb the crypt wall in the rain"` and `/create-obstacle` against one world per pack; the fiction part should match, the mechanics block should be in each system's terms.
 - Regression: the Karcsa Vadisi sample world (FAE) gives the same kind of output as before.
 
