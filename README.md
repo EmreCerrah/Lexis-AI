@@ -67,6 +67,8 @@ System packs contain **game mechanics only**: no published setting, characters, 
 4. At the table: `/event …` whenever something happens, `/help-skills …` for rules, `/create-obstacle …` for scene material.
 5. At the end: `/close-session`, answer once, done.
 
+Lost? `/lexis-help` lists every command and suggests the next step.
+
 Full walk-through: [Getting started](docs/getting-started.md).
 
 ## Commands
@@ -80,6 +82,7 @@ Full walk-through: [Getting started](docs/getting-started.md).
 | `/create-obstacle` | one obstacle, trap, puzzle or hazard: fiction first, then the numbers |
 | `/create-lore` | one NPC, place, group or story hook, as a proposal |
 | `/close-session` | one numbered list of everything to change; writes only what you approve |
+| `/lexis-help` | lists the commands, shows where your world stands and what to do next |
 
 Details and examples: [Commands](docs/commands.md).
 
@@ -98,7 +101,7 @@ Details and examples: [Commands](docs/commands.md).
 ```
 plugin/                    # the plugin: platform-neutral skills, core rules, templates, system packs
   AGENTS.md                # core rules every command reads first
-  skills/<command>/        # the 8 commands
+  skills/<command>/        # the 9 commands
   references/              # knowledge model, world layout, lenses
   templates/               # world file templates
   systems/<id>/            # one folder per game system pack
@@ -115,6 +118,8 @@ go build -o lexis-setup .
 go run . --source ../plugin --dry-run
 ```
 Build with a version label: `go build -ldflags "-X main.version=v0.2.0" -o lexis-setup .`. Cross-compile with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.
+
+**Releasing:** bump `version` in `plugin/plugin.json`, then tag the merge commit twice: `vX.Y.Z` (the release) and `lexis-setup/vX.Y.Z` (the Go module lives in `lexis-setup/`, so `go install …@vX.Y.Z` and `@latest` read that tag).
 
 The tests also check every system pack against the pack contract and the content rule ([Creating a system pack](docs/creating-a-system-pack.md#4-test-it)).
 

@@ -43,7 +43,7 @@ It then downloads the plugin, shows the install plan and asks `Continue? [Y/n]`.
 ```
 Install plan — lexis-ai 0.2.0 → Claude Code (project: C:\Campaigns\Karcsa, language: Türkçe (Turkish), game system: 5E SRD (fifth edition compatible))
   • Shared files (rules, templates, system packs) → C:\Campaigns\Karcsa\.claude\lexis-ai
-  • 8 skills → C:\Campaigns\Karcsa\.claude\skills
+  • 9 skills → C:\Campaigns\Karcsa\.claude\skills
 ```
 
 ## Where the files go
@@ -104,11 +104,11 @@ lexis-setup --ref feat/system-packs
 The first line prints the branch's latest commit id. The second builds the setup tool from that commit: Go does not accept branch names that contain `/` as a version, so use the commit id (the first 7-12 characters are enough). `--ref` makes `lexis-setup` download the plugin from the same branch.
 
 ## Uninstalling
-- **Project install:** delete `lexis-ai/` and the eight command folders (`world-init`, `event`, `ripples`, `create-aspect`, `create-obstacle`, `create-lore`, `help-skills`, `close-session`) from the tool's `skills/` folder in your project.
+- **Project install:** delete `lexis-ai/` and the nine command folders (`world-init`, `event`, `ripples`, `create-aspect`, `create-obstacle`, `create-lore`, `help-skills`, `close-session`, `lexis-help`) from the tool's `skills/` folder in your project.
 - **Claude Code (user):** `claude plugin uninstall lexis-ai@lexis-ai`, then `claude plugin marketplace remove lexis-ai`, then delete `~/.lexis-ai/claude-code`.
 - **Codex (user):** remove the `lexis-ai` plugin in Codex, then delete `~/.lexis-ai/codex`.
 - **Gemini CLI:** `gemini extensions uninstall lexis-ai`, then delete `~/.lexis-ai/gemini`.
-- **Copilot (user):** delete the eight command folders from `~/.copilot/skills` and the folder `~/.copilot/lexis-ai`.
+- **Copilot (user):** delete the nine command folders from `~/.copilot/skills` and the folder `~/.copilot/lexis-ai`.
 
 Your world folders are separate and stay as they are.
 

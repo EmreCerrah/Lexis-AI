@@ -18,6 +18,7 @@ A **GM assistant** for the live table. You run the game; the agent never rolls d
 | `/create-lore` | Creates a persistent NPC, location, group or hook | `proposals/` (proposal) |
 | `/help-skills` | Answers rules questions in the world's system terms | nothing |
 | `/close-session` | Gathers everything from the session into one numbered list for your approval and writes only what you approve | canon files |
+| `/lexis-help` | Lists the commands, the world's state and the next step | nothing |
 
 How you call them depends on the tool: Claude Code `/lexis-ai:event`, Codex `$event` (or `@lexis-ai`), Copilot `/event`. In Gemini CLI, just describe what you want. A plain-language request works everywhere.
 
