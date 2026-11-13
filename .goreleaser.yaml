@@ -1,0 +1,62 @@
+# GoReleaser config for the lexis-setup installer.
+# Runs from .github/workflows/release.yml when a vX.Y.Z tag is pushed.
+# Local dry run: goreleaser release --snapshot --clean
+version: 2
+
+project_name: lexis-setup
+
+git:
+  # The Go module tag (lexis-setup/vX.Y.Z) sits on the same commit as the
+  # release tag; only vX.Y.Z tags name a release.
+  ignore_tags:
+    - "lexis-setup/*"
+
+before:
+  hooks:
+    - sh -c "cd lexis-setup && go test ./..."
+
+builds:
+  - id: lexis-setup
+    dir: lexis-setup
+    main: .
+    binary: lexis-setup
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags:
+      - -trimpath
+    ldflags:
+      # A release binary installs the plugin from its own tag, not from main.
+      - -s -w -X main.version={{ .Tag }} -X main.defaultRef={{ .Tag }}
+
+archives:
+  - id: lexis-setup
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    files:
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^chore:"
+      - "^docs:"
+      - "^Merge "
+
+release:
+  github:
+    owner: EmreCerrah
+    name: Lexis-AI
+  # Add the binaries to a release that already exists (e.g. notes written by hand).
+  mode: keep-existing
+  footer: |
+    Install with Go instead: `go install github.com/EmreCerrah/Lexis-AI/lexis-setup@{{ .Tag }}`
