@@ -8,14 +8,32 @@ Lexis-AI is installed with `lexis-setup`, a small command-line program. It asks 
   - **Codex** (the CLI or the Codex desktop app)
   - **Gemini CLI** (the `gemini` command)
   - **GitHub Copilot** (Copilot CLI, or Copilot in an editor that reads skills)
-- **Go 1.22 or newer** to install `lexis-setup`: https://go.dev/dl/. You don't need to know Go; it is only used to download and build the setup tool.
+- A way to get `lexis-setup`: either a **prebuilt binary** from the [Releases page](https://github.com/EmreCerrah/Lexis-AI/releases) (nothing else needed, see 2a) or **Go 1.22 or newer** to build it yourself (2b): https://go.dev/dl/. You don't need to know Go; it is only used to download and build the setup tool.
 
+## 2a. Get the setup tool: prebuilt binary (no Go)
+On the [Releases page](https://github.com/EmreCerrah/Lexis-AI/releases), open the newest release and download the archive for your computer:
+
+| Your computer | Archive |
+|---|---|
+| Windows | `lexis-setup_<version>_windows_amd64.zip` (`arm64` on an ARM PC) |
+| macOS, any chip | `lexis-setup_<version>_darwin_all.tar.gz` — one file for both Apple Silicon (M1-M4) and Intel |
+| Linux | `lexis-setup_<version>_linux_amd64.tar.gz` (or `arm64`) |
+
+Unpack it; inside is a single program, `lexis-setup`. Put it wherever you like and run it from there. `checksums.txt` in the release lets you verify the download.
+
+**macOS and Linux:** make it runnable, and on macOS clear the download quarantine, otherwise macOS refuses to start it ("cannot be verified"):
+```bash
+chmod +x ./lexis-setup
+xattr -d com.apple.quarantine ./lexis-setup
+```
+The second line is macOS only, and only needed once. The binaries are not signed with an Apple developer certificate.
+
+## 2b. Get the setup tool: build it with Go
 Check Go with:
 ```bash
 go version
 ```
-
-## 2. Install the setup tool
+Then:
 ```bash
 go install github.com/EmreCerrah/Lexis-AI/lexis-setup@latest
 ```
@@ -89,7 +107,7 @@ lexis-setup --platform copilot --scope project --dir ./my-campaign --lang Englis
 ```
 
 ## Updating
-1. Update the setup tool: run the same `go install …@latest` command again.
+1. Update the setup tool: download the newest binary from the [Releases page](https://github.com/EmreCerrah/Lexis-AI/releases) again, or run the same `go install …@latest` command.
 2. Run `lexis-setup` again with the same answers. It replaces only the folders it created before (they carry a `.lexis-ai.json` marker) and leaves everything else alone. Your world files are never touched.
 
 To **add or change a game system**, run `lexis-setup` again and choose the system you want, or "All systems". The installed set is replaced by your new choice.
