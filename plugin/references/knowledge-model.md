@@ -21,7 +21,7 @@ The unit of knowledge is **file + section**. There is no per-line tagging. Which
 
 ### Proposal
 - An item you generated with a `create-*` command.
-- Persistent entities (`/create-lore`) → `proposals/<slug>.md`. Scene items (`/create-aspect`, `/create-obstacle`) → a `G<n>` line in `## Generated` of the session log.
+- Persistent entities (`/create-lore`) → `proposals/<slug>.md`. Scene items (`/create-aspect`, `/create-obstacle`, `/create-scene`) → a `G<n>` line in `## Generated` of the session log.
 - At `/close-session` the GM says which were used at the table. Used lore → canon file (its uncertain parts → `## Uncertain`); unused → deleted or kept in `proposals/` for later, as the GM chooses.
 
 ## Links (`## Links`)

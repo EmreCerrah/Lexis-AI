@@ -27,6 +27,8 @@ Goal: follow a chain of hooks as one story arc (e.g. Empty Coffins → The Yello
 - `/close-session` proposes arc progress (current hook resolved → next hook active).
 - Hidden truths stay fixed; the arc only tracks which part of the story is in play.
 
+Also in this round: **`/create-scene`**: the GM names a place and adds a few notes; the AI fills the gaps with read-aloud text, who is there, 3 interactions with the system's check and difficulty, and a scene tag.
+
 ## 2. Table tests for the other systems
 - Fate Accelerated / Fate Core next, then the remaining packs as GMs try them.
 - Note what reads badly at the table and fix the pack.

@@ -33,6 +33,7 @@ Number the items continuously across groups. Give each one a **suggested** answe
 
 **F. Generated items** (`G<n>`): ask "was it used at the table?"
 - scene tag/obstacle: used and lasting (a place or group tag) → propose adding it to that file's system section (`entities.md` of the pack: `## Aspects` in Fate, `## Features` in 5E); used and transient → only marked as used in the log; unused → marked unused.
+- scene (`/create-scene`): used → propose its lasting parts for the place's file (a new feature or a lasting scene tag → the place's fiction or system section; a `new:` person → a `/create-lore` proposal or an `## Uncertain` line in the place's file, as the GM chooses); unused → marked unused.
 - lore (including an arc): ✅ canon (move `proposals/<slug>.md` into its folder, drop the proposal frontmatter, `type:` = target-type) · ⏸ keep (stays in proposals/) · ❌ delete.
 
 **G. Old uncertain items**

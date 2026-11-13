@@ -27,6 +27,7 @@ If unsure, use `/<command>` and add one line on the other forms.
 | `help-skills` | a rules answer in the world's system: which check, difficulty, options | `/help-skills climb the wall in the rain` |
 | `create-aspect` | one scene tag for the current scene, helping and hindering | `/create-aspect foggy cemetery` |
 | `create-obstacle` | one obstacle, trap, puzzle or hazard: fiction first, then the numbers | `/create-obstacle locked crypt door` |
+| `create-scene` | a place the players enter: read-aloud text, who is there, 3 interactions with checks and difficulties, a scene tag; your notes are kept, it fills the gaps | `/create-scene old-cemetery night, fog, a grave dug open` |
 | `create-lore` | one NPC, place, group or hook as a proposal | `/create-lore a nervous gravekeeper` |
 | `close-session` | one numbered list of everything to change; writes only what the GM approves | `/close-session` |
 | `lexis-help` | this guide | `/lexis-help event` |

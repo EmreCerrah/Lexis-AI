@@ -1,6 +1,6 @@
 # Commands
 
-Lexis-AI has nine commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
+Lexis-AI has ten commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
 
 | Command | Use it | Writes |
 |---|---|---|
@@ -10,6 +10,7 @@ Lexis-AI has nine commands. Call them as described in [Getting started](getting-
 | [`/help-skills`](#help-skills) | for a rules question | nothing |
 | [`/create-aspect`](#create-aspect) | for a scene tag (aspect, feature, circumstance …) | the session log |
 | [`/create-obstacle`](#create-obstacle) | for a lock, trap, puzzle, hazard or social obstacle | the session log |
+| [`/create-scene`](#create-scene) | when the players enter a place | the session log |
 | [`/create-lore`](#create-lore) | for a new NPC, place, group or story hook | `proposals/` + the session log |
 | [`/close-session`](#close-session) | at the end of the session | the world files (only what you approve) |
 | [`/lexis-help`](#lexis-help) | when you forget a command or what to do next | nothing |
@@ -107,6 +108,32 @@ One obstacle, **fiction first**:
 - for a puzzle, the clue chain, solvable without dice too,
 
 then your system's block: the suggested difficulty, fitting checks, what success and failure levels mean, trap or hazard numbers, and 2-3 "success at a cost" options. Logged as `G<n>`.
+
+## /create-scene
+```
+/create-scene <place> [your notes]
+/create-scene old-cemetery night, thick fog, the gravekeeper is gone, one grave dug open
+```
+The players walk into a place: you give the place and a few notes, it fills the gaps. Your notes are kept exactly; everything it adds fits the place's file, the session's events, your Immutable Rules and the hidden truths.
+- **Read-aloud text:** 2-4 sentences through the senses, with nothing secret in it.
+- **Who is here:** up to 3 people linked to the place (never someone the session put elsewhere or killed), what they are doing and their attitude.
+- **3 interactions**, each with where it can lead and a system line: the check and a suggested difficulty in your system (`Wisdom (Perception) DC 15`, `Careful, Fair (+2)`, `Survey, risky/standard` …), or `no roll`.
+- **One scene tag** for the place, helping and hindering.
+- **🔒 GM:** what is hidden here and a complication if the players linger; a `🧭` line if an interaction can open an active arc's step.
+
+```
+🎬 G3 · Old Cemetery — The Open Grave
+Fog swallows the lantern light ten steps out. Somewhere a shovel scrapes …
+Here:
+- [[keeper-dog]] — growling at the open grave · Hostile
+Interactions:
+1. The open grave → fresh boot prints lead to the chapel · Wisdom (Survival) DC 12
+2. The gravekeeper's hut, door ajar → his ledger · no roll
+3. The dog → it won't let anyone near the grave · Wisdom (Animal Handling) DC 15
+✨ Thick fog — helps: hiding (Advantage on Stealth) · hinders: sight beyond 3 m
+🔒 GM: the grave was emptied from below. If they linger, the shovel sound comes closer.
+```
+Logged as `G<n>`. Nothing is written to the place's file; at `/close-session` you can keep lasting details (a new feature, a new person) for the place. Prep mode adds sub-areas, more interactions and each NPC's hidden motive. A place with no file works too; it offers `/create-lore` to make it lasting.
 
 ## /create-lore
 ```
