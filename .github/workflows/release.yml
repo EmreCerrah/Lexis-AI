@@ -1,0 +1,43 @@
+name: release
+
+# Builds lexis-setup for Linux, macOS and Windows and attaches the binaries
+# to the GitHub release. Runs on a vX.Y.Z tag push, or by hand for a tag that
+# already exists (Actions → release → Run workflow).
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to build (e.g. v0.3.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: lexis-setup/go.mod
+          cache-dependency-path: lexis-setup/go.mod
+
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Two tags share the release commit; build the vX.Y.Z one.
+          GORELEASER_CURRENT_TAG: ${{ env.RELEASE_TAG }}
