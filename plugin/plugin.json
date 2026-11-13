@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "lexis-ai",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Live-table GM assistant for tabletop RPGs: records reported events as canon, lists their ripples as hypotheses, and updates world files only after end-of-session approval. Game systems: 5E SRD, ORC 2E Core, Fate Accelerated, Fate Core, d100 Percentile Core, Forged in the Dark Core, Doom d20 Core and Superhero d20 Effects Core.",
   "author": {
     "name": "Emre Cerrah"
