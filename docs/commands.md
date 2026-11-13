@@ -42,7 +42,8 @@ It writes `world.md`, `system.md`, a short `AGENTS.md`, the folders `characters/
 - empty folders (no characters yet …) and empty `world.md` sections;
 - items you deferred (`## Uncertain` lines from `/world-init`);
 - character, location and group files without your system's sections or without `## Links`;
-- hooks without a hidden truth.
+- hooks without a hidden truth;
+- hook chains (`next link in the chain`) that are not yet an arc ([World files](world-files.md#arcs)).
 
 Missing folders and the world's `AGENTS.md` are created without asking. You answer the list once (`all`, `1, 3: Gabriel, Ayşe (PC); rest later`, `3 you suggest`), and it fills in only what you chose. Characters can be marked **PC** or **NPC**.
 
@@ -55,9 +56,10 @@ Missing folders and the world's `AGENTS.md` are created without asking. You answ
 1. Records the event as `E<n>` in the open session log (it opens `sessions/session-NNN.md` if none is open).
 2. Checks it against the Immutable Rules. A conflict is **recorded anyway** and flagged `⚠ rule conflict (IR<n>)` with three options: (a) it only looks like a violation, (b) a costly exception, (c) the rule changes. You can answer now or at `/close-session`.
 3. If players try to break a hook's hidden truth, it gives 1-3 in-world reasons why they can't.
-4. Lists 3-5 **ripples** (possible consequences, `R<k>`), each tied to the file it would change.
-5. Lists **who might know** (one step along `## Links`; never written to a file).
-6. Proposes up to 2 new links (`L<j>`) if the event obviously creates a relation.
+4. **Arc check:** for each active arc, notes `🧭` when the event completes the current step (decided at `/close-session`), jumps ahead to a later step, or removes something a later step needs. A jump or a threat becomes a decision: (a) offstage / plan holds (b) reorder / the step changes (c) drop the steps. The event is never blocked.
+5. Lists 3-5 **ripples** (possible consequences, `R<k>`), each tied to the file it would change.
+6. Lists **who might know** (one step along `## Links`; never written to a file).
+7. Proposes up to 2 new links (`L<j>`) if the event obviously creates a relation.
 
 ```
 📌 E2 recorded (session-001) · Lens: power-politics
@@ -110,7 +112,7 @@ then your system's block: the suggested difficulty, fitting checks, what success
 ```
 /create-lore <what you need: an NPC, a place, a group, a hook>
 ```
-One persistent entity, written to `proposals/<slug>.md` from the world's template, with the system sections your game needs (aspects in Fate, a stat line in 5E …) and 1-4 links to existing files. A new hook always gets its own hidden truth, consistent with the others. It becomes canon only if you approve it at `/close-session`.
+One persistent entity (an NPC, place, group, hook or **arc**: `/create-lore an arc from <hooks>`), written to `proposals/<slug>.md` from the world's template, with the system sections your game needs (aspects in Fate, a stat line in 5E …) and 1-4 links to existing files. A new hook always gets its own hidden truth, consistent with the others. It becomes canon only if you approve it at `/close-session`.
 
 ## /close-session
 ```
@@ -120,13 +122,14 @@ Builds **one numbered list** of everything from the session and waits for one an
 
 | Group | What you decide |
 |---|---|
-| A. Open decisions | rule conflicts and broken hidden truths: (a)/(b)/(c) |
+| A. Open decisions | rule conflicts, broken hidden truths, arc skips and threats: (a)/(b)/(c) |
 | B. Events | the concrete changes the events make to world files (already canon; suggested ✅) |
-| C. Ripples | ✅ it happened · ❓ uncertain (goes to `## Uncertain`) · ❌ drop |
-| D. Link proposals | ✅ / ❌ |
-| E. Generated items | was it used? lasting scene tags can join a place; lore can become canon (✅), stay a proposal (⏸) or be deleted (❌) |
-| F. Old uncertain items | promote, remove or keep what this session confirmed or refuted |
-| G. Info | dangling links, unknown names |
+| C. Arcs | a step done → its hook `resolved`, the next hook `active`; the last step → the arc `resolved`; reordered or changed steps |
+| D. Ripples | ✅ it happened · ❓ uncertain (goes to `## Uncertain`) · ❌ drop |
+| E. Link proposals | ✅ / ❌ |
+| F. Generated items | was it used? lasting scene tags can join a place; lore can become canon (✅), stay a proposal (⏸) or be deleted (❌) |
+| G. Old uncertain items | promote, remove or keep what this session confirmed or refuted |
+| H. Info | dangling links, unknown names |
 
 Answer in plain words: `all as suggested`, `3 ✅, 5 ❌, rest as suggested`, `1 c: <new rule text>`, `defer 4-6`. Deferred items keep the log `pending` and come back next time.
 
@@ -135,6 +138,7 @@ Answer in plain words: `all as suggested`, `3 ✅, 5 ❌, rest as suggested`, `1
 - Updated files: [[old-cemetery]], [[gravekeeper]]
 - Added to uncertain: 3 · Rejected: 2 · Proposals kept: 1
 - Rule change: —
+- Arcs: [[the-yellow-curtain]] step 2/4 → [[the-masters-letter]]
 ```
 
 ## /lexis-help
@@ -153,5 +157,6 @@ A short guide that writes nothing.
 …
 🌍 Vespera · 5E SRD · Türkçe
 - Session: session-002 open, E3 R7 G1 D0
+- 🧭 The Yellow Curtain: step 2/4 [[the-yellow-curtain]]
 - Next: keep reporting with /event; /close-session at the end
 ```

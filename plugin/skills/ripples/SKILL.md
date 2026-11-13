@@ -9,7 +9,7 @@ Takes an event that is already in a session log and asks "what else follows?" th
 
 ## Read first
 1. `../../AGENTS.md`. 2. `../../references/knowledge-model.md`. 3. `../../references/lenses/index.md`, then the lens files you pick.
-4. World: `## Immutable Rules` in `world.md`, the event's files and their links up to 3 hops, linked hooks.
+4. World: `## Immutable Rules` in `world.md`, the event's files and their links up to 3 hops, linked hooks, and active arcs (`arcs/*.md`: steps and `## 🔒 Endgame`).
 
 ## Steps
 1. **Find the event.** The argument may be `E2`, `S003-E2` or a description. Default: the last `E<n>` in the open log. If the event is not in any log, tell the GM in one line to record it with `/event` first, and stop.
@@ -34,7 +34,7 @@ Table mode:
 Spread:
 - [[…]] — may hear it as a rumor (… → … → …)
 ```
-At most 5 ripples in total in table mode. Prep mode: up to 4 per lens, each with one sentence of "why" and the file it would change, plus a short "Which hook does it move closer?" line (🔒).
+At most 5 ripples in total in table mode. Prep mode: up to 4 per lens, each with one sentence of "why" and the file it would change, plus a short "Which hook does it move closer?" line (🔒) and, if the hook is in an active arc, `→ moves [[arc]] toward step <n>`. Table mode: at most one such arc note in total. Ripples never contradict an arc's endgame and never make its next step mandatory.
 
 ## Never
 - Edit canon files, or present a ripple as something that happened.

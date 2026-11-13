@@ -12,6 +12,7 @@ my-campaign/
   locations/<slug>.md
   groups/<slug>.md
   hooks/<slug>.md
+  arcs/<slug>.md       # chains of hooks (optional)
   sessions/session-001.md   # one log per session
   proposals/<slug>.md       # /create-lore output waiting for approval
 ```
@@ -36,7 +37,15 @@ Each file has fiction sections (`## Who`, `## Wants` / `## Description` …), th
 A story hook has:
 - `## Surface`: what the players can see.
 - `## 🔒 Hidden Truth`: what is really going on. Lexis-AI never reveals it and never lets a suggestion contradict it. If players try to break it, it suggests in-world reasons why they can't.
-- `## Links`: the people and places involved, and the next hook.
+- `## Links`: the people and places involved, and its arc (`- [[arc]] — arc, step 2`).
+
+### Arcs
+An arc is a chain of hooks followed as one story (`arcs/<slug>.md`):
+- `## Premise`: what the story is about.
+- `## Steps`: the hooks in order, each with an optional `Moves on when:` (what has to happen for the story to move on).
+- `## 🔒 Endgame` (optional): where the story ends if nobody stops it. Never revealed.
+
+The order lives in the arc file and each hook's `status:` in the hook file; the current step is simply the first hook that is not `resolved`. An arc is a plan, not a fixed future: `/event` notices when the players complete a step, jump ahead or destroy something a later step needs, and you decide how the arc adapts at `/close-session`. Older worlds with `next link in the chain` links keep working; `/world-init` offers to turn those chains into arcs.
 
 ### Session logs
 `sessions/session-NNN.md`, with `status: open`, `pending` or `closed`. During a session only the log changes:
@@ -55,7 +64,7 @@ Logs are append-only: earlier lines are never rewritten. Outside the log, an ite
 ## Canon, hypothesis, inference, proposal
 | Kind | Where it lives | How it changes |
 |---|---|---|
-| **Canon** | the body of a world file | only through `/close-session` (or `/world-init`) |
+| **Canon** | the body of a world file (including `arcs/`) | only through `/close-session` (or `/world-init`) |
 | **Hypothesis** | `## Uncertain`, or `## Ripples` in the log | promoted, kept or dropped at `/close-session` |
 | **Inference** | only in an answer ("who might know") | never stored |
 | **Proposal** | `proposals/`, or `## Generated` in the log | approved or rejected at `/close-session` |
