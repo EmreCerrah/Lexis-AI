@@ -52,10 +52,11 @@ System packs contain **game mechanics only**: no published setting, characters, 
 ¹ D&D is a trademark of Wizards of the Coast LLC. Lexis-AI is not affiliated with, endorsed or sponsored by Wizards of the Coast.
 
 ## Quick start
-1. Install [Go](https://go.dev/dl/) 1.22+ and the setup tool:
+1. Get the setup tool: download it for your system from the [Releases page](https://github.com/EmreCerrah/Lexis-AI/releases) — no Go needed, and macOS gets one file for both Apple Silicon and Intel — or build it with [Go](https://go.dev/dl/) 1.22+:
    ```bash
    go install github.com/EmreCerrah/Lexis-AI/lexis-setup@latest
    ```
+   A downloaded macOS or Linux binary needs `chmod +x ./lexis-setup` first, and on macOS `xattr -d com.apple.quarantine ./lexis-setup`.
 2. Run it and answer four questions (AI tool, where to install, answer language, game system):
    ```bash
    lexis-setup
@@ -121,7 +122,7 @@ go run . --source ../plugin --dry-run
 ```
 Build with a version label: `go build -ldflags "-X main.version=v0.3.0" -o lexis-setup .`. Cross-compile with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.
 
-**Releasing:** bump `version` in `plugin/plugin.json`, then tag the merge commit twice: `vX.Y.Z` (the release) and `lexis-setup/vX.Y.Z` (the Go module lives in `lexis-setup/`, so `go install …@vX.Y.Z` and `@latest` read that tag). Pushing `vX.Y.Z` runs the release workflow: GoReleaser builds `lexis-setup` for Linux, macOS and Windows (amd64, arm64) and attaches the archives to the GitHub release. A release binary installs the plugin from its own tag. For a tag that already exists, run the workflow by hand (Actions → release → Run workflow). Local dry run: `goreleaser release --snapshot --clean`.
+**Releasing:** bump `version` in `plugin/plugin.json`, then tag the merge commit twice: `vX.Y.Z` (the release) and `lexis-setup/vX.Y.Z` (the Go module lives in `lexis-setup/`, so `go install …@vX.Y.Z` and `@latest` read that tag). Pushing `vX.Y.Z` runs the release workflow: GoReleaser builds `lexis-setup` for Linux and Windows (amd64, arm64) and one universal macOS binary (Apple Silicon + Intel) and attaches the archives to the GitHub release. A release binary installs the plugin from its own tag. For a tag that already exists, run the workflow by hand (Actions → release → Run workflow). Local dry run: `goreleaser release --snapshot --clean`.
 
 The tests also check every system pack against the pack contract and the content rule ([Creating a system pack](docs/creating-a-system-pack.md#4-test-it)).
 

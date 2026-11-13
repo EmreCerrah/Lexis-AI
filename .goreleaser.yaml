@@ -30,6 +30,15 @@ builds:
       # A release binary installs the plugin from its own tag, not from main.
       - -s -w -X main.version={{ .Tag }} -X main.defaultRef={{ .Tag }}
 
+# One macOS archive for both Intel and Apple Silicon (M1-M4): the
+# viewer does not have to know which chip their Mac has. replace: true
+# drops the two per-arch darwin builds from the release.
+universal_binaries:
+  - id: lexis-setup-macos
+    ids: [lexis-setup]
+    name_template: lexis-setup
+    replace: true
+
 archives:
   - id: lexis-setup
     formats: [tar.gz]
