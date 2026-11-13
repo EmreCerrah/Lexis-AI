@@ -14,7 +14,7 @@ status: {{waiting / active / resolved}}
 {{What is really going on}}
 
 ## Links
-<!-- For a chained hook: - [[next-hook]] — next link in the chain -->
+<!-- A hook in an arc: - [[arc-slug]] — arc, step <n> (the order lives in arcs/<arc-slug>.md) -->
 - [[{{slug}}]] — {{relation}}
 
 ## Uncertain

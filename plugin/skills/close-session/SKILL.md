@@ -15,24 +15,30 @@ If no log is open or pending, say there is no open session to close, and stop.
 Number the items continuously across groups. Give each one a **suggested** answer. Keep each item to one line, plus a preview line for file edits: `→ file · section: + "text"`.
 
 **A. Open decisions** (decide these first; they change other items)
-- Each `D<m>` without a GM answer. Rule conflict → (a) apparent violation (b) costly exception (c) rule change. Hook break → (a) plan holds (b) plan changes. For (c)/(b), show the proposed new rule or hidden-truth text, or ask the GM to give it.
+- Each `D<m>` without a GM answer. Rule conflict → (a) apparent violation (b) costly exception (c) rule change. Hook break → (a) plan holds (b) plan changes. Arc skip → (a) offstage (b) reorder (c) drop the skipped steps. Arc threat → (a) plan holds (b) the step changes (c) drop the step. For (c)/(b), show the proposed new rule or hidden-truth text, or ask the GM to give it.
 
 **B. Events → world files**
 - Events are already canon. For each `E<n>`, propose the concrete edits that write its *facts* (not its ripples) into entity files: state changes, deaths, items moved, places damaged, hook `status` changes. Suggested: ✅.
 
-**C. Ripples** (`R<k>`)
+**C. Arcs** (only if `arcs/` has an active arc or the log has an `Arc:` line)
+- **Step done:** for an event marked `Arc: [[arc]] step <n> → done?`: the step's hook → `status: resolved`, the next step's hook → `status: active`. Suggested ✅ if the event meets the step's `Moves on when`, otherwise ❓ (stays as it is).
+- **Last step done** → the arc's `status: resolved`.
+- **Arc decisions** answered in A: reorder → rewrite the `## Steps` order; the step changes → the GM's new step text, with ` _(changed: S<NNN>)_`; drop → remove the step line and the hook's `arc, step` link (the hook file stays).
+- A `waiting` arc whose first step's hook became `active` this session → the arc's `status: active`.
+
+**D. Ripples** (`R<k>`)
 - For each: ✅ canon (it happened or was confirmed at the table) · ❓ uncertain (→ the target file's `## Uncertain`) · ❌ reject. Suggested: ❓, unless a later `E<n>` confirms it (then ✅) or contradicts it (then ❌).
 
-**D. Link proposals** (`L<j>`) → the target file's `## Links`. ✅ / ❌.
+**E. Link proposals** (`L<j>`) → the target file's `## Links`. ✅ / ❌.
 
-**E. Generated items** (`G<n>`): ask "was it used at the table?"
+**F. Generated items** (`G<n>`): ask "was it used at the table?"
 - scene tag/obstacle: used and lasting (a place or group tag) → propose adding it to that file's system section (`entities.md` of the pack: `## Aspects` in Fate, `## Features` in 5E); used and transient → only marked as used in the log; unused → marked unused.
-- lore: ✅ canon (move `proposals/<slug>.md` into its folder, drop the proposal frontmatter, `type:` = target-type) · ⏸ keep (stays in proposals/) · ❌ delete.
+- lore (including an arc): ✅ canon (move `proposals/<slug>.md` into its folder, drop the proposal frontmatter, `type:` = target-type) · ⏸ keep (stays in proposals/) · ❌ delete.
 
-**F. Old uncertain items**
+**G. Old uncertain items**
 - Existing `## Uncertain` lines (in any file) that this session's events confirm or refute → ✅ promote to the body / ❌ remove / ❓ keep.
 
-**G. Info** (no decision): dangling `[[links]]` to files that don't exist; unresolved names (`new: …`).
+**H. Info** (no decision): dangling `[[links]]` to files that don't exist; unresolved names (`new: …`).
 
 ## 2. Ask once (in the output language)
 ```
@@ -41,8 +47,10 @@ A. Open decisions
  1. D1 (E2 · IR2) … — (a)/(b)/(c) · suggested: a
 B. Events
  2. E1 → [[old-cemetery]] · Description: + "…" · suggested ✅
-C. Ripples
- 3. R1 … → [[…]] · suggested ❓
+C. Arcs
+ 3. [[arc]] step 1 done → [[hook-a]] resolved, [[hook-b]] active · suggested ✅
+D. Ripples
+ 4. R1 … → [[…]] · suggested ❓
  …
 Answer like: "all as suggested" · "3 ✅, 5 ❌, rest as suggested" · "1 c: <new rule>" · "defer 4-6"
 ```
@@ -53,6 +61,7 @@ Then **stop and wait**. Do not write anything while waiting. If the GM changes a
 - `## Uncertain` lines carry their source: `- … _(source: S<NNN>-R<k>)_`.
 - Rule change (c): edit the `IR<n>` text in `world.md`, keep its number, append ` _(changed: S<NNN>)_`. Never silently delete a rule number.
 - Hidden truth (b): replace the `## 🔒 Hidden Truth` text with the GM's new text only.
+- Arc files: change only `status:` and the `## Steps` lines the GM approved; never touch `## 🔒 Endgame` unless the GM gives new text.
 - Deferred items: leave them in the log and set the log to `status: pending`. Otherwise `status: closed`.
 - Fill `## End-of-Session Decisions` in the log with one line per item: `<no>. <id> → ✅/❓/❌/⏸/deferred`.
 
@@ -62,6 +71,7 @@ Then **stop and wait**. Do not write anything while waiting. If the GM changes a
 - Updated files: [[…]], [[…]]
 - Added to uncertain: <n> · Rejected: <n> · Proposals kept: <n>
 - Rule change: <IR2 → …> | —
+- Arcs: <[[arc]] step 2/4 → [[hook]] | resolved> | —
 ```
 
 ## Never

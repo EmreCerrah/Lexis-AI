@@ -21,6 +21,7 @@ Who might know:
 - **Events become canon instantly**, consequences stay hypotheses until you decide. Nothing in your world changes behind your back.
 - **Ripples through lenses:** power and politics, society and rumor, faith and the supernatural.
 - **Who might know:** follows the links between your characters, places and groups.
+- **Arcs:** chain hooks into one story; Lexis-AI notices when the players finish a step, jump ahead or put a later step at risk, and proposes the progress at session end.
 - **Immutable Rules and hidden truths:** suggestions never break your world's core rules and never reveal a hook's secret. If *you* break a rule, it is recorded and you choose how the world deals with it.
 - **Rules help in 8 game systems**, with scene material (scene tags, obstacles, traps, NPCs) in each system's terms.
 - **One end-of-session list:** approve, keep as uncertain, or drop each item with a single answer.

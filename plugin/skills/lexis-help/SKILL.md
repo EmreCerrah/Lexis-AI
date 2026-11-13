@@ -8,7 +8,7 @@ description: Show the Lexis-AI commands, what each one does and how to call it, 
 A short guide to Lexis-AI, in the output language. This skill records nothing and writes nothing.
 
 ## Read first
-`../../AGENTS.md` (output language, §10 system packs). If there is a world (`world.md` with `type: world` in the current folder or above): its frontmatter (`name`, `language`, `system`), whether `system.md` exists, and the newest log in `sessions/` (its `status:` and how many `E`, `R`, `G`, `D` items it has). The installed packs: `../../systems/*/pack.md` (`name`).
+`../../AGENTS.md` (output language, §10 system packs). If there is a world (`world.md` with `type: world` in the current folder or above): its frontmatter (`name`, `language`, `system`), whether `system.md` exists, the newest log in `sessions/` (its `status:` and how many `E`, `R`, `G`, `D` items it has), and every `arcs/*.md` with `status: active` (its steps and the status of their hooks). The installed packs: `../../systems/*/pack.md` (`name`).
 
 ## How to call a command
 Show every command in the form the GM just used to call this one:
@@ -41,6 +41,7 @@ Translate the "One line" text and the example sentences into the output language
 
 🌍 <world name> · <system pack name> · <language>
 - Session: <session-NNN open, E3 R7 G1 D0 | no open session>
+- 🧭 <arc name>: step <n>/<total> [[current hook]]   (one line per active arc; omit if none)
 - Next: <one suggestion>
 ```
 - **Next** follows the world's state: no world → `/world-init`; no `system.md`, a `system:` that is not installed, or empty `characters/` → `/world-init` to complete the world; an open log → keep reporting with `/event`, and `/close-session` at the end; a `pending` log → `/close-session` to finish the deferred items; otherwise → `/event` when play starts.
@@ -54,4 +55,4 @@ Translate the "One line" text and the example sentences into the output language
 ## Never
 - Write or change any file, or open a session log.
 - Answer a rules question itself (point to `help-skills`).
-- Reveal a `## 🔒 Hidden Truth` or `## 🔒 GM Notes` while describing the world.
+- Reveal a `## 🔒 Hidden Truth`, `## 🔒 GM Notes` or an arc's `## 🔒 Endgame` while describing the world.

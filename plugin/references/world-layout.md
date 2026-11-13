@@ -11,6 +11,7 @@ A world is a plain folder of Markdown files the GM owns. The plugin never stores
   locations/<slug>.md
   groups/<slug>.md
   hooks/<slug>.md
+  arcs/<slug>.md         # chains of hooks (optional)
   sessions/session-001.md   # session logs, one per session
   proposals/<slug>.md       # /create-lore output waiting for approval
 ```
@@ -18,7 +19,7 @@ A world is a plain folder of Markdown files the GM owns. The plugin never stores
 ## Files
 - Templates: `templates/` (world core) and `systems/<system>/templates/` (system pack). Copy the template, fill it, and keep every heading even when empty (write `—` under an empty heading).
 - Headings and frontmatter keys stay in English exactly as in the templates; the content under them is in the output language (`AGENTS.md` §3).
-- Frontmatter `type:` is one of `world`, `system`, `character`, `location`, `group`, `hook`, `session`, `proposal`.
+- Frontmatter `type:` is one of `world`, `system`, `character`, `location`, `group`, `hook`, `arc`, `session`, `proposal`.
 - **Slugs:** lowercase ASCII, words joined by `-`, accented letters transliterated (ç→c, ğ→g, ı→i, ö→o, ş→s, ü→u, é→e, ß→ss …). Slugs are unique across the whole world, because `[[slug]]` must resolve by file name (Obsidian-compatible).
 - **Links:** `[[slug]]` only: no folder prefix, no `.md`. A link to a file that does not exist yet is allowed; `/close-session` lists such dangling links.
 
@@ -31,4 +32,4 @@ A world is a plain folder of Markdown files the GM owns. The plugin never stores
 - A `pending` log still holds deferred items; the next `/close-session` includes them. New events go into a new `open` log, never into a `pending` one.
 
 ## Canon files
-Canon files are `world.md`, `system.md`, `characters/`, `locations/`, `groups/`, `hooks/`. Only `/world-init` (creating the world) and `/close-session` (approved items) write to them. See `AGENTS.md` §6.
+Canon files are `world.md`, `system.md`, `characters/`, `locations/`, `groups/`, `hooks/`, `arcs/`. Only `/world-init` (creating the world) and `/close-session` (approved items) write to them. See `AGENTS.md` §6.

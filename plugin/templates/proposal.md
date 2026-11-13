@@ -1,7 +1,7 @@
 ---
 type: proposal
-target-type: {{character / location / group / hook}}
-target-folder: {{characters / locations / groups / hooks}}
+target-type: {{character / location / group / hook / arc}}
+target-folder: {{characters / locations / groups / hooks / arcs}}
 source: {{S003-G2}}
 status: proposal
 ---
