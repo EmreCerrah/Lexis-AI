@@ -119,7 +119,7 @@ go test ./...
 go build -o lexis-setup .
 go run . --source ../plugin --dry-run
 ```
-Build with a version label: `go build -ldflags "-X main.version=v0.2.0" -o lexis-setup .`. Cross-compile with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.
+Build with a version label: `go build -ldflags "-X main.version=v0.3.0" -o lexis-setup .`. Cross-compile with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.
 
 **Releasing:** bump `version` in `plugin/plugin.json`, then tag the merge commit twice: `vX.Y.Z` (the release) and `lexis-setup/vX.Y.Z` (the Go module lives in `lexis-setup/`, so `go install …@vX.Y.Z` and `@latest` read that tag).
 

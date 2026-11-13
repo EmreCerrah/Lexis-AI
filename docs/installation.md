@@ -41,7 +41,7 @@ It asks four questions. Press Enter to take the default shown in brackets.
 It then downloads the plugin, shows the install plan and asks `Continue? [Y/n]`.
 
 ```
-Install plan — lexis-ai 0.2.0 → Claude Code (project: C:\Campaigns\Karcsa, language: Türkçe (Turkish), game system: 5E SRD (fifth edition compatible))
+Install plan — lexis-ai 0.3.0 → Claude Code (project: C:\Campaigns\Karcsa, language: Türkçe (Turkish), game system: 5E SRD (fifth edition compatible))
   • Shared files (rules, templates, system packs) → C:\Campaigns\Karcsa\.claude\lexis-ai
   • 10 skills → C:\Campaigns\Karcsa\.claude\skills
 ```
