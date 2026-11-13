@@ -65,7 +65,7 @@ System packs contain **game mechanics only**: no published setting, characters, 
    /world-init
    ```
    (Claude Code user install: `/lexis-ai:world-init` · Codex: `$world-init` · Gemini CLI: "set up a new world")
-4. At the table: `/event …` whenever something happens, `/help-skills …` for rules, `/create-obstacle …` for scene material.
+4. At the table: `/event …` whenever something happens, `/help-skills …` for rules, `/create-scene …` when the players enter a place, `/create-obstacle …` for more scene material.
 5. At the end: `/close-session`, answer once, done.
 
 Lost? `/lexis-help` lists every command and suggests the next step.
@@ -81,6 +81,7 @@ Full walk-through: [Getting started](docs/getting-started.md).
 | `/help-skills` | answers a rules question in your system's terms |
 | `/create-aspect` | one scene tag (aspect, scene feature, circumstance, clock …) |
 | `/create-obstacle` | one obstacle, trap, puzzle or hazard: fiction first, then the numbers |
+| `/create-scene` | a place the players enter: your notes plus read-aloud text, who is there, 3 interactions with checks and difficulties |
 | `/create-lore` | one NPC, place, group or story hook, as a proposal |
 | `/close-session` | one numbered list of everything to change; writes only what you approve |
 | `/lexis-help` | lists the commands, shows where your world stands and what to do next |
@@ -102,7 +103,7 @@ Details and examples: [Commands](docs/commands.md).
 ```
 plugin/                    # the plugin: platform-neutral skills, core rules, templates, system packs
   AGENTS.md                # core rules every command reads first
-  skills/<command>/        # the 9 commands
+  skills/<command>/        # the 10 commands
   references/              # knowledge model, world layout, lenses
   templates/               # world file templates
   systems/<id>/            # one folder per game system pack

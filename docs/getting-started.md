@@ -79,13 +79,14 @@ The answer comes in your system's terms. In 5E, for example:
 - Feature: —
 ```
 
-### Scene material: `/create-obstacle`, `/create-aspect`, `/create-lore`
+### Scene material: `/create-scene`, `/create-obstacle`, `/create-aspect`, `/create-lore`
 ```
+/create-scene old-cemetery night, fog, the gravekeeper is gone
 /create-obstacle the cellar door the keeper locked behind him
 /create-aspect the graveyard at midnight
 /create-lore an old priest who knows about the troupe
 ```
-Each one gives you something ready to use. Obstacles and scene tags are logged; new people and places go to `proposals/` and become part of the world only if you approve them at the end.
+Each one gives you something ready to use. `/create-scene` keeps your notes and fills in the rest: what to read aloud, who is there, three things to do with the check and difficulty for each. Scenes, obstacles and scene tags are logged; new people and places go to `proposals/` and become part of the world only if you approve them at the end.
 
 ### More consequences: `/ripples`
 When there is a pause, dig deeper into an event:

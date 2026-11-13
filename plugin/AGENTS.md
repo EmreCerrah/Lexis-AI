@@ -43,7 +43,7 @@ A **reported event** is canon the moment the GM reports it. It lives in the open
 | Skill | May write | Must never write |
 |---|---|---|
 | `/world-init` | creates the world (all canon files), only while the world does not exist yet, or fills sections the GM answers now | — |
-| `/event`, `/ripples`, `/create-aspect`, `/create-obstacle` | the **open session log** only (append) | any canon file |
+| `/event`, `/ripples`, `/create-aspect`, `/create-obstacle`, `/create-scene` | the **open session log** only (append) | any canon file |
 | `/create-lore` | `proposals/<slug>.md` (including arcs) + the open session log | any canon file |
 | `/help-skills` | nothing | anything |
 | `/close-session` | canon files, `proposals/`, the session log, **only items the GM approved in this run** | anything not approved |
@@ -52,7 +52,7 @@ Canon files = `world.md`, `system.md`, and everything in `characters/`, `locatio
 If you are about to edit a canon file outside these permissions, stop. That is a bug, not a judgment call.
 
 ## 7. Conflict rules
-- **Your own output never violates an `## Immutable Rules` item, a hook's `## 🔒 Hidden Truth` or an arc's `## 🔒 Endgame`.** Check both before every ripple, scene tag, obstacle and lore draft.
+- **Your own output never violates an `## Immutable Rules` item, a hook's `## 🔒 Hidden Truth` or an arc's `## 🔒 Endgame`.** Check them before every ripple, scene, scene tag, obstacle and lore draft.
 - When players try to break a hidden truth (expose it early, kill the one who must survive, open what must stay shut), offer 1-3 **in-world reasons why they can't**, never "the rules say no".
 - **The GM reports an event that breaks an Immutable Rule:** never block it or refuse to record it. Record it, flag it `⚠ rule conflict (IR<n>)`, and offer:
   (a) apparent violation: it only looks like a violation; give an in-world explanation
