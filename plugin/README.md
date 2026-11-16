@@ -17,6 +17,7 @@ A **GM assistant** for the live table. You run the game; the agent never rolls d
 | `/create-obstacle` | Creates an obstacle, puzzle or hazard: fiction first, then the system's difficulty and fitting checks | the log (proposal) |
 | `/create-scene` | Builds the scene when the players enter a place: your notes plus read-aloud text, who is there, 3 interactions with checks and difficulties, a scene tag | the log (proposal) |
 | `/create-lore` | Creates a persistent NPC, location, group or hook | `proposals/` (proposal) |
+| `/suggest-event` | The scene has stalled: 3 things that could happen now, each with its source and what it asks of the players | nothing |
 | `/help-skills` | Answers rules questions in the world's system terms | nothing |
 | `/close-session` | Gathers everything from the session into one numbered list for your approval and writes only what you approve | canon files |
 | `/lexis-help` | Lists the commands, the world's state and the next step | nothing |
@@ -25,7 +26,7 @@ How you call them depends on the tool: Claude Code `/lexis-ai:event`, Codex `$ev
 
 ## Flow
 ```
-/world-init  →  (at the table) /event … /ripples … /create-scene … /create-* … /help-skills  →  /close-session
+/world-init  →  (at the table) /event … /ripples … /create-scene … /create-* … /help-skills … /suggest-event  →  /close-session
 ```
 - **Table mode** (default): short bullets, no approval questions mid-session.
 - **Prep mode:** add `prep` or `detailed` to a command for deeper analysis.
@@ -54,7 +55,7 @@ If you use Codex, open your world folder in **workspace-write** mode (with file-
 ```
 plugin.json                 # the only manifest (agent-plugins.org schema)
 AGENTS.md                   # core rules every skill reads first
-skills/<command>/SKILL.md   # the 10 commands (platform-neutral)
+skills/<command>/SKILL.md   # the 11 commands (platform-neutral)
 references/                 # knowledge model, folder layout, lenses (hidden references, not skills)
 templates/                  # world core templates
 systems/<id>/               # system packs: srd5, orc-d20, fate-accelerated, fate-core, d100, fitd, doom-d20, hero-d20 (same files each)

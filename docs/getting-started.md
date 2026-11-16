@@ -88,6 +88,12 @@ The answer comes in your system's terms. In 5E, for example:
 ```
 Each one gives you something ready to use. `/create-scene` keeps your notes and fills in the rest: what to read aloud, who is there, three things to do with the check and difficulty for each. Scenes, obstacles and scene tags are logged; new people and places go to `proposals/` and become part of the world only if you approve them at the end.
 
+### The scene stalled: `/suggest-event`
+```
+/suggest-event they have searched the whole crypt and won't leave
+```
+Three things that could happen now, each from the world you already wrote and each naming where it comes from. Pick one, say it at the table, then report it with `/event`. Nothing is recorded.
+
 ### More consequences: `/ripples`
 When there is a pause, dig deeper into an event:
 ```

@@ -1,6 +1,6 @@
 # Commands
 
-Lexis-AI has ten commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
+Lexis-AI has eleven commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
 
 | Command | Use it | Writes |
 |---|---|---|
@@ -8,6 +8,7 @@ Lexis-AI has ten commands. Call them as described in [Getting started](getting-s
 | [`/event`](#event) | right after something happens at the table | the session log |
 | [`/ripples`](#ripples) | when you want more consequences of an event | the session log |
 | [`/help-skills`](#help-skills) | for a rules question | nothing |
+| [`/suggest-event`](#suggest-event) | when the scene has stalled and nobody knows what to do | nothing |
 | [`/create-aspect`](#create-aspect) | for a scene tag (aspect, feature, circumstance …) | the session log |
 | [`/create-obstacle`](#create-obstacle) | for a lock, trap, puzzle, hazard or social obstacle | the session log |
 | [`/create-scene`](#create-scene) | when the players enter a place | the session log |
@@ -90,6 +91,28 @@ A rules answer in your system's terms. It records nothing.
 - useful options: a matching feature or stunt from the character's file, a scene tag, a meta-currency use.
 
 Examples per system: [Game systems](game-systems.md).
+
+## /suggest-event
+```
+/suggest-event [what is stalling, or where they are] [prep]
+/suggest-event they have searched the whole crypt and won't leave
+```
+Three things that could happen in the next minute, each drawn from the world you already wrote. You pick one, say it at the table, then report it with `/event` in your own words. Nothing is recorded, so an option you don't use leaves no trace.
+
+Each option comes from a different kind of pressure: **someone acts** (an NPC or group following a goal their file already states), **the world answers** (a ripple from the log that hasn't happened yet, the place itself, the time of day), **something arrives** (news, a messenger, a sound). Ripples you have already seen come first: they land as the world keeping its promises rather than as a new idea.
+
+```
+🎲 What could happen now
+1. The gravekeeper comes back for the shovel he dropped — [[gravekeeper]], R4
+   → asks: do they hide, or meet him?
+2. The gate is chained from outside; the fog muffles the footsteps leaving — [[old-cemetery]]
+   → asks: who locked them in, and how do they get out?
+3. A boy with a theater ticket in his hat runs past the wall — [[the-yellow-curtain]] 🔒
+   → asks: follow him, or stay and finish?
+```
+Every option names its source, so you can tell at a glance whether it fits, and ends in a choice the players can refuse — never a task they must do. A `🔒` marks an option to read before using, because it touches a hidden truth. Options never resolve what the players are doing, never force an active arc's next step and never introduce a named NPC, place or group (that is `/create-lore`). Prep mode gives 5 options with their likely ripples.
+
+Use `/create-scene` when the players *enter* a place, and `/suggest-event` when they are already there and the scene has run dry.
 
 ## /create-aspect
 ```

@@ -45,14 +45,14 @@ A **reported event** is canon the moment the GM reports it. It lives in the open
 | `/world-init` | creates the world (all canon files), only while the world does not exist yet, or fills sections the GM answers now | — |
 | `/event`, `/ripples`, `/create-aspect`, `/create-obstacle`, `/create-scene` | the **open session log** only (append) | any canon file |
 | `/create-lore` | `proposals/<slug>.md` (including arcs) + the open session log | any canon file |
-| `/help-skills` | nothing | anything |
+| `/help-skills`, `/suggest-event` | nothing | anything |
 | `/close-session` | canon files, `proposals/`, the session log, **only items the GM approved in this run** | anything not approved |
 
 Canon files = `world.md`, `system.md`, and everything in `characters/`, `locations/`, `groups/`, `hooks/`, `arcs/`.
 If you are about to edit a canon file outside these permissions, stop. That is a bug, not a judgment call.
 
 ## 7. Conflict rules
-- **Your own output never violates an `## Immutable Rules` item, a hook's `## 🔒 Hidden Truth` or an arc's `## 🔒 Endgame`.** Check them before every ripple, scene, scene tag, obstacle and lore draft.
+- **Your own output never violates an `## Immutable Rules` item, a hook's `## 🔒 Hidden Truth` or an arc's `## 🔒 Endgame`.** Check them before every ripple, scene, suggested event, scene tag, obstacle and lore draft.
 - When players try to break a hidden truth (expose it early, kill the one who must survive, open what must stay shut), offer 1-3 **in-world reasons why they can't**, never "the rules say no".
 - **The GM reports an event that breaks an Immutable Rule:** never block it or refuse to record it. Record it, flag it `⚠ rule conflict (IR<n>)`, and offer:
   (a) apparent violation: it only looks like a violation; give an in-world explanation
@@ -61,7 +61,7 @@ If you are about to edit a canon file outside these permissions, stop. That is a
   The GM may answer now or leave it open. An unanswered flag waits for `/close-session`.
 - **The GM knowingly lets a hidden truth break:** offer (a) plan holds: the hidden truth stays, show how the story reconnects to it, or (b) plan changes: the hidden truth is rewritten at `/close-session`. Never offer "skip to the next hook".
 - **An event skips or threatens an arc step:** never block it; the event is canon and the arc adapts. Record a `D<n>`. Skip → (a) the skipped steps happen offstage (b) reorder the steps (c) drop the skipped steps. Threat (something a later step needs is gone) → (a) plan holds, with an in-world way the step can still happen (b) the step changes (c) drop the step. Decided now or at `/close-session`.
-- Never push the players toward an arc's next step. You may make it *possible* (a ripple, an NPC who knows something), never mandatory.
+- Never push the players toward an arc's next step. You may make it *possible* (a ripple, a suggested event, an NPC who knows something), never mandatory.
 
 ## 8. Who knows what
 - "Who might know" is an **inference** from `## Links`, never stored. It is a *possibility of knowing*, not knowledge; the GM decides.

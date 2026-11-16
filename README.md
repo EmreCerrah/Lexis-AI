@@ -83,6 +83,7 @@ Full walk-through: [Getting started](docs/getting-started.md).
 | `/create-aspect` | one scene tag (aspect, scene feature, circumstance, clock …) |
 | `/create-obstacle` | one obstacle, trap, puzzle or hazard: fiction first, then the numbers |
 | `/create-scene` | a place the players enter: your notes plus read-aloud text, who is there, 3 interactions with checks and difficulties |
+| `/suggest-event` | the scene has stalled: 3 things that could happen now, each with its source |
 | `/create-lore` | one NPC, place, group or story hook, as a proposal |
 | `/close-session` | one numbered list of everything to change; writes only what you approve |
 | `/lexis-help` | lists the commands, shows where your world stands and what to do next |
@@ -104,7 +105,7 @@ Details and examples: [Commands](docs/commands.md).
 ```
 plugin/                    # the plugin: platform-neutral skills, core rules, templates, system packs
   AGENTS.md                # core rules every command reads first
-  skills/<command>/        # the 10 commands
+  skills/<command>/        # the 11 commands
   references/              # knowledge model, world layout, lenses
   templates/               # world file templates
   systems/<id>/            # one folder per game system pack
