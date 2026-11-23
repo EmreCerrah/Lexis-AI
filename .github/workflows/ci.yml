@@ -1,0 +1,49 @@
+name: ci
+
+# Runs on every pull request and on main: the installer's tests (which also
+# check each system pack against the pack contract), gofmt, go vet, and the
+# Markdown link check.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  installer:
+    name: installer (go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: lexis-setup/go.mod
+          cache-dependency-path: lexis-setup/go.mod
+
+      - name: gofmt
+        working-directory: lexis-setup
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "These files need gofmt:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: go vet
+        working-directory: lexis-setup
+        run: go vet ./...
+
+      - name: go test
+        working-directory: lexis-setup
+        run: go test -count=1 ./...
+
+  docs:
+    name: docs (links)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check-links.py

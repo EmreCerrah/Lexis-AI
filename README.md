@@ -121,6 +121,10 @@ go test ./...
 go build -o lexis-setup .
 go run . --source ../plugin --dry-run
 ```
+Every pull request runs the same checks in CI (`.github/workflows/ci.yml`): `gofmt`, `go vet`, `go test` and the Markdown link check, which you can also run yourself:
+```bash
+python3 scripts/check-links.py
+```
 Build with a version label: `go build -ldflags "-X main.version=v0.3.1" -o lexis-setup .`. Cross-compile with `GOOS=linux GOARCH=amd64` or `GOOS=darwin GOARCH=arm64`.
 
 **Releasing:** bump `version` in `plugin/plugin.json`, then tag the merge commit twice: `vX.Y.Z` (the release) and `lexis-setup/vX.Y.Z` (the Go module lives in `lexis-setup/`, so `go install …@vX.Y.Z` and `@latest` read that tag). Pushing `vX.Y.Z` runs the release workflow: GoReleaser builds `lexis-setup` for Linux and Windows (amd64, arm64) and one universal macOS binary (Apple Silicon + Intel) and attaches the archives to the GitHub release. A release binary installs the plugin from its own tag. For a tag that already exists, run the workflow by hand (Actions → release → Run workflow). Local dry run: `goreleaser release --snapshot --clean`.
@@ -131,4 +135,8 @@ The tests also check every system pack against the pack contract and the content
 Planned work, in priority order: [ROADMAP.md](ROADMAP.md).
 
 ## License
-The plugin and the installer are MIT-licensed (`plugin/plugin.json`). Each system pack follows its source's license, stated in its `pack.md`: the ORC packs (`orc-d20`, `d100`) are released under the ORC License, the OGL pack (`hero-d20`) under the OGL 1.0a, and the others carry the attribution their CC-BY or third-party license requires.
+The project is **MIT**-licensed ([LICENSE](LICENSE)): the installer, the skills, the core rules, the templates and the docs. Fork it, ship it, keep the notice.
+
+The **system packs** in `plugin/systems/` are the exception. Each one restates the mechanics of an openly licensed game in our own words and follows that game's license, with the operative notices in its own `pack.md`: the ORC packs (`orc-d20`, `d100`) under the ORC License, `hero-d20` under the OGL 1.0a, `doom-d20` under the MÖRK BORG Third Party License, and `srd5`, `fate-accelerated`, `fate-core` and `fitd` with the attribution their CC-BY license requires. Summary and trademark notes: [NOTICE.md](NOTICE.md).
+
+Your world files are yours. Nothing here claims any right in them.
