@@ -69,7 +69,7 @@ System packs contain **game mechanics only**: no published setting, characters, 
 4. At the table: `/event …` whenever something happens, `/help-skills …` for rules, `/create-scene …` when the players enter a place, `/create-obstacle …` for more scene material.
 5. At the end: `/close-session`, answer once, done.
 
-Lost? `/lexis-help` lists every command and suggests the next step.
+Before a session, `/world-status` tells you where everything was. Lost? `/lexis-help` lists every command and suggests the next step.
 
 Full walk-through: [Getting started](docs/getting-started.md).
 
@@ -84,6 +84,7 @@ Full walk-through: [Getting started](docs/getting-started.md).
 | `/create-obstacle` | one obstacle, trap, puzzle or hazard: fiction first, then the numbers |
 | `/create-scene` | a place the players enter: your notes plus read-aloud text, who is there, 3 interactions with checks and difficulties |
 | `/suggest-event` | the scene has stalled: 3 things that could happen now, each with its source |
+| `/world-status` | the one-minute briefing before a session: last session, active hooks, each arc's step, what waits for you |
 | `/check-consistency` | between sessions: what in your world contradicts what, both sides named |
 | `/create-lore` | one NPC, place, group or story hook, as a proposal |
 | `/close-session` | one numbered list of everything to change; writes only what you approve |
@@ -106,7 +107,7 @@ Details and examples: [Commands](docs/commands.md).
 ```
 plugin/                    # the plugin: platform-neutral skills, core rules, templates, system packs
   AGENTS.md                # core rules every command reads first
-  skills/<command>/        # the 12 commands
+  skills/<command>/        # the 13 commands
   references/              # knowledge model, world layout, lenses
   templates/               # world file templates
   systems/<id>/            # one folder per game system pack

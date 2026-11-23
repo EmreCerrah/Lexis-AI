@@ -45,7 +45,13 @@ Result:
 - Next: report what happens at the table with /event; at the end of the session run /close-session.
 ```
 
-## 3. During the session
+## 3. Before the session: `/world-status`
+```
+/world-status
+```
+Two weeks later, this is the one-minute catch-up: what the players did last time, who is in play, which hooks are active, each arc's current step and what would move it on, and what still waits for your decision. Hidden truths stay hidden unless you ask for them with `/world-status secrets`.
+
+## 4. During the session
 
 ### Something happened: `/event`
 Report it in one or two sentences, the way you'd tell a friend.
@@ -101,7 +107,7 @@ When there is a pause, dig deeper into an event:
 ```
 You get more ripples through different lenses (power and politics, society and rumor, faith and the supernatural) and how the news could travel further.
 
-## 4. End of session: `/close-session`
+## 5. End of session: `/close-session`
 ```
 /close-session
 ```
@@ -123,7 +129,7 @@ Answer once, for example `all as suggested, 2 ✅`. Only then are the world file
 - ❌ is dropped.
 - Deferred items stay open for the next `/close-session`.
 
-## 5. Between sessions
+## 6. Between sessions
 - Read and edit your world files directly; they are plain Markdown. See [Your world files](world-files.md).
 - Add `prep` or `detailed` to a command for a longer analysis: `/ripples E1 prep`.
 - Run `/world-init` again in an existing world to fill in what you left as "later".

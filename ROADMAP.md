@@ -20,31 +20,33 @@ Items are in priority order. Each one starts with a short design pass before any
   - **`/create-scene`:** the GM names a place and adds notes; the AI fills the gaps with read-aloud text, who is there, 3 interactions with the system's check and difficulty, and a scene tag.
   - **Prebuilt binaries:** GoReleaser builds `lexis-setup` for Linux, Windows (amd64, arm64) and one universal macOS binary on every version tag, so installing needs no Go.
   - **`/suggest-event`:** the scene has stalled, so 3 things that could happen now, one per kind of pressure, unspent ripples first; records nothing ([docs/design/suggest-event.md](docs/design/suggest-event.md)).
+  - **`/check-consistency`:** what in the world contradicts what, both sides named, writing nothing itself ([docs/design/check-consistency.md](docs/design/check-consistency.md)).
+  - **LICENSE, NOTICE.md and CI:** MIT for the project with per-pack notices, and `gofmt`, `go vet`, `go test` and the Markdown link check on every pull request.
   - **Docs:** a new README, and guides in `docs/`, including moving and backing up a world.
   - **Releases:** version tags and release notes (`vX.Y.Z` + `lexis-setup/vX.Y.Z`).
 - **Table tests:** 5E SRD tested at the table.
 
-## 1. Now: `/check-consistency`
-Goal: a world that has grown for a year starts to contradict itself, and the GM finds out at the table. Design: [docs/design/check-consistency.md](docs/design/check-consistency.md).
+## 1. Now: `/world-status`
+Goal: the one-minute briefing before a session, so the GM does not have to reconstruct two weeks from memory. Design: [docs/design/world-status.md](docs/design/world-status.md).
 
-- Reports what disagrees with what: broken Immutable Rules, a dead character still acting, arc steps resolved out of order, hypotheses a later event settled, one-way links, old system sections.
-- Every finding names both sides with their files; severity is certainty, not importance.
-- The boundary with `/world-init` fill mode: missing belongs there, contradicting belongs here.
-- Writes nothing by itself; answers become decisions `/close-session` applies, so canon keeps one writer.
+- Last session, who is in play, active hooks, each arc's step with its `Moves on when:`, what waits for a decision, loose threads.
+- Decided: its own command, not `/lexis-help status` — a skill is found through its description, and one description cannot carry both jobs.
+- Secrets are opt-in (`/world-status secrets`) and always last, in case players can see the screen.
+- Writes nothing.
 
 ## 2. Table tests for the other systems
 - Fate Accelerated / Fate Core next, then the remaining packs as GMs try them.
 - Note what reads badly at the table and fix the pack.
 
 ## 3. v1.1 commands
-- `/world-status`: a one-minute pre-session briefing covering active hooks and arcs, open decisions, pending proposals and what happened last session. Overlaps with `/lexis-help`'s world block; decide whether it becomes `/lexis-help status` or its own command.
 
 ## 4. Prep mode: deep analysis report
 - The 9-section analysis of an event, for use between sessions only.
 - It writes nothing to canon; useful parts become proposals.
 
-## 5. Distribution
-- Done: prebuilt binaries on GitHub Releases. Still open: `npx lexis-ai` for people who have Node but not Go, and signing the macOS binaries so no `xattr` step is needed.
+## 5. Later, if asked for
+- `npx lexis-ai` for people who have Node but not Go. The prebuilt binaries cover most of this already.
+- Signing the macOS binaries so the `xattr` step is not needed (needs an Apple developer account).
 
 ## Later (lower priority)
 - **Images for characters and locations.** On hold: needs a careful design first.

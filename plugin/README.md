@@ -18,6 +18,7 @@ A **GM assistant** for the live table. You run the game; the agent never rolls d
 | `/create-scene` | Builds the scene when the players enter a place: your notes plus read-aloud text, who is there, 3 interactions with checks and difficulties, a scene tag | the log (proposal) |
 | `/create-lore` | Creates a persistent NPC, location, group or hook | `proposals/` (proposal) |
 | `/suggest-event` | The scene has stalled: 3 things that could happen now, each with its source and what it asks of the players | nothing |
+| `/world-status` | The one-minute briefing before a session: last session, who is in play, active hooks, each arc's current step, open decisions, loose threads | nothing |
 | `/check-consistency` | Between sessions: scans the world for things that contradict each other and reports both sides | nothing (answers wait as decisions) |
 | `/help-skills` | Answers rules questions in the world's system terms | nothing |
 | `/close-session` | Gathers everything from the session into one numbered list for your approval and writes only what you approve | canon files |
@@ -56,7 +57,7 @@ If you use Codex, open your world folder in **workspace-write** mode (with file-
 ```
 plugin.json                 # the only manifest (agent-plugins.org schema)
 AGENTS.md                   # core rules every skill reads first
-skills/<command>/SKILL.md   # the 12 commands (platform-neutral)
+skills/<command>/SKILL.md   # the 13 commands (platform-neutral)
 references/                 # knowledge model, folder layout, lenses (hidden references, not skills)
 templates/                  # world core templates
 systems/<id>/               # system packs: srd5, orc-d20, fate-accelerated, fate-core, d100, fitd, doom-d20, hero-d20 (same files each)

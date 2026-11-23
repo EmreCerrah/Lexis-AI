@@ -46,7 +46,7 @@ A **reported event** is canon the moment the GM reports it. It lives in the open
 | `/event`, `/ripples`, `/create-aspect`, `/create-obstacle`, `/create-scene` | the **open session log** only (append) | any canon file |
 | `/create-lore` | `proposals/<slug>.md` (including arcs) + the open session log | any canon file |
 | `/check-consistency` | the open session log only: the `D<n>` items the GM asked for (append) | any canon file |
-| `/help-skills`, `/suggest-event` | nothing | anything |
+| `/help-skills`, `/suggest-event`, `/world-status` | nothing | anything |
 | `/close-session` | canon files, `proposals/`, the session log, **only items the GM approved in this run** | anything not approved |
 
 Canon files = `world.md`, `system.md`, and everything in `characters/`, `locations/`, `groups/`, `hooks/`, `arcs/`.
