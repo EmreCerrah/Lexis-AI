@@ -127,6 +127,7 @@ Answer once, for example `all as suggested, 2 ✅`. Only then are the world file
 - Read and edit your world files directly; they are plain Markdown. See [Your world files](world-files.md).
 - Add `prep` or `detailed` to a command for a longer analysis: `/ripples E1 prep`.
 - Run `/world-init` again in an existing world to fill in what you left as "later".
+- Run `/check-consistency` to see what in your world contradicts what: a character dead in one file and acting in another, an Immutable Rule broken in canon, arc steps resolved out of order, uncertain lines a later event settled. It reports both sides and changes nothing on its own.
 
 ## Tips for the table
 - Keep `/event` short and factual. Name people and places as they are named in your files.

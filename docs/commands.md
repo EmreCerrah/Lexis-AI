@@ -1,6 +1,6 @@
 # Commands
 
-Lexis-AI has eleven commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
+Lexis-AI has twelve commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
 
 | Command | Use it | Writes |
 |---|---|---|
@@ -13,6 +13,7 @@ Lexis-AI has eleven commands. Call them as described in [Getting started](gettin
 | [`/create-obstacle`](#create-obstacle) | for a lock, trap, puzzle, hazard or social obstacle | the session log |
 | [`/create-scene`](#create-scene) | when the players enter a place | the session log |
 | [`/create-lore`](#create-lore) | for a new NPC, place, group or story hook | `proposals/` + the session log |
+| [`/check-consistency`](#check-consistency) | between sessions, to find what contradicts what | nothing (answers wait as decisions) |
 | [`/close-session`](#close-session) | at the end of the session | the world files (only what you approve) |
 | [`/lexis-help`](#lexis-help) | when you forget a command or what to do next | nothing |
 
@@ -164,6 +165,32 @@ Logged as `G<n>`. Nothing is written to the place's file; at `/close-session` yo
 ```
 One persistent entity (an NPC, place, group, hook or **arc**: `/create-lore an arc from <hooks>`), written to `proposals/<slug>.md` from the world's template, with the system sections your game needs (aspects in Fate, a stat line in 5E …) and 1-4 links to existing files. A new hook always gets its own hidden truth, consistent with the others. It becomes canon only if you approve it at `/close-session`.
 
+## /check-consistency
+```
+/check-consistency [area]
+/check-consistency arcs
+```
+Reads the whole world between sessions and reports **what disagrees with what**. Running it is safe: it changes nothing on its own.
+
+It looks for contradictions, not gaps — for anything *missing* (no `system.md`, an empty folder, a hook without a hidden truth, a dangling link) use `/world-init`. Here: canon that breaks an Immutable Rule, a character dead in one file and acting in another, the same relation described two ways, arc steps resolved out of order, a hook in two arcs, a hidden truth canon already contradicts, `## Uncertain` lines a later event settled, and files still carrying an old system's sections.
+
+```
+🔍 Consistency check: Vespera (37 files, 6 sessions)
+⚠ Contradictions (2)
+1. [[it-recep]] died in S003-E4, but [[the-cemetery]] still lists him as keeper
+   → (a) the file is stale: drop the link (b) he survived: fix the event's record
+2. IR2 "the dead never rise on their own" vs [[marie]] § Background: "rose from her grave alone"
+   → (a) it only looks like a violation (b) a costly exception (c) the rule changes
+❓ Drift (3)
+4. [[gabriel-belmont]] links [[order-of-light]], the group does not link back
+   → (a) add the reciprocal link (b) one-way is correct
+ℹ Info (2)
+- session-005 is still pending: 3 decisions wait at /close-session
+```
+Severity is about **certainty**, not importance: `⚠` two statements that cannot both be true · `❓` probably stale, but you may have meant it · `ℹ` nothing to decide. Every finding names both sides with their files, so you can judge it in one line, and the report stops at 10 findings — narrow it with an area (a folder, a file, `rules`, `arcs`, `links`, `uncertain`).
+
+Answers are not applied here. If you answer items, they are appended to the session log as decisions and `/close-session` applies them with the usual approval; canon keeps a single writer. You can also ignore the report and edit the files yourself. A hidden truth is never quoted, only pointed at.
+
 ## /close-session
 ```
 /close-session
@@ -172,7 +199,7 @@ Builds **one numbered list** of everything from the session and waits for one an
 
 | Group | What you decide |
 |---|---|
-| A. Open decisions | rule conflicts, broken hidden truths, arc skips and threats: (a)/(b)/(c) |
+| A. Open decisions | rule conflicts, broken hidden truths, arc skips and threats, `/check-consistency` findings you answered: (a)/(b)/(c) |
 | B. Events | the concrete changes the events make to world files (already canon; suggested ✅) |
 | C. Arcs | a step done → its hook `resolved`, the next hook `active`; the last step → the arc `resolved`; reordered or changed steps |
 | D. Ripples | ✅ it happened · ❓ uncertain (goes to `## Uncertain`) · ❌ drop |

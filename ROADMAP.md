@@ -19,17 +19,18 @@ Items are in priority order. Each one starts with a short design pass before any
   - **Arcs:** a chain of hooks followed as one story ([docs/design/arcs.md](docs/design/arcs.md)). `/event` notices a step done, skipped or threatened; `/close-session` proposes the progress; `/world-init` converts existing hook chains.
   - **`/create-scene`:** the GM names a place and adds notes; the AI fills the gaps with read-aloud text, who is there, 3 interactions with the system's check and difficulty, and a scene tag.
   - **Prebuilt binaries:** GoReleaser builds `lexis-setup` for Linux, Windows (amd64, arm64) and one universal macOS binary on every version tag, so installing needs no Go.
+  - **`/suggest-event`:** the scene has stalled, so 3 things that could happen now, one per kind of pressure, unspent ripples first; records nothing ([docs/design/suggest-event.md](docs/design/suggest-event.md)).
   - **Docs:** a new README, and guides in `docs/`, including moving and backing up a world.
   - **Releases:** version tags and release notes (`vX.Y.Z` + `lexis-setup/vX.Y.Z`).
 - **Table tests:** 5E SRD tested at the table.
 
-## 1. Now: `/suggest-event`
-Goal: the scene has stalled, and the GM needs one thing to happen now, from the world they already wrote. Design: [docs/design/suggest-event.md](docs/design/suggest-event.md).
+## 1. Now: `/check-consistency`
+Goal: a world that has grown for a year starts to contradict itself, and the GM finds out at the table. Design: [docs/design/check-consistency.md](docs/design/check-consistency.md).
 
-- 3 options, one per kind of pressure: someone acts · the world answers · something arrives.
-- Unspent ripples (`R<k>`) come first: the table already half-expects them.
-- Every option names its source and ends in a choice the players can refuse.
-- Records nothing; a used option arrives as an `E<n>` through `/event`.
+- Reports what disagrees with what: broken Immutable Rules, a dead character still acting, arc steps resolved out of order, hypotheses a later event settled, one-way links, old system sections.
+- Every finding names both sides with their files; severity is certainty, not importance.
+- The boundary with `/world-init` fill mode: missing belongs there, contradicting belongs here.
+- Writes nothing by itself; answers become decisions `/close-session` applies, so canon keeps one writer.
 
 ## 2. Table tests for the other systems
 - Fate Accelerated / Fate Core next, then the remaining packs as GMs try them.
@@ -37,7 +38,6 @@ Goal: the scene has stalled, and the GM needs one thing to happen now, from the 
 
 ## 3. v1.1 commands
 - `/world-status`: a one-minute pre-session briefing covering active hooks and arcs, open decisions, pending proposals and what happened last session. Overlaps with `/lexis-help`'s world block; decide whether it becomes `/lexis-help status` or its own command.
-- `/check-consistency`: a between-session scan for broken Immutable Rules, contradictions between files, dangling `[[links]]` and stale `## Uncertain` lines.
 
 ## 4. Prep mode: deep analysis report
 - The 9-section analysis of an event, for use between sessions only.
