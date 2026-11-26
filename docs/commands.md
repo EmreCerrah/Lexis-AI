@@ -1,6 +1,6 @@
 # Commands
 
-Lexis-AI has twelve commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
+Lexis-AI has thirteen commands. Call them as described in [Getting started](getting-started.md) (`/event`, `/lexis-ai:event`, `$event` … depending on your tool).
 
 | Command | Use it | Writes |
 |---|---|---|
@@ -13,6 +13,7 @@ Lexis-AI has twelve commands. Call them as described in [Getting started](gettin
 | [`/create-obstacle`](#create-obstacle) | for a lock, trap, puzzle, hazard or social obstacle | the session log |
 | [`/create-scene`](#create-scene) | when the players enter a place | the session log |
 | [`/create-lore`](#create-lore) | for a new NPC, place, group or story hook | `proposals/` + the session log |
+| [`/world-status`](#world-status) | before a session, to remember where everything was | nothing |
 | [`/check-consistency`](#check-consistency) | between sessions, to find what contradicts what | nothing (answers wait as decisions) |
 | [`/close-session`](#close-session) | at the end of the session | the world files (only what you approve) |
 | [`/lexis-help`](#lexis-help) | when you forget a command or what to do next | nothing |
@@ -164,6 +165,36 @@ Logged as `G<n>`. Nothing is written to the place's file; at `/close-session` yo
 /create-lore <what you need: an NPC, a place, a group, a hook>
 ```
 One persistent entity (an NPC, place, group, hook or **arc**: `/create-lore an arc from <hooks>`), written to `proposals/<slug>.md` from the world's template, with the system sections your game needs (aspects in Fate, a stat line in 5E …) and 1-4 links to existing files. A new hook always gets its own hidden truth, consistent with the others. It becomes canon only if you approve it at `/close-session`.
+
+## /world-status
+```
+/world-status [secrets] [prep]
+```
+The one-minute briefing before a session. It reports **state** and writes nothing: what commands exist is `/lexis-help`, what contradicts what is `/check-consistency`, what is missing is `/world-init`.
+
+```
+📋 Vespera · 5E SRD · Türkçe · next: session-006
+Last session (005, pending):
+- They opened the sealed crypt and found the coffins empty
+- Gabriel burned the ledger before the Order could read it
+In play:
+- [[gabriel-belmont]] (PC) — hunting the troupe · [[marie]] (PC) — recovering
+- [[order-of-light]] — looking for the ledger they now cannot read
+Active hooks (2 active, 3 waiting):
+- [[the-power-of-words]] — a printer's apprentice is selling lines nobody wrote
+🧭 Arcs:
+- The Yellow Curtain: step 2/4 [[the-yellow-curtain]]
+  moves on when: the troupe's patron is exposed or the play is performed
+Waiting on you:
+- session-005 is pending: 3 decisions at /close-session
+Loose threads:
+- R7 the mayor orders the cemetery closed "for repairs" (not yet happened)
+🔒 2 hidden truths and 1 arc endgame are in play — /world-status secrets to see them
+Next: finish session-005 with /close-session, then /event when play starts
+```
+A group with nothing in it is left out. The arc line carries that step's `Moves on when:` — the one thing you cannot reconstruct from memory.
+
+**Secrets are opt-in.** Hidden truths and arc endgames are never printed by default, in case players can see your screen; the report ends with a count instead. `/world-status secrets` adds a final `🔒 Not for the table` block with one line per secret, always last. `prep` gives up to 5 lines per group with why each matters now.
 
 ## /check-consistency
 ```

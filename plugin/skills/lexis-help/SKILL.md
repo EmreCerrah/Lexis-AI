@@ -30,6 +30,7 @@ If unsure, use `/<command>` and add one line on the other forms.
 | `create-scene` | a place the players enter: read-aloud text, who is there, 3 interactions with checks and difficulties, a scene tag; your notes are kept, it fills the gaps | `/create-scene old-cemetery night, fog, a grave dug open` |
 | `create-lore` | one NPC, place, group or hook as a proposal | `/create-lore a nervous gravekeeper` |
 | `suggest-event` | 3 things that could happen now when the scene has stalled, each from the world you wrote; records nothing | `/suggest-event they won't leave the crypt` |
+| `world-status` | the one-minute briefing before a session: last session, who is in play, active hooks, each arc's step, what waits for you | `/world-status` |
 | `check-consistency` | between sessions: what in the world contradicts what, both sides named; writes nothing by itself | `/check-consistency arcs` |
 | `close-session` | one numbered list of everything to change; writes only what the GM approves | `/close-session` |
 | `lexis-help` | this guide | `/lexis-help event` |
@@ -47,6 +48,7 @@ Translate the "One line" text and the example sentences into the output language
 - 🧭 <arc name>: step <n>/<total> [[current hook]]   (one line per active arc; omit if none)
 - Next: <one suggestion>
 ```
+- At the start of a session, point to `/world-status` for the briefing rather than repeating it here; this command's world block stays three lines.
 - **Next** follows the world's state: no world → `/world-init`; no `system.md`, a `system:` that is not installed, or empty `characters/` → `/world-init` to complete the world; an open log → keep reporting with `/event`, and `/close-session` at the end; a `pending` log → `/close-session` to finish the deferred items; otherwise → `/event` when play starts.
 - If the world's system is not installed, say so in the world line (re-run `lexis-setup`, or switch with `/world-init`).
 - No world: replace the world block with one line: "No world here: run `/world-init` in an empty folder for your campaign."
