@@ -30,6 +30,7 @@ If unsure, use `/<command>` and add one line on the other forms.
 | `create-scene` | a place the players enter: read-aloud text, who is there, 3 interactions with checks and difficulties, a scene tag; your notes are kept, it fills the gaps | `/create-scene old-cemetery night, fog, a grave dug open` |
 | `create-lore` | one NPC, place, group or hook as a proposal | `/create-lore a nervous gravekeeper` |
 | `suggest-event` | 3 things that could happen now when the scene has stalled, each from the world you wrote; records nothing | `/suggest-event they won't leave the crypt` |
+| `check-consistency` | between sessions: what in the world contradicts what, both sides named; writes nothing by itself | `/check-consistency arcs` |
 | `close-session` | one numbered list of everything to change; writes only what the GM approves | `/close-session` |
 | `lexis-help` | this guide | `/lexis-help event` |
 

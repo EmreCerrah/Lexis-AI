@@ -15,7 +15,7 @@ If no log is open or pending, say there is no open session to close, and stop.
 Number the items continuously across groups. Give each one a **suggested** answer. Keep each item to one line, plus a preview line for file edits: `→ file · section: + "text"`.
 
 **A. Open decisions** (decide these first; they change other items)
-- Each `D<m>` without a GM answer. Rule conflict → (a) apparent violation (b) costly exception (c) rule change. Hook break → (a) plan holds (b) plan changes. Arc skip → (a) offstage (b) reorder (c) drop the skipped steps. Arc threat → (a) plan holds (b) the step changes (c) drop the step. For (c)/(b), show the proposed new rule or hidden-truth text, or ask the GM to give it.
+- Each `D<m>` without a GM answer, including `consistency:` items from `/check-consistency` (each one carries the GM's chosen option; apply it to the two files the finding names). Rule conflict → (a) apparent violation (b) costly exception (c) rule change. Hook break → (a) plan holds (b) plan changes. Arc skip → (a) offstage (b) reorder (c) drop the skipped steps. Arc threat → (a) plan holds (b) the step changes (c) drop the step. For (c)/(b), show the proposed new rule or hidden-truth text, or ask the GM to give it.
 
 **B. Events → world files**
 - Events are already canon. For each `E<n>`, propose the concrete edits that write its *facts* (not its ripples) into entity files: state changes, deaths, items moved, places damaged, hook `status` changes. Suggested: ✅.
